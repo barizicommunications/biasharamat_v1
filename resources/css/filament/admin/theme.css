@@ -1,0 +1,249 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@config './tailwind.config.js';
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(155, 155, 155, 0.64);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProLight.woff2') format('woff2'), url('/fonts/CeraProLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProLightItalic.woff2') format('woff2'), url('/fonts/CeraProLightItalic.woff') format('woff');
+    font-weight: 200;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProRegular.woff2') format('woff2'), url('/fonts/CeraProRegular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProRegularItalic.woff2') format('woff2'), url('/fonts/CeraProRegularItalic.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProMedium.woff2') format('woff2'), url('/fonts/CeraProMedium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProMediumItalic.woff2') format('woff2'), url('/fonts/CeraProMediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProBold.woff2') format('woff2'), url('/fonts/CeraProBold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProBoldItalic.woff2') format('woff2'), url('/fonts/CeraProBoldItalic.woff') format('woff');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProBlack.woff2') format('woff2'), url('/fonts/CeraProBlack.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: CeraPro;
+    src: url('/fonts/CeraProBlackItalic.woff2') format('woff2'), url('/fonts/CeraProBlackItalic.woff') format('woff');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+.cerapro {
+    font-family: CeraPro, sans-serif
+}
+
+body {
+    font-family: CeraPro, sans-serif;
+    color: #414142;
+}
+
+.rounded-lg {
+    border-radius: 0.2rem !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.rounded-xl {
+    border-radius: 0.2rem !important;
+    transition: all 0.3s ease-in-out;
+}
+
+.fi-simple-main-ctn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.90;
+    background-image: radial-gradient(
+            circle at top,
+            theme('colors.primary.300'),
+            theme('colors.transparent'),
+            theme('colors.transparent') 100%
+    );
+}
+
+.dark .fi-simple-main-ctn::before {
+    background-image: radial-gradient(
+            circle at top,
+            theme('colors.primary.800'),
+            theme('colors.gray.950'),
+            theme('colors.gray.950') 100%
+    );
+}
+
+.fi-simple-layout::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1605362001336-f91645086f32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80');
+    background-size: cover;
+    background-position-y: bottom;
+    filter: grayscale(100) invert(100) blur(10px);
+}
+
+.dark .fi-simple-layout::before {
+    filter: grayscale(100);
+}
+
+.fi-simple-main {
+    @apply relative dark:!bg-gray-950/60 backdrop-blur-2xl;
+}
+
+.fi-simple-main::before {
+    @apply absolute inset-x-0 mx-auto h-px w-2/3 bg-gradient-to-r from-transparent via-primary-500 to-transparent dark:from-transparent dark:via-primary-500 dark:to-transparent;
+    content: '';
+    z-index: 1;
+    top: -1px;
+}
+
+/* remove rounded */
+.fi-btn,
+.fi-modal-window,
+.fi-tabs,
+.fi-wi-stats-overview-stat {
+    @apply rounded-sm;
+
+}
+
+.fi-wi-stats-overview-stat {
+    @apply transition-shadow;
+    background: theme('colors.primary.200');
+    @apply !p-4;
+    @apply shadow-md;
+}
+
+.fi-wi-stats-overview-stat:hover {
+    @apply shadow-xl;
+}
+
+@layer components {
+    .fi-topbar {
+        @apply bg-white dark:bg-gray-900;
+    }
+
+    .fi-topbar nav {
+        @apply w-full max-w-7xl mx-auto ring-0;
+    }
+
+    .fi-topbar .fi-icon-button {
+        @apply me-4 !important;
+    }
+
+    .fi-sidebar-item-active a {
+        @apply bg-primary-100 dark:bg-primary-600/30 dark:text-white;
+    }
+
+    .fi-sidebar-item a:hover {
+        @apply bg-primary-100 dark:bg-primary-600/30 dark:text-white;
+    }
+
+    .fi-tabs-item-active {
+        @apply bg-primary-100 dark:bg-primary-600/30 dark:text-white;
+    }
+
+    .fi-sidebar-item-active svg {
+        @apply dark:text-white;
+    }
+
+    .fi-tenant-menu + div {
+        @apply -ms-3 -me-3;
+    }
+
+    .fi-button.outline-primary {
+        @apply bg-white dark:bg-gray-900 border-primary-500 dark:border-primary-400 border-2 shadow-none text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-800 !important;
+    }
+
+    .fi-button.outline-gray {
+        @apply bg-white dark:bg-gray-900 border-gray-400 dark:border-gray-400 border-2 shadow-none text-gray-600 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-gray-800 !important;
+    }
+
+    .fi-button.outline-danger {
+        @apply bg-white dark:bg-gray-900 border-danger-500 dark:border-danger-400 border-2 shadow-none text-danger-600 dark:text-danger-400 hover:bg-primary-50 dark:hover:bg-gray-800 !important;
+    }
+
+    .icon {
+        @apply !w-5 !h-5;
+    }
+
+    .fi-sidebar-nav > ul {
+        @apply !gap-y-3;
+    }
+}
+
+@media (min-width: 1024px) {
+    .fi-sidebar-open {
+        max-width: @apply ! w-100;
+    }
+}
+
+.rounded-xl {
+    @apply rounded-tl-none;
+}
