@@ -11,7 +11,7 @@ class PaymentsTrend extends ApexChartWidget
      *
      * @var string
      */
-    protected static string $chartId = 'paymentsTrend';
+    // protected static string $chartId = 'paymentsTrend';
 
     /**
      * Widget Title

@@ -9,9 +9,9 @@ class InvestorAccountTrend extends ApexChartWidget
     /**
      * Chart Id
      *
-     * @var string
+     *
      */
-    protected static string $chartId = 'investorAccountTrend';
+    // protected static $chartId = 'investorAccountTrend';
 
     /**
      * Widget Title
