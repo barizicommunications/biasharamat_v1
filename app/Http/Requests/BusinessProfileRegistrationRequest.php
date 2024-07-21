@@ -22,6 +22,7 @@ class BusinessProfileRegistrationRequest extends FormRequest
     public function rules(): array
     {
         return [
+            
             'name' => 'required',
             'company_name' => 'required',
             'mobile_number' => 'required',
