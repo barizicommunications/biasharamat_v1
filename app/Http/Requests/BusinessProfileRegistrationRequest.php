@@ -22,12 +22,11 @@ class BusinessProfileRegistrationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
             'name' => 'required',
             'company_name' => 'required',
             'mobile_number' => 'required',
             'email' => 'required|email',
-            'display_company_names' => 'boolean',
+            'display_company_details' => 'sometimes|accepted',
             'seller_role' => 'required|in:Director,Adviser,Shareholder,Other',
             'seller_interest' => 'required',
             'business_start_date' => 'required|date',
@@ -50,10 +49,11 @@ class BusinessProfileRegistrationRequest extends FormRequest
             'tangible_assets' => 'required',
             'liabilities' => 'required',
             'physical_assets' => 'required',
-            'interested_in_quotations' => 'required',
+            'interested_in_quotations' => 'sometimes|accepted',
             'business_photos' => 'required',
             'business_documents' => 'required',
             'proof_of_business' => 'required',
+            'active_business' => 'sometimes|accepted',
         ];
     }
 }

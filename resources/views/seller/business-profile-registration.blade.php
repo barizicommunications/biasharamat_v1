@@ -40,6 +40,7 @@
                                                class=" w-full bg-[#f5f5f5] border-0 py-4 text-[#c4c4c4] text-sm"
                                                placeholder="Enter your full name" disabled
                                                value="{{ Auth::user()->full_name }}">
+                                               <input type="hidden" id="name" name="name" value="{{ Auth::user()->full_name }}">
                                     </div>
                                     <div class="mb-4">
                                         <label for="company_name" class="block mb-3 text-sm">Company name</label>
@@ -69,10 +70,15 @@
                                 </div>
 
                                 <div class="flex">
-                                    <input type="checkbox" aria-label="display" name="display_company_details"
-                                           class="rounded-sm self-center"> <span
-                                            class="inline-flex ml-4 text-[#828282]">Display company details to introduced members so that they can know about my company</span>
-                                </div>
+                                    <input type="checkbox"
+                                           id="display_company_details"
+                                           aria-label="display"
+                                           name="display_company_details"
+                                           class="rounded-sm self-center"
+                                           @if (old('display_company_details')) checked @endif
+                                    >
+                                    <span class="inline-flex ml-4 text-[#828282]">Display company details to introduced members so that they can know about my company</span>
+                                  </div>
                             </div>
                         </div>
                         <div class=" bg-white p-8 mb-10">
@@ -87,54 +93,40 @@
                                 <div class="grid gap-8 grid-cols-1 md:grid-cols-2 mb-4">
                                     <div class="mb-4">
                                         <label for="seller_role" class="block mb-3 text-sm">Your are a(n)</label>
-                                        <select name="seller_role" id="seller_role"
-                                                class="w-full bg-[#f5f5f5] border-0 py-4  text-sm">
-                                            <option value="">&mdash; select &mdash;</option>
-                                            <option value="Director">Director</option>
-                                            <option value="Adviser">Adviser/Business Broker</option>
-                                            <option value="Shareholder">Shareholder</option>
-                                            <option value="Other">Other(specify)</option>
+                                        <select name="seller_role" id="seller_role" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
+                                          <option value="">&mdash; select &mdash;</option>
+                                          @foreach (['Director', 'Adviser/Business Broker', 'Shareholder', 'Other'] as $role)
+                                            <option value="{{ $role }}" @if (old('seller_role') == $role) selected @endif>{{ $role }}</option>
+                                          @endforeach
                                         </select>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="seller_interest" class="block mb-3 text-sm">What are you interested
-                                            in?</label>
-                                        <select name="seller_interest" id="seller_interest"
-                                                class="w-full bg-[#f5f5f5] border-0 py-4  text-sm">
-                                            <option value="">&mdash; select &mdash;</option>
-                                            <option value="Full sale of business">Full sale of business</option>
-                                            <option value="Partial stake sale of business/investment">Partial stake sale
-                                                of business/investment
-                                            </option>
-                                            <option value="Loan for business">Loan for business</option>
+                                      </div>
 
+                                      <div class="mb-4">
+                                        <label for="seller_interest" class="block mb-3 text-sm">What are you interested in?</label>
+                                        <select name="seller_interest" id="seller_interest" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
+                                          <option value="">&mdash; select &mdash;</option>
+                                          @foreach (['Full sale of business', 'Partial stake sale of business/investment', 'Loan for business'] as $interest)
+                                            <option value="{{ $interest }}" @if (old('seller_interest') == $interest) selected @endif>{{ $interest }}</option>
+                                          @endforeach
                                         </select>
-
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="business_start_date" class="block mb-3 text-sm">When was the
-                                            business established? (dd/mm/yyyy)</label>
-                                        <input value="{{ old('business_start_date') }}" type="date"
-                                               id="business_start_date"
-                                               class=" w-full bg-[#f5f5f5] border-0 py-4 text-[#c4c4c4] text-sm"
+                                      </div>
+                                      <div class="mb-4">
+                                        <label for="business_start_date" class="block mb-3 text-sm">When was the business established? (dd/mm/yyyy)</label>
+                                        <input value="{{ old('business_start_date') }}" type="date" id="business_start_date"
+                                               class="w-full bg-[#f5f5f5] border-0 py-4 text-[#c4c4c4] text-sm"
                                                placeholder="dd/mm/yyyy" name="business_start_date">
+                                      </div>
 
-                                    </div>
                                     <div class="mb-4">
-                                        <label for="business_industry" class="block mb-3 text-sm">Select business
-                                            industry</label>
-                                        <select name="business_industry" id="business_industry"
-                                                class="w-full bg-[#f5f5f5] border-0 py-4  text-sm">
-                                            <option value="">&mdash; select &mdash;</option>
-                                            <option value="Technology">Technology</option>
-                                            <option value="Building, Contruction and Maintenance">Building, Contruction
-                                                and Maintenance
-                                            </option>
-                                            <option value="Education">Education</option>
-
+                                        <label for="business_industry" class="block mb-3 text-sm">Select business industry</label>
+                                        <select name="business_industry" id="business_industry" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
+                                          <option value="">&mdash; select &mdash;</option>
+                                          @foreach (['Technology', 'Building, Contruction and Maintenance', 'Education'] as $industry)
+                                            <option value="{{ $industry }}" @if (old('business_industry') == $industry) selected @endif>{{ $industry }}</option>
+                                          @endforeach
                                         </select>
+                                      </div>
 
-                                    </div>
 
                                 </div>
 
@@ -143,24 +135,22 @@
                                     <div>
                                         <label for="business_location" class="block mb-3 text-sm">Where is the business
                                             located / headquartered?</label>
-                                        <div class="grid  grid-cols-3 gap-4">
-                                            <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-[#c4c4c4] text-sm"
-                                                   placeholder="Country" value="{{ old('county') }}" name="country">
-                                            <br>
-                                            @error('country') <span class="text-red-600">{{ $message }}</span> @enderror
+                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                <div class="col-span-1">
+                                                    <input type="text" class="bg-[#f5f5f5] border py-4 text-[#c4c4c4] text-sm w-full" placeholder="Country" value="{{ old('country') }}" name="country">
+                                                    @error('country') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
 
+                                                <div class="col-span-1">
+                                                    <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-[#c4c4c4] text-sm w-full" placeholder="City" name="city" value="{{ old('city') }}">
+                                                    @error('city') <span class="text-red-500">{{ $message }}</span> @enderror
+                                                </div>
 
-                                            <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-[#c4c4c4] text-sm"
-                                                   placeholder="City" name="city" value="{{ old('city') }}">
-                                            <br>
-                                            @error('city') <span class="text-red-500">{{ $message }}</span> @enderror
-
-
-                                            <input type="text"
-                                                   class="bg-[#f5f5f5] border-0 py-4 text-[#c4c4c4] text-sm ml-2"
-                                                   placeholder="County" name="county" value="{{ old('county') }}">
-                                            @error('county') <span class="text-red-600">{{ $message }}</span> @enderror
-                                        </div>
+                                                <div class="col-span-1">
+                                                    <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-[#c4c4c4] text-sm w-full" placeholder="County" name="county" value="{{ old('county') }}">
+                                                    @error('county') <span class="text-red-600">{{ $message }}</span> @enderror
+                                                </div>
+                                            </div>
                                     </div>
                                     <div>
                                         <label for="number_employees" class="block mb-3 text-sm">How many employees
@@ -172,28 +162,22 @@
                                                 class="text-red-600">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="business_legal_entity" class="block mb-3 text-sm">Select business
-                                            legal entity type</label>
-                                        <select name="business_legal_entity" id="business_legal_entity"
-                                                class="w-full bg-[#f5f5f5] border-0 py-4  text-sm">
-                                            <option value=""></option>
-                                            <option value="Sole Proprietorship/Sole Trader">Sole Proprietership/Sole
-                                                Trader
-                                            </option>
-                                            <option value="General Partnership">General partnership</option>
-                                            <option value="Limited liability partnership (LLP)">Limited liability
-                                                partnership (LLP)
-                                            </option>
-                                            <option value="Building, Contruction and Maintenance">Building, Contruction
-                                                and Maintenance
-                                            </option>
-                                            <option value="Education">Education</option>
-
+                                        <label for="business_legal_entity" class="block mb-3 text-sm">Select business legal entity type</label>
+                                        <select name="business_legal_entity" id="business_legal_entity" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm" >
+                                            <option value="">&mdash; select &mdash;</option>
+                                          @foreach ([
+                                            'Sole Proprietorship/Sole Trader',
+                                            'General Partnership',
+                                            'Limited liability partnership (LLP)',
+                                            'Building, Contruction and Maintenance',
+                                            'Education',
+                                          ] as $entity)
+                                            <option value="{{ $entity }}" @if (old('business_legal_entity') == $entity) selected @endif>{{ $entity }}</option>
+                                          @endforeach
                                         </select>
-                                        @error('business_legal_entity') <span
-                                                class="text-red-600">{{ $message }}</span> @enderror
+                                        @error('business_legal_entity') <span class="text-red-600">{{ $message }}</span> @enderror
+                                      </div>
 
-                                    </div>
                                     <div class="mb-4">
                                         <label for="website_link" class="block mb-3 text-sm">Link to your business
                                             website</label>
@@ -327,8 +311,9 @@
                                 </div>
                             </div>
                             <div class="flex">
-                                <input type="checkbox" class="rounded-sm self-center"> <span
-                                        class="inline-flex ml-4 text-[#828282]" name="interested_in_quotations">I’m interested in receiving quotations from Advisors / Boutique Investment Banks who can manage this transaction. </span>
+                                <div class="flex">
+                                <input type="checkbox" class="rounded-sm self-center" name="interested_in_quotations" @if (old('interested_in_quotations')) checked @endif> <span
+                                        class="inline-flex ml-4 text-[#828282]" >I’m interested in receiving quotations from Advisors / Boutique Investment Banks who can manage this transaction. </span>
                             </div>
                         </div>
 
@@ -362,7 +347,7 @@
                                     <h5 class="mb-4">Proof of business</h5>
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
                                         {{-- <img src="{{ asset('images/upload-document.png') }}" alt=""> --}}
-                                        <input type="file" name="proof_of_business" id="proof-of_business"
+                                        <input type="file" name="proof_of_business" id="proof_of_business"
                                                accept=".pdf, .docx, .pptx, .xlsx, .txt">
                                     </div>
                                 </div>
@@ -414,7 +399,7 @@
                                     <div class="flex space-x-8 items-center">
                                         <div>
                                             <input type="checkbox" name="active_business" id="active_business"
-                                                   class="text-sm rounded-sm h-3 w-3">
+                                                   class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
                                         </div>
                                         <div>
                                             <h5>Monthly</h5>
@@ -430,7 +415,7 @@
                                     <div class="flex space-x-8 items-center">
                                         <div>
                                             <input type="checkbox" name="active_business" id="active_business"
-                                                   class="text-sm rounded-sm h-3 w-3">
+                                                   class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
                                         </div>
                                         <div>
                                             <h5><span>Yearly</span> <span class="text-green-400">(Recommended)</span>
