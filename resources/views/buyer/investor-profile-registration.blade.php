@@ -36,11 +36,11 @@
             </span>
 
                 <a href="#" class="text-primary">
-                    Register business profile
+                    Business buyer registration
                 </a>
             </div>
 
-            <h2 class="text-primary font-bold text-xl md:text-3xl mb-8">Business profile registration</h2>
+            <h2 class="text-primary font-bold text-xl md:text-3xl mb-8">Business buyer registration</h2>
 
             <div class="flex flex-wrap md:flex-nowrap space-x-20">
                 <div class="w-3/4">
@@ -65,13 +65,12 @@
                                                <input type="hidden" id="name" name="name" value="{{ Auth::user()->full_name }}">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="company_name" class="block mb-3 text-sm">Company name</label>
-                                        <input value="{{ old('company_name') }}" type="text" id="company_name"
+                                        <label for="email" class="block mb-3 text-sm">Official email for quick
+                                            verification</label>
+                                        <input value="{{ old('email') ?? Auth::user()->email }}" type="email" id="email"
                                                class=" w-full bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm"
-                                               placeholder="Enter your company name" name="company_name">
-                                        @error('company_name')
-                                        <span class="text-red-600">{{ $message }}</span>
-                                        @enderror
+                                               placeholder="Enter your email" name="email">
+                                        @error('email') <span class="text-red-600">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="mb-4">
                                         <label for="mobile_number" class="block mb-3 text-sm">Your mobile number</label>
@@ -81,77 +80,96 @@
                                         @error('mobile_number') <span
                                                 class="text-red-600">{{ $message }}</span> @enderror
                                     </div>
-                                    <div class="mb-4">
-                                        <label for="email" class="block mb-3 text-sm">Official email for quick
-                                            verification</label>
-                                        <input value="{{ old('email') ?? Auth::user()->email }}" type="email" id="email"
-                                               class=" w-full bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm"
-                                               placeholder="Enter your email" name="email">
-                                        @error('email') <span class="text-red-600">{{ $message }}</span> @enderror
-                                    </div>
+
                                 </div>
 
-                                <div class="flex">
-                                    <input type="checkbox"
-                                           id="display_company_details"
-                                           aria-label="display"
-                                           name="display_company_details"
-                                           class="rounded-sm self-center"
-                                           @if (old('display_company_details')) checked @endif
-                                    >
-                                    <span class="inline-flex ml-4 text-[#828282]">Display company details to introduced members so that they can know about my company</span>
-                                  </div>
+
                             </div>
                         </div>
                         <div class=" bg-white p-8 mb-10">
                             <h3 class="text-primary font-semibold mb-4"><span class="text-xl">b. </span><span
-                                        class="text-2xl">Business information</span></h3>
-                            <p class="text-[#9D9D9D]">Information entered here is displayed publicly to match you with
-                                the right set of investors and buyers. Do not mention business name/information which
-                                can identify the business.</p>
+                                        class="text-2xl">Your requirements</span></h3>
+                            <p class="text-[#9D9D9D]">Information entered here will be publicly displayed to match you with the right set of businesses. Fields specifically marked as 'Private' will not be publicly displayed.</p>
                             <hr class="my-8 border-t-[1px] border-gray-300">
 
                             <div class="section-b">
+                                <div class="mb-4">
+                                    <label for="interested_in" class="block mb-3 text-sm">You are interested in</label>
+                                    <div class="flex">
+                                        <div class="flex">
+                                        <input type="radio" class="rounded-sm self-center" name="interested_in" value="acquiring_business" @if (old('interested_in')) checked @endif> <span
+                                                class="inline-flex ml-4 text-[#828282] text-sm" >Acquiring / Buying a Business </span>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="flex">
+                                    <input type="radio" class="rounded-sm self-center" name="interested_in" value="investing_in_a_business" @if (old('interested_in')) checked @endif> <span
+                                            class="inline-flex ml-4 text-[#828282] text-sm" >Investing in a Business </span>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div class="flex">
+                                <input type="radio" class="rounded-sm self-center" name="interested_in" value="lending_to_a_business" @if (old('interested_in')) checked @endif> <span
+                                        class="inline-flex ml-4 text-[#828282] text-sm" >Lending to a Business </span>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="flex">
+                            <input type="radio" class="rounded-sm self-center" name="interested_in" value="buying_property_plant_machinery" @if (old('interested_in')) checked @endif> <span
+                                    class="inline-flex ml-4 text-[#828282] text-sm" >Buying Property / Plant / Machinery </span>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <div class="flex">
+                        <input type="radio" class="rounded-sm self-center" name="interested_in" value="taking_up_franchise" @if (old('interested_in')) checked @endif> <span
+                                class="inline-flex ml-4 text-[#828282] text-sm" >Taking up a Franchise / Distributorship / Sales Agency </span>
+                    </div>
+                </div>
+
+                                </div>
+
                                 <div class="grid gap-8 grid-cols-1 md:grid-cols-2 mb-4">
                                     <div class="mb-4">
-                                        <label for="seller_role" class="block mb-3 text-sm">Your are a(n)</label>
-                                        <select name="seller_role" id="seller_role" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
+                                        <label for="buyer_role" class="block mb-3 text-sm">Your are a(n)</label>
+                                        <select name="buyer_role" id="seller_role" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
                                           <option value="">&mdash; select &mdash;</option>
-                                          @foreach (['Director', 'Adviser', 'Shareholder', 'Other'] as $role)
-                                            <option value="{{ $role }}" @if (old('seller_role') == $role) selected @endif>{{ $role }}</option>
+                                          @foreach (['Individual investor/buyer', 'Corporate investor/buyer'] as $role)
+                                            <option value="{{ $role }}" @if (old('buyer_role') == $role) selected @endif>{{ $role }}</option>
                                           @endforeach
                                         </select>
-                                        @error('seller_role') <span class="text-red-600">{{ $message }}</span> @enderror
+                                        @error('buyer_role') <span class="text-red-600">{{ $message }}</span> @enderror
                                       </div>
 
                                       <div class="mb-4">
-                                        <label for="seller_interest" class="block mb-3 text-sm">What are you interested in?</label>
+                                        <label for="seller_interest" class="block mb-3 text-sm">Select industries you are interested in. </label>
                                         <select name="seller_interest" id="seller_interest" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
                                           <option value="">&mdash; select &mdash;</option>
-                                          @foreach (['Full sale of business', 'Partial stake sale of business/investment', 'Loan for business'] as $interest)
+                                          @foreach (['Select all','Education', 'Technology', 'Building, construction and maintanance'] as $interest)
                                             <option value="{{ $interest }}" @if (old('seller_interest') == $interest) selected @endif>{{ $interest }}</option>
                                           @endforeach
                                         </select>
                                         @error('seller_interest') <span class="text-red-600">{{ $message }}</span> @enderror
                                       </div>
                                       <div class="mb-4">
-                                        <label for="business_start_date" class="block mb-3 text-sm">When was the business established? (dd/mm/yyyy)</label>
-                                        <input value="{{ old('business_start_date') }}" type="date" id="business_start_date"
-                                               class="w-full bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm"
-                                               placeholder="dd/mm/yyyy" name="business_start_date">
-                                               @error('business_start_date') <span class="text-red-600">{{ $message }}</span> @enderror
-                                      </div>
-
-                                    <div class="mb-4">
-                                        <label for="business_industry" class="block mb-3 text-sm">Select business industry</label>
-                                        <select name="business_industry" id="business_industry" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
+                                        <label for="seller_location_interest" class="block mb-3 text-sm">Select locations you are interested in.  </label>
+                                        <select name="seller_location_interest" id="seller_location_interest" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
                                           <option value="">&mdash; select &mdash;</option>
-                                          @foreach (['Technology', 'Building, Contruction and Maintenance', 'Education'] as $industry)
-                                            <option value="{{ $industry }}" @if (old('business_industry') == $industry) selected @endif>{{ $industry }}</option>
+                                          @foreach (['Nairobi','Mombasa', 'Kisumu', 'Eldoret','Nakuru'] as $interest)
+                                            <option value="{{ $interest }}" @if (old('seller_interest') == $interest) selected @endif>{{ $interest }}</option>
                                           @endforeach
                                         </select>
-                                        @error('business_industry') <span class="text-red-600">{{ $message }}</span> @enderror
+                                        @error('seller_location_interest') <span class="text-red-600">{{ $message }}</span> @enderror
                                       </div>
+
+                                      <div class="mb-4">
+                                        <label for="investment_range" class="block mb-3 text-sm">Provide your investment range.</label>
+                                        <input type="number"
+                                               class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
+                                               id="investment_range" placeholder="KES  |" name="investment_range"
+                                               value="{{ old('investment_range') }}">
+                                        @error('investment_range') <span
+                                                class="text-red-600">{{ $message }}</span> @enderror
+                                    </div>
 
 
                                 </div>
@@ -159,223 +177,111 @@
 
                                 <div class="grid grid-cols-1 gap-10 md:grid-cols-2 mb-4">
                                     <div>
-                                        <label for="business_location" class="block mb-3 text-sm">Where is the business
-                                            located / headquartered?</label>
-                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                <div class="col-span-1">
-                                                    <input type="text" class="bg-[#f5f5f5] border py-4 text-gray-700 text-sm w-full" placeholder="Country" value="{{ old('country') }}" name="country">
-                                                    @error('country') <span class="text-red-600">{{ $message }}</span> @enderror
-                                                </div>
 
-                                                <div class="col-span-1">
-                                                    <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full" placeholder="City" name="city" value="{{ old('city') }}">
-                                                    @error('city') <span class="text-red-500">{{ $message }}</span> @enderror
-                                                </div>
-
-                                                <div class="col-span-1">
-                                                    <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full" placeholder="County" name="county" value="{{ old('county') }}">
-                                                    @error('county') <span class="text-red-600">{{ $message }}</span> @enderror
-                                                </div>
+                                            <div class="mb-4">
+                                                <label for="current_location" class="block mb-3 text-sm">Your current location.</label>
+                                                <input type="text"
+                                                       class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
+                                                       id="current_location" value="{{ old('current_location') }}" name="current_location">
+                                                @error('current_location') <span
+                                                        class="text-red-600">{{ $message }}</span> @enderror
                                             </div>
                                     </div>
-                                    <div>
-                                        <label for="number_employees" class="block mb-3 text-sm">How many employees
-                                            does the business have?</label>
-                                        <input value="{{ old('number_employees') }}" id="number_employees" type="number"
-                                               name="number_employees"
-                                               class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full">
-                                        @error('number_employees') <span
+                                    <div class="mb-4">
+                                        <label for="company_name" class="block mb-3 text-sm">Name of company.</label>
+                                        <input type="text"
+                                               class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
+                                               id="company_name" value="{{ old('company_name') }}" name="company_name">
+                                        @error('company_name') <span
                                                 class="text-red-600">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="business_legal_entity" class="block mb-3 text-sm">Select business legal entity type</label>
-                                        <select name="business_legal_entity" id="business_legal_entity" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm" >
-                                            <option value="">&mdash; select &mdash;</option>
-                                          @foreach ([
-                                            'Sole Proprietorship/Sole Trader',
-                                            'General Partnership',
-                                            'Limited liability partnership (LLP)',
-                                            'Building, Contruction and Maintenance',
-                                            'Education',
-                                          ] as $entity)
-                                            <option value="{{ $entity }}" @if (old('business_legal_entity') == $entity) selected @endif>{{ $entity }}</option>
-                                          @endforeach
-                                        </select>
-                                        @error('business_legal_entity') <span class="text-red-600">{{ $message }}</span> @enderror
-                                      </div>
+                                        <label for="linkedin_profile" class="block mb-3 text-sm">Company LinkedIn profile. Private</label>
+                                        <input type="text"
+                                               class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
+                                               id="linkedin_profile" value="{{ old('linkedin_profile') }}" name="linkedin_profile">
+                                        @error('linkedin_profile') <span
+                                                class="text-red-600">{{ $message }}</span> @enderror
+                                    </div>
 
                                     <div class="mb-4">
-                                        <label for="website_link" class="block mb-3 text-sm">Link to your business
-                                            website</label>
+                                        <label for="website_link" class="block mb-3 text-sm">Link to company website</label>
                                         <input type="text"
                                                class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
                                                id="website_link" value="{{ old('website_link') }}" name="website_link">
                                         @error('website_link') <span
                                                 class="text-red-600">{{ $message }}</span> @enderror
                                     </div>
-                                    <div class="mb-4">
-                                        <label for="business_description" class="block mb-3 text-sm">Describe the
-                                            business</label>
-                                        <textarea class="w-full bg-[#f5f5f5] border-0"
-                                                  style="height:140px; resize:none;"
-                                                  id="business_description"
-                                                  name="business_description">{{ old('business_description') }}</textarea>
-                                        @error('business_description') <span
-                                                class="text-red-600">{{ $message }}</span> @enderror
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="product_services" class="block mb-3 text-sm">List products and
-                                            services of the business</label>
-                                        <textarea class="w-full bg-[#f5f5f5] border-0"
-                                                  style="height:140px; resize:none;"
-                                                  id="product_services"
-                                                  name="product_services">{{ old('product_services') }}</textarea>
-                                        @error('product_services') <span
-                                                class="text-red-600">{{ $message }}</span> @enderror
-                                    </div>
+
+
                                 </div>
 
-                                <div class="mb-4">
-                                    <label for="business_highlights" class="block mb-3 text-sm">Mention highlights of
-                                        the
-                                        business including number of clients, growth rate, promoter experience, business
-                                        relationships, awards, etc</label>
-                                    <textarea id="business_highlights" class="w-full bg-[#f5f5f5] border-0"
-                                              style="height:140px; resize:none;"
-                                              name="business_highlights">{{ old('business_highlights') }}</textarea>
-                                    @error('business_highlights') <span
-                                            class="text-red-600">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="mb-4">
-                                    <label for="facility_description" class="block mb-3 text-sm">Describe your facility
-                                        such as built-up area, number of floors, rental/lease details</label>
-                                    <textarea class="w-full bg-[#f5f5f5] border-0"
-                                              style="height:140px; resize:none;" id="facility_description"
-                                              name="facility_description">{{ old('facility_description') }}</textarea>
-                                    @error('facility_description') <span
-                                            class="text-red-600">{{ $message }}</span> @enderror
-                                </div>
+
+
                             </div>
                         </div>
 
                         <div class="mb-10 bg-white p-8">
                             <h3 class="text-primary font-semibold mb-4"><span class="text-xl">c. </span><span
-                                        class="text-2xl">Transactional information</span></h3>
-                            <p class="text-[#9D9D9D]">Please enter your own details here. Information entered here is
-                                not publicly displayed.</p>
+                                        class="text-2xl">Additional information</span></h3>
+                            <p class="text-[#9D9D9D]">Documents help us verify and approve your profile faster. Document names entered here are publicly visible but are accessible only to introduced members.</p>
                             <hr class="my-8 border-t-[1px] border-gray-300">
 
                             <div class="grid gap-10 grid-cols-1 md:grid-cols-2 mb-4">
                                 <div class="mb-4">
-                                    <label for="business_funds" class="block mb-3 text-sm">How is the business funded
-                                        presently? Mention all debts, securities registered, equity funding,
-                                        etc.</label>
-                                    <textarea id="business_funds" class="w-full bg-[#f5f5f5] border-0"
+                                    <label for="business_funds" class="block mb-3 text-sm">Factors the company looks for in a business.</label>
+                                    <textarea id="business_factors" class="w-full bg-[#f5f5f5] border-0"
                                               style="height:140px; resize:none;"
-                                              name="business_funds">{{ old('business_funds') }}</textarea>
-                                    @error('business_funds') <span class="text-red-600">{{ $message }}</span> @enderror
+                                              name="business_factors">{{ old('business_factors') }}</textarea>
+                                    @error('business_factors') <span class="text-red-600">{{ $message }}</span> @enderror
                                 </div>
                                 <div class="mb-4">
-                                    <label for="number_shareholders" class="block mb-8 text-sm ">Current number of
-                                        shareholders and shareholding </label>
-                                    <textarea id="number_shareholders" class="w-full bg-[#f5f5f5] border-0"
+                                    <label for="about_company" class="block mb-3 text-sm ">About the company </label>
+                                    <textarea id="about_company" class="w-full bg-[#f5f5f5] border-0"
                                               style="height:140px; resize:none;"
-                                              name="number_shareholders">{{ old('number_shareholders') }}</textarea>
-                                    @error('number_shareholders') <span
+                                              name="about_company">{{ old('about_company') }}</textarea>
+                                    @error('about_company') <span
                                             class="text-red-600">{{ $message }}</span> @enderror
                                 </div>
-                                <div class="mb-4">
-                                    <label for="monthly_turnover" class="block mb-3 text-sm">At present, what is your
-                                        average monthly turnover?</label>
-                                    <input type="number"
-                                           class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
-                                           id="monthly_turnover" placeholder="KES  |" name="monthly_turnover"
-                                           value="{{ old('monthly_turnover') }}">
-                                    @error('monthly_turnover') <span
-                                            class="text-red-600">{{ $message }}</span> @enderror
+                                <div>
+                                    <h5 class="mb-4 text-sm">Attach Corporate Profile and/or Terms of Engagement if any .</h5>
+                                    <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
+                                        {{-- <img src="{{ asset('images/upload-document.png') }}" alt=""> --}}
+                                        <input type="file" name="corporate_profile" id="corporate_profile"
+                                               accept=".pdf, .docx, .pptx, .xlsx, .txt">
+                                    </div>
+                                    @error('corporate_profile') <span
+                                    class="text-red-600"> {{ $message }}</span> @enderror
                                 </div>
-                                <div class="mb-4">
-                                    <label for="yearly_turnover" class="block mb-3 text-sm">Indicate turnover for the
-                                        preceding year</label>
-                                    <input type="number"
-                                           class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
-                                           id="yearly_turnover" placeholder="KES  |" name="yearly_turnover"
-                                           value="{{ old('yearly_turnover') }}">
-                                    @error('yearly_turnover') <span class="text-red-600">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="mb-4">
-                                    <label for="profit_margin" class="block mb-3 text-sm">What is the EBITDA / Operating
-                                        Profit Margin Percentage/Last reported profit/loss</label>
-                                    <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
-                                           id="profit_margin" name="profit_margin" value="{{ old('profit_margin') }}">
-                                    @error('profit_margin') <span class="text-red-600">{{ $message}} </span> @enderror
-                                </div>
-                                <div class="mb-4">
-                                    <label for="tangible_assets" class="block mb-8 text-sm">List all tangible and
-                                        intangible assets the business owns. </label>
-                                    <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
-                                           id="tangible_assets" name="tangible_assets"
-                                           value="{{ old('tangible_assets') }}">
-                                    @error('tangible_assets') <span class="text-red-600">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="mb-4">
-                                    <label for="liabilities" class="block mb-8 text-sm">List all liabilities the
-                                        business owns </label>
-                                    <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
-                                           id="liabilities" name="liabilities" value="{{ old('liabilities')}}">
-                                    @error('liabilities') <span class="text-red-600">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="mb-4">
-                                    <label for="physical_assets" class="block mb-3 text-sm">What is the value of
-                                        physical assets owned by the business that would be part of the
-                                        transaction? </label>
-                                    <input type="text" class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
-                                           id="physical_assets" placeholder="KES |" name="physical_assets"
-                                           value="{{ old('physical_assets') }}">
-                                    @error('physical_assets') <span
-                                            class="text-red-600"> {{ $message }}</span> @enderror
-                                </div>
+
+
+
+
+
                             </div>
-                            <div class="flex">
-                                <div class="flex">
-                                <input type="checkbox" class="rounded-sm self-center" name="interested_in_quotations" @if (old('interested_in_quotations')) checked @endif> <span
-                                        class="inline-flex ml-4 text-[#828282]" >I’m interested in receiving quotations from Advisors / Boutique Investment Banks who can manage this transaction. </span>
-                            </div>
-                        </div>
+
                         </div>
 
                         <div class="mb-10 bg-white p-8">
                             <h3 class="text-primary font-semibold mb-4"><span class="text-xl">d. </span><span
-                                        class="text-2xl">Documents</span></h3>
-                            <p class="text-[#9D9D9D]">Photos are an important part of your profile and are publicly
-                                displayed. Documents help us verify and approve your profile faster. Documents names
-                                entered here are publicly visible but are accessible only to introduced members.</p>
+                                        class="text-2xl">Documents & proof</span></h3>
+                            <p class="text-[#9D9D9D]">Documents help us verify and approve your profile faster. Document names entered here are publicly visible but are accessible only to introduced members.</p>
                             <hr class="my-8 border-t-[1px] border-gray-300">
 
                             <div class="grid gap-4 grid-cols-1 md:grid-cols-2">
                                 <div>
-                                    <h5 class="mb-4">Business photos</h5>
+                                    <h5 class="mb-4">Company logo</h5>
 
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
                                         {{-- <img src="{{ asset('images/upload-document.png') }}" alt=""> --}}
-                                        <input type="file" name="business_photos" id="business_photos"
+                                        <input type="file" name="company_logo" id="company_logo"
                                                accept=".jpg, .jpeg, .png">
                                     </div>
-                                    @error('business_photos') <span
+                                    @error('company_logo') <span
                                             class="text-red-600"> {{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <h5 class="mb-4">Business documents</h5>
-                                    <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
-                                        {{-- <img src="{{ asset('images/upload-document.png') }}" alt=""> --}}
-                                        <input type="file" name="business_documents" id="business_documents"
-                                               accept=".pdf, .docx, .pptx, .xlsx, .txt">
-                                    </div>
-                                    @error('business_documents') <span
-                                    class="text-red-600"> {{ $message }}</span> @enderror
-                                </div>
-                                <div>
-                                    <h5 class="mb-4">Proof of business</h5>
+                                    <h5 class="mb-4">Attach proof of business for faster verification</h5>
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
                                         {{-- <img src="{{ asset('images/upload-document.png') }}" alt=""> --}}
                                         <input type="file" name="proof_of_business" id="proof_of_business"
@@ -384,6 +290,7 @@
                                     @error('proof_of_business') <span
                                     class="text-red-600"> {{ $message }}</span> @enderror
                                 </div>
+
                             </div>
 
                         </div>
@@ -408,11 +315,29 @@
                                                    class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
                                         </div>
                                         <div>
-                                            <h5>Monthly</h5>
+                                            <h5>Active plan</h5>
                                         </div>
                                     </div>
                                     <div>
-                                        <h5 class="font-bold">KES 12,000</h5>
+                                        <h5 class="font-bold">KES 17,000</h5>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="plan-2 mb-4" x-data=" {isOpen : false}">
+                                <div class="flex justify-between cursor-pointer" @click="isOpen = !isOpen">
+                                    <div class="flex space-x-8 items-center">
+                                        <div>
+                                            <input type="checkbox" name="active_business" id="active_business"
+                                                   class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
+                                        </div>
+                                        <div>
+                                            <h5><span>Premium plan</span> <span class="text-green-400">(Recommended)</span>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-bold">KES 20,500</h5>
                                     </div>
                                 </div>
                             </div>
@@ -424,17 +349,17 @@
                                                    class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
                                         </div>
                                         <div>
-                                            <h5><span>Yearly</span> <span class="text-green-400">(Recommended)</span>
+                                            <h5><span>Yearly</span>
                                             </h5>
                                         </div>
                                     </div>
                                     <div>
-                                        <h5 class="font-bold">KES 143,999</h5>
+                                        <h5 class="font-bold">KES 205,000</h5>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex">
-                                <input type="checkbox" class="rounded-sm self-center"> <span class="inline-flex ml-4">I accept 1% finder's fee (payable post transaction) and other terms of engagement. </span>
+                                <input type="checkbox" class="rounded-sm self-center"> <span class="inline-flex ml-4">I accept terms of engagement. </span>
                             </div>
                         </div>
 

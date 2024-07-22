@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\InvestorRegistrationRequest;
 
 class InvestorRegistrationController extends Controller
@@ -35,7 +36,6 @@ class InvestorRegistrationController extends Controller
     public function store(InvestorRegistrationRequest $request)
     {
 
-        dd($request->email);
 
         $firstName = explode(' ', $request->buyer_name)[0];
         $lastName = explode(' ', $request->buyer_name)[1];
@@ -49,7 +49,7 @@ class InvestorRegistrationController extends Controller
             'password' => bcrypt($request->buyer_password),
             'email' => $request->buyer_email,
         ];
-        dd($data);
+
 
         $user = User::create($data);
 

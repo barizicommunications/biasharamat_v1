@@ -12,16 +12,16 @@
 
                         <div class="mb-4">
                             <label for="buyer_name" class="block mb-3 ">Your name</label>
-                            <input type="text" id="buyer_name" class="w-full">
+                            <input type="text" id="buyer_name" name="buyer_name" class="w-full">
                         </div>
                         <div class="mb-4">
                             <label for="buyer_email" class="block mb-3 ">Your email</label>
-                            <input type="email" id="buyer_email" class="w-full">
+                            <input type="email" id="buyer_email" name="buyer_email" class="w-full">
                         </div>
 
                         <div class="mb-8">
                             <label for="buyer_password" class="block mb-3 ">Your password</label>
-                            <input type="password"  id="buyer_password"  class="w-full">
+                            <input type="password"  id="buyer_password"  name="buyer_password" class="w-full">
                         </div>
                         <div class="mb-2">
                             <button type="submit" class="text-white bg-primary px-8 py-3 block text-center w-full">
