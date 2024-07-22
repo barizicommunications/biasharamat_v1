@@ -13,7 +13,42 @@ return new class extends Migration
     {
         Schema::create('business_profiles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->unique();
+            $table->string('name');
+            $table->string('company_name');
+            $table->string('mobile_number');
+            $table->string('email')->unique();
+            $table->string('display_company_details')->nullable();
+            $table->enum('seller_role', ['Director', 'Adviser', 'Shareholder', 'Other']);
+            $table->string('seller_interest');
+            $table->date('business_start_date');
+            $table->string('business_industry');
+            $table->string('country');
+            $table->string('city');
+            $table->string('county');
+            $table->integer('number_employees');
+            $table->string('business_legal_entity');
+            $table->string('website_link');
+            $table->text('business_description');
+            $table->text('product_services');
+            $table->text('business_highlights');
+            $table->text('facility_description');
+            $table->string('business_funds');
+            $table->string('number_shareholders');
+            $table->string('monthly_turnover');
+            $table->string('yearly_turnover');
+            $table->string('profit_margin');
+            $table->string('tangible_assets');
+            $table->string('liabilities');
+            $table->string('physical_assets');
+            $table->string('interested_in_quotations')->nullable();
+            $table->json('business_photos');
+            $table->json('business_documents');
+            $table->json('proof_of_business');
+            $table->string('active_business')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

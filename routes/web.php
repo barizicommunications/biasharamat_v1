@@ -1,11 +1,13 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\BusinessProfileController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\BusinessProfileController;
+use App\Http\Controllers\InvestorProfileController;
 use App\Http\Controllers\SellerRegistrationController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\InvestorRegistrationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,15 +37,28 @@ Route::group(['controller' => SellerRegistrationController::class], function () 
         ->name('business.store');
 });
 
-Route::get('register-business-investor', function () {
-    return view('guests.register-business-investor');
-})->name('registerInvestor');
+Route::group(['controller' => InvestorRegistrationController::class], function () {
+    Route::get('/register-business-investor', 'create')
+        ->name('investor.create');
+    Route::post('/register-business-investor', 'store')
+        ->name('investor.store');
+});
+
+// Route::get('register-business-investor', function () {
+//     return view('guests.register-business-investor');
+// })->name('registerInvestor');
 
 Route::group(['controller' => BusinessProfileController::class], function () {
     Route::get('/business-profile-registration', 'create')
         ->name('business.profile.create');
     Route::post('/business-profile-registration', 'store')
         ->name('business.profile.store');
+});
+Route::group(['controller' => InvestorProfileController::class], function () {
+    Route::get('/investor-profile-registration', 'create')
+        ->name('investor.profile.create');
+    Route::post('/investor-profile-registration', 'store')
+        ->name('investor.profile.store');
 });
 
 Route::get('verification-call-page', function () {

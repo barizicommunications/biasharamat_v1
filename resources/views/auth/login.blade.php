@@ -27,14 +27,14 @@
                                 Login
                             </button>
                         </div>
-                        <div>
+                        {{-- <div>
                             <a href="{{ route('business.profile.create') }}"
                                class="text-primary bg-transparent border border-primary px-8 py-3 block text-center">
                                 <span class="inline-block align-middle"><img src="{{ asset('images/google-logo.png') }}"
                                                                              alt=""></span>
                                 <span class="inline-block align-middle ml-3">Log in with google</span>
                             </a>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
                 <div class=" col-span-2 justify-self-end ">

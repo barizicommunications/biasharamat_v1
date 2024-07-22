@@ -7,31 +7,34 @@
                     <h2 class="text-2xl text-primary font-bold">Create an account</h2>
                     <p class="text-[#9D9D9D] mb-6">Enter your credentials to create your account</p>
 
-                    <form>
+                    <form action="{{ route('investor.store') }}" method="post">
                         @csrf
 
                         <div class="mb-4">
-                            <label for="seller_name" class="block mb-3 ">Your name</label>
-                            <input type="text" id="seller_name" class="w-full">
+                            <label for="buyer_name" class="block mb-3 ">Your name</label>
+                            <input type="text" id="buyer_name" class="w-full">
                         </div>
                         <div class="mb-4">
-                            <label for="seller_email" class="block mb-3 ">Your email</label>
-                            <input type="email" id="seller_email" class="w-full">
+                            <label for="buyer_email" class="block mb-3 ">Your email</label>
+                            <input type="email" id="buyer_email" class="w-full">
                         </div>
+
                         <div class="mb-8">
-                            <label for="seller_password" class="block mb-3 ">Your password</label>
-                            <input type="password"  id="seller_password"  class="w-full">
+                            <label for="buyer_password" class="block mb-3 ">Your password</label>
+                            <input type="password"  id="buyer_password"  class="w-full">
                         </div>
                         <div class="mb-2">
-                            <a href="#" class="text-white bg-primary px-8 py-3 block text-center">Create account</a>
+                            <button type="submit" class="text-white bg-primary px-8 py-3 block text-center w-full">
+                                Create account
+                            </button>
                         </div>
-                        <div>
+                        {{-- <div>
                             <a href="#" class="text-primary bg-transparent border border-primary px-8 py-3 block text-center">
 
                                <span class="inline-block align-middle"><img src="{{ asset('images/google-logo.png') }}" alt=""></span>
                                <span class="inline-block align-middle ml-3">Sign up with google</span>
                             </a>
-                        </div>
+                        </div> --}}
 
                     </form>
                 </div>

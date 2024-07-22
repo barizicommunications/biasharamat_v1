@@ -83,19 +83,27 @@
                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                     Add business profile
                                 </a>
-                                <a href="{{ route('registerInvestor') }}"
+                                <a href="{{ route('investor.create') }}"
                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                     Add investor profile
                                 </a>
                             @else
-                                <a href="{{ route('business.profile.create') }}"
-                                   class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    Add business profile
-                                </a>
-                                <a href="{{ route('registerInvestor') }}"
-                                   class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    Add investor profile
-                                </a>
+                               @if(auth()->user()->registration_type == "Business Seller" && !\App\Models\BusinessProfile::where('user_id',auth()->user()->id)->first())
+                               <a href="{{ route('business.profile.create') }}"
+                               class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                Add business profile
+                            </a>
+
+                               @endif
+                                @if(auth()->user()->registration_type == "Business Buyer")
+
+                                <a href="{{ route('investor.create') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                 Add investor profile
+                             </a>
+
+
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -113,7 +121,7 @@
                         </a>
                         <form method="POST" action="{{ route('logout') }}" class="inline-block ml-4">
                             @csrf
-                            <button type="submit" class="text-red-500 hover:underline">Logout</button>
+                            <button type="submit" class="text-red-500 hover:underline px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0  hover:bg-gray-100">Logout</button>
                           </form>
                     @endif
                 </div>

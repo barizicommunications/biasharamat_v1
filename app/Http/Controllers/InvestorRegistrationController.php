@@ -2,33 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Requests\SellerRegistrationRequest;
+use App\Http\Requests\InvestorRegistrationRequest;
 
-class SellerRegistrationController extends Controller
+class InvestorRegistrationController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        // if (!\Auth::check()) {
+        //     return redirect()->route('login');
+        // }
+
+        return view('guests.register-business-investor');
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(SellerRegistrationRequest $request)
+    public function store(InvestorRegistrationRequest $request)
     {
-        $firstName = explode(' ', $request->seller_name)[0];
-        $lastName = explode(' ', $request->seller_name)[1];
+
+        dd($request->email);
+
+        $firstName = explode(' ', $request->buyer_name)[0];
+        $lastName = explode(' ', $request->buyer_name)[1];
+
+
 
         $data = [
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'registration_type'=> "Business Seller",
-            'password' => bcrypt($request->seller_password),
-            'email' => $request->seller_email,
+            'registration_type'=> "Business Buyer",
+            'password' => bcrypt($request->buyer_password),
+            'email' => $request->buyer_email,
         ];
+        dd($data);
 
         $user = User::create($data);
 
-        $roleName = "Business Seller";
+        $roleName = "Business Buyer";
 
         $role = Role::where('name', $roleName)->first(); // Find the first role matching the name
 
@@ -43,15 +68,9 @@ class SellerRegistrationController extends Controller
 
         Auth::loginUsingId($user->id);
 
-        return redirect()->route('business.profile.create');
-    }
+        return redirect()->route('investor.profile.create');
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('guests.register-business-seller');
+
     }
 
     /**
