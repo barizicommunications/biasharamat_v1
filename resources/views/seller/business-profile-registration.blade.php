@@ -44,7 +44,7 @@
 
             <div class="flex flex-wrap md:flex-nowrap space-x-20">
                 <div class="w-3/4">
-                    <form method="post" action="{{ route('business.profile.store') }}">
+                    <form method="post" action="{{ route('business.profile.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class=" bg-white p-8 mb-8">
                             <h3 class="text-primary font-semibold mb-4"><span class="text-xl">a. </span><span
@@ -195,8 +195,6 @@
                                             'Sole Proprietorship/Sole Trader',
                                             'General Partnership',
                                             'Limited liability partnership (LLP)',
-                                            'Building, Contruction and Maintenance',
-                                            'Education',
                                           ] as $entity)
                                             <option value="{{ $entity }}" @if (old('business_legal_entity') == $entity) selected @endif>{{ $entity }}</option>
                                           @endforeach
@@ -357,9 +355,9 @@
                                     <h5 class="mb-4">Business photos</h5>
 
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
-                                        {{-- <img src="{{ asset('images/upload-document.png') }}" alt=""> --}}
+
                                         <input type="file" name="business_photos" id="business_photos"
-                                               accept=".jpg, .jpeg, .png">
+                                               accept=".jpg,.png,.jpeg">
                                     </div>
                                     @error('business_photos') <span
                                             class="text-red-600"> {{ $message }}</span> @enderror
@@ -367,7 +365,7 @@
                                 <div>
                                     <h5 class="mb-4">Business documents</h5>
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
-                                        {{-- <img src="{{ asset('images/upload-document.png') }}" alt=""> --}}
+
                                         <input type="file" name="business_documents" id="business_documents"
                                                accept=".pdf, .docx, .pptx, .xlsx, .txt">
                                     </div>
@@ -377,7 +375,7 @@
                                 <div>
                                     <h5 class="mb-4">Proof of business</h5>
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
-                                        {{-- <img src="{{ asset('images/upload-document.png') }}" alt=""> --}}
+
                                         <input type="file" name="proof_of_business" id="proof_of_business"
                                                accept=".pdf, .docx, .pptx, .xlsx, .txt">
                                     </div>

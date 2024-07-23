@@ -68,6 +68,6 @@ class BusinessSellerResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return User::query()
-            ->where('role', 'BUSINESS_SELLER');
+            ->where('registration_type', 'Business Seller');
     }
 }

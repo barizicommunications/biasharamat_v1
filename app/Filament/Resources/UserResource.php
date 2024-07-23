@@ -87,8 +87,8 @@ class UserResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        return User::query()->where('role', 'ADMIN');
-    }
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     return User::query()->where('registration_type', 'Business Buyer');
+    // }
 }

@@ -341,7 +341,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="{{ route('sellerProfileOverview') }}"
+                            <a href="#"
                                class="uppercase text-xs px-8 py-2  outline outline-2 block text-center rounded-sm">Contact
                                 business</a>
                         </div>

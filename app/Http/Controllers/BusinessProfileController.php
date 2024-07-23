@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Business;
 use Illuminate\Http\Request;
 use App\Models\BusinessProfile;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\BusinessSellerSignup;
+use App\Notifications\ApplicationUnderReview;
 use App\Http\Requests\BusinessProfileRegistrationRequest;
 
 class BusinessProfileController extends Controller
@@ -36,6 +39,23 @@ class BusinessProfileController extends Controller
         // Validate the request data
         $validatedData = $request->validated();
 
+        $businessPhotos = $request->file('business_photos');
+        $businessDocuments = $request->file('business_documents');
+        $proofOfBusiness = $request->file('proof_of_business');
+
+        $photofileName = time() . '.' . $businessPhotos->getClientOriginalExtension();
+        $businessPhotos->storeAs('public/business_photos', $photofileName);
+
+
+        $businessDocumentFile = time() . '.' . $businessDocuments->getClientOriginalExtension();
+        $businessDocuments->storeAs('public/business_documents', $businessDocumentFile);
+
+
+        $proofOfBusinessFile = time() . '.' . $proofOfBusiness->getClientOriginalExtension();
+        $proofOfBusiness->storeAs('public/proof_of_business', $proofOfBusinessFile);
+
+
+
         // Get the authenticated user
         $user = Auth::user();
 
@@ -44,6 +64,15 @@ class BusinessProfileController extends Controller
         $businessProfile = new BusinessProfile($validatedData);
         $businessProfile->user_id = $user->id;
         $businessProfile->save();
+
+
+        // Notify the user that their application is under review
+        $user->notify(new ApplicationUnderReview());
+
+
+        // Notify the admin about the new signup
+        $admin = User::where('registration_type', 'Admin')->first();
+        $admin->notify(new BusinessSellerSignup($user));
 
 
 

@@ -91,10 +91,14 @@
                     {{-- <a href="#" class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">My profile</a> --}}
                     <div x-data="{ open: false }" class="relative inline-block">
                         <!-- Dropdown trigger using click -->
+                        @if (Auth::guest() || (Auth::check() && (!Auth::user()->businessProfile && !Auth::user()->investorProfile)))
+
                         <a href="#" @click="open = !open"
                            class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            + Add Profile
+                          + Add Profile
                         </a>
+
+                      @endif
 
                         <!-- Dropdown content -->
                         <div x-show="open" @click.away="open = false"

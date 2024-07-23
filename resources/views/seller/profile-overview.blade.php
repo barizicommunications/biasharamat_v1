@@ -178,7 +178,7 @@
                         </div>
                         <div>
                             <h5 class="text-sm mb-1">Employees</h5>
-                            <h2 class="font-bold text-gray-400">50 - 100</h2>
+                            <h2 class="font-bold text-gray-400">{{ $sellerProfile->number_employees }}</h2>
                         </div>
                     </div>
                     <div class="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">

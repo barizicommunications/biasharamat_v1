@@ -50,9 +50,9 @@ class BusinessProfileRegistrationRequest extends FormRequest
             'liabilities' => 'required',
             'physical_assets' => 'required',
             'interested_in_quotations' => 'sometimes|accepted',
-            'business_photos' => 'required',
-            'business_documents' => 'required',
-            'proof_of_business' => 'required',
+            'business_photos' => 'required|mimes:jpg,jpeg,png',
+            'business_documents' => 'required|file|mimes:application/pdf,docx,xlsx,pptx,txt',
+            'proof_of_business' => 'required|file|mimes:application/pdf,docx,xlsx,pptx,txt',
             'active_business' => 'sometimes|accepted',
         ];
     }
