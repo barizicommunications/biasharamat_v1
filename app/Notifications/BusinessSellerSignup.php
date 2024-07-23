@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BusinessSellerSignup extends Notification
+class BusinessSellerSignup extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -53,7 +53,9 @@ class BusinessSellerSignup extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'name' => $this->user->first_name,
+            'email' => $this->user->email,
+            'message' => 'A new business seller has signed up on your platform.'
         ];
     }
 }

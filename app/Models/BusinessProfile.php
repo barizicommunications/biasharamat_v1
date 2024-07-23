@@ -40,18 +40,17 @@ class BusinessProfile extends Model
         'physical_assets',
         'interested_in_quotations',
         'business_photos',
-        'business_documents',
-        'proof_of_business',
+        'information_memorandum',
+        'financial_report',
+        'valuation_worksheet',
         'active_business',
     ];
 
     protected $casts = [
-        'display_company_details' => 'boolean',
-        'interested_in_quotations' => 'boolean',
+        // 'display_company_details' => 'boolean',
+        // 'interested_in_quotations' => 'boolean',
         'active_business' => 'boolean',
         'business_photos' => 'array',
-        'business_documents' => 'array',
-        'proof_of_business' => 'array',
     ];
 
     public function user()

@@ -39,20 +39,60 @@ class BusinessProfileController extends Controller
         // Validate the request data
         $validatedData = $request->validated();
 
+        $businessPhotosPaths = [];
+
         $businessPhotos = $request->file('business_photos');
-        $businessDocuments = $request->file('business_documents');
-        $proofOfBusiness = $request->file('proof_of_business');
-
-        $photofileName = time() . '.' . $businessPhotos->getClientOriginalExtension();
-        $businessPhotos->storeAs('public/business_photos', $photofileName);
 
 
-        $businessDocumentFile = time() . '.' . $businessDocuments->getClientOriginalExtension();
-        $businessDocuments->storeAs('public/business_documents', $businessDocumentFile);
+        if ($businessPhotos) {
+            foreach ($businessPhotos as $file) {
+                // Generate a unique name for the file before saving it
+                $fileName = time() . '-' . $file->getClientOriginalName();
+
+                // Store the file in the storage directory (e.g., storage/app/public/files)
+                $filePath = $file->storeAs('public/businessPhotos', $fileName);
+
+                // Store the file path
+                $businessPhotosPaths[] = $filePath;
+            }
+        }
 
 
-        $proofOfBusinessFile = time() . '.' . $proofOfBusiness->getClientOriginalExtension();
-        $proofOfBusiness->storeAs('public/proof_of_business', $proofOfBusinessFile);
+
+        $informationMemorandum = $request->file('information_memorandum');
+
+        if ($informationMemorandum) {
+            // Generate a unique name for the file before saving it
+            $fileName = time() . '-' . $informationMemorandum->getClientOriginalName();
+
+            // Store the file in the specified directory (e.g., storage/app/public/information_memorandums)
+            $memorandumfilePath = $informationMemorandum->storeAs('public/information_memorandums', $fileName);
+        }
+
+
+        // Handle the financial report file
+        $financialReport = $request->file('financial_report');
+
+        if ($financialReport) {
+            // Generate a unique name for the file before saving it
+            $fileName = time() . '-' . $financialReport->getClientOriginalName();
+
+            // Store the file in the specified directory (e.g., storage/app/public/financial_reports)
+            $financialfilePath = $financialReport->storeAs('public/financial_reports', $fileName);
+        }
+
+
+        // Handle the valuation worksheet file
+        $valuationWorksheet = $request->file('valuation_worksheet');
+
+        if ($valuationWorksheet) {
+            // Generate a unique name for the file before saving it
+            $fileName = time() . '-' . $valuationWorksheet->getClientOriginalName();
+
+            // Store the file in the specified directory (e.g., storage/app/public/valuation_worksheets)
+            $valuationfilePath = $valuationWorksheet->storeAs('public/valuation_worksheets', $fileName);
+        }
+
 
 
 
@@ -63,6 +103,10 @@ class BusinessProfileController extends Controller
         // Create the business profile
         $businessProfile = new BusinessProfile($validatedData);
         $businessProfile->user_id = $user->id;
+        $businessProfile->business_photos = json_encode($filePaths);
+        $businessProfile->information_memorandum = $memorandumfilePath;
+        $businessProfile->financial_report = $financialfilePath;
+        $businessProfile->valuation_worksheets = $valuationfilePath;
         $businessProfile->save();
 
 

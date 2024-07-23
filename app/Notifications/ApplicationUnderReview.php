@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ApplicationUnderReview extends Notification
+class ApplicationUnderReview extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -26,7 +26,7 @@ class ApplicationUnderReview extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -42,14 +42,7 @@ class ApplicationUnderReview extends Notification
 
 
 
-    public function toDatabase($notifiable)
-    {
-        return [
-            'data' => json_encode([ // Data to be stored with the notification
-                'message' => 'Your application is currently under review.',
-            ]),
-        ];
-    }
+
 
     /**
      * Get the array representation of the notification.
@@ -59,7 +52,7 @@ class ApplicationUnderReview extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'name'=> 'Hardy kathurima'
         ];
     }
 }

@@ -43,8 +43,9 @@ return new class extends Migration
             $table->string('physical_assets');
             $table->string('interested_in_quotations')->nullable();
             $table->json('business_photos');
-            $table->json('business_documents');
-            $table->json('proof_of_business');
+            $table->string('information_memorandum');
+            $table->string('financial_report');
+            $table->string('valuation_worksheets');
             $table->string('active_business')->nullable();
             $table->timestamps();
 

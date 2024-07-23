@@ -356,30 +356,40 @@
 
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
 
-                                        <input type="file" name="business_photos" id="business_photos"
-                                               accept=".jpg,.png,.jpeg">
+                                        <input type="file" name="business_photos[]" id="business_photos"
+                                               accept=".jpg,.png,.jpeg" multiple>
                                     </div>
                                     @error('business_photos') <span
                                             class="text-red-600"> {{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <h5 class="mb-4">Business documents</h5>
+                                    <h5 class="mb-4">Information Memorandum</h5>
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
 
-                                        <input type="file" name="business_documents" id="business_documents"
+                                        <input type="file" name="information_memorandum" id="information_memorandum"
                                                accept=".pdf, .docx, .pptx, .xlsx, .txt">
                                     </div>
-                                    @error('business_documents') <span
+                                    @error('information_memorandum') <span
                                     class="text-red-600"> {{ $message }}</span> @enderror
                                 </div>
                                 <div>
-                                    <h5 class="mb-4">Proof of business</h5>
+                                    <h5 class="mb-4">Financial Report</h5>
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
 
-                                        <input type="file" name="proof_of_business" id="proof_of_business"
+                                        <input type="file" name="financial_report" id="financial_report"
                                                accept=".pdf, .docx, .pptx, .xlsx, .txt">
                                     </div>
-                                    @error('proof_of_business') <span
+                                    @error('financial_report') <span
+                                    class="text-red-600"> {{ $message }}</span> @enderror
+                                </div>
+                                <div>
+                                    <h5 class="mb-4">Valuation Worksheet</h5>
+                                    <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
+
+                                        <input type="file" name="valuation_worksheet" id="valuation_worksheet"
+                                               accept=".xlsx">
+                                    </div>
+                                    @error('valuation_worksheet') <span
                                     class="text-red-600"> {{ $message }}</span> @enderror
                                 </div>
                             </div>
