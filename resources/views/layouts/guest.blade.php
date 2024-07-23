@@ -62,11 +62,32 @@
             <div x-cloak :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']"
                  class="absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center">
                 <div class="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
-                    <a href="#"
+                    <a href="{{ route('about') }}"
                        class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">About
                         us</a>
-                    <a href="#"
-                       class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">FAQs</a>
+
+                        <a href="{{ route('blog') }}"
+                       class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Blogs</a>
+
+                        @if (Auth::check())
+                        @if(auth()->user()->registration_type == "Business Seller" && \App\Models\BusinessProfile::where('user_id',auth()->user()->id)->first())
+
+                        <a href="{{ route('sellerProfileOverview',auth()->user()->businessProfile->id) }}"
+                       class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Business profile</a>
+
+                        @endif
+
+                        @if(auth()->user()->registration_type == "Business Buyer" && \App\Models\InvestorProfile::where('user_id',auth()->user()->id)->first())
+
+                        <a href="{{ route('buyer.buyer-profile',auth()->user()->investorProfile->id) }}"
+                       class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Buyer profile</a>
+
+                        @endif
+
+
+                        @endif
+                    {{-- <a href="#"
+                       class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">FAQs</a> --}}
                     {{-- <a href="#" class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">My profile</a> --}}
                     <div x-data="{ open: false }" class="relative inline-block">
                         <!-- Dropdown trigger using click -->
@@ -95,15 +116,20 @@
                             </a>
 
                                @endif
-                                @if(auth()->user()->registration_type == "Business Buyer")
+                                @if(auth()->user()->registration_type == "Business Buyer" && !\App\Models\InvestorProfile::where('user_id',auth()->user()->id)->first())
 
-                                <a href="{{ route('investor.create') }}"
+                                <a href="{{ route('investor.profile.create') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                                  Add investor profile
                              </a>
 
 
                                 @endif
+
+
+
+
+
                             @endif
                         </div>
                     </div>

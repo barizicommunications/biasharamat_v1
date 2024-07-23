@@ -49,7 +49,7 @@ class InvestorProfileController extends Controller
 
 
 
-            return redirect()->route('businessVerificationCallPage');
+            return redirect()->route('investorVerificationCallPage');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Redirect back with input and error messages
@@ -65,7 +65,8 @@ class InvestorProfileController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $buyerProfile = InvestorProfile::where('id',$id)->first();
+        return view('buyer.buyer-profile', compact('buyerProfile'));
     }
 
     /**

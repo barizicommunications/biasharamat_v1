@@ -23,6 +23,9 @@ use App\Http\Controllers\InvestorRegistrationController;
 Route::get('/', function () {
     return view('homepage');
 });
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 
 Route::middleware(['throttle:api'])->post('/login/authenticate', [LoginController::class, 'auth'])
     ->name('authenticate');
@@ -51,23 +54,33 @@ Route::group(['controller' => InvestorRegistrationController::class], function (
 Route::group(['controller' => BusinessProfileController::class], function () {
     Route::get('/business-profile-registration', 'create')
         ->name('business.profile.create');
+        Route::get('/seller-profile-overview/{id}', 'show')
+        ->name('sellerProfileOverview');
+        Route::get('verification-call-page', function () {
+            return view('seller.verification-call-page');
+        })->name('businessVerificationCallPage');
     Route::post('/business-profile-registration', 'store')
         ->name('business.profile.store');
 });
 Route::group(['controller' => InvestorProfileController::class], function () {
     Route::get('/investor-profile-registration', 'create')
         ->name('investor.profile.create');
+        Route::get('investor-verification-call-page', function () {
+            return view('buyer.buyer-verification-call');
+        })->name('investorVerificationCallPage');
+        Route::get('/business-buyer-profile-overview/{id}', 'show')
+        ->name('buyer.buyer-profile');
     Route::post('/investor-profile-registration', 'store')
         ->name('investor.profile.store');
 });
 
-Route::get('verification-call-page', function () {
-    return view('seller.verification-call-page');
-})->name('businessVerificationCallPage');
 
-Route::get('profile-overview', function () {
-    return view('seller.profile-overview');
-})->name('sellerProfileOverview');
+
+
+
+// Route::get('profile-overview', function () {
+//     return view('seller.profile-overview');
+// })->name('sellerProfileOverview');
 
 Route::get('investors-and-buyers', function () {
     return view('seller.investors-and-buyers');
@@ -90,9 +103,9 @@ Route::get('blog/{id}', function () {
 })->name('singleBlog');
 
 
-Route::get('business-buyer-profile-overview', function () {
-    return view('buyer.buyer-profile');
-})->name('buyerProfile');
+// Route::get('business-buyer-profile-overview', function () {
+//     return view('buyer.buyer-profile');
+// })->name('buyerProfile');
 
 
 Route::get('/dashboard', function () {

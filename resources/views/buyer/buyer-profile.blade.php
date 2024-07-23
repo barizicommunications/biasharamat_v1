@@ -22,7 +22,7 @@
                 </span>
 
                 <a href="#" class="text-primary">
-                    Industrial Goods
+                    {{ $buyerProfile->buyer_interest }}
                 </a>
             </div>
 
@@ -33,7 +33,7 @@
                     <div class=" bg-white p-8 mb-8" >
 
                        <div class="mb-8">
-                        <h2 class="text-primary font-semibold text-lg mb-2">Managing Director, Electrical Engineering, Corporate Acquirer, Nairobi, Kenya</h2>
+                        <h2 class="text-primary font-semibold text-lg mb-2">{{ $buyerProfile->buyer_role }}</h2>
 
                         <p>Live business  |  Software development company for sale in Nairobi, Kenya</p>
                        </div>
@@ -41,14 +41,14 @@
 
                         <div class="mb-4">
                         <h2 class="text-primary font-semibold">Name, phone, email</h2>
-                        <p>John Doe</p>
-                        <p>+254-712-345-567</p>
-                        <p>johndoe@doemail.com</p>
+                        <p>{{ $buyerProfile->user->full_name }}</p>
+                        <p>{{ $buyerProfile->mobile_number }}</p>
+                        <p>{{ $buyerProfile->email }}</p>
                         </div>
 
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Business name</h2>
-                            <p>John Doe Enterprises</p>
+                            <p>{{ $buyerProfile->company_name }}</p>
                         </div>
                         <div class="mb-6">
                             <h2 class="text-primary font-semibold mb-4">User verification</h2>

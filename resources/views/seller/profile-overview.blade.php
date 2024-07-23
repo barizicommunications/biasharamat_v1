@@ -14,11 +14,11 @@
                 </span>
 
                 <a href="#" class="text-primary">
-                    Software development
+                    {{ $sellerProfile->business_industry }}
                 </a>
             </div>
 
-            <h2 class="text-primary font-bold text-xl md:text-3xl mb-8">Online Edu, Nairobi, Kenya</h2>
+            <h2 class="text-primary font-bold text-xl md:text-3xl mb-8">{{ $sellerProfile->company_name }}</h2>
             <div class="flex flex-wrap md:flex-nowrap space-x-8">
                 <div class="w-3/5">
 
@@ -168,7 +168,7 @@
 
                <div class="w-2/5  h-fit" x-data="{ showContent:false }">
                 <div class="bg-white p-6 mb-6">
-                    <h3 class="text-semibold text-primary text-lg">Edutech Company</h3>
+                    <h3 class="text-semibold text-primary text-lg">{{ $sellerProfile->company_name }}</h3>
                     <hr class="mt-2 mb-6">
 
                     <div class="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">

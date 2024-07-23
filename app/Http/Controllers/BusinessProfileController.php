@@ -20,6 +20,16 @@ class BusinessProfileController extends Controller
     }
 
 
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $sellerProfile = BusinessProfile::where('id',$id)->first();
+        return view('seller.profile-overview', compact('sellerProfile'));
+    }
+
+
     public function store(BusinessProfileRegistrationRequest $request)
 {
     try {
