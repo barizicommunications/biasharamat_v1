@@ -44,7 +44,7 @@
 
             <div class="flex flex-wrap md:flex-nowrap space-x-20">
                 <div class="w-3/4">
-                    <form method="post" action="{{ route('business.profile.store') }}">
+                    <form method="post" action="{{ route('investor.profile.store') }}">
                         @csrf
                         <div class=" bg-white p-8 mb-8">
                             <h3 class="text-primary font-semibold mb-4"><span class="text-xl">a. </span><span
@@ -131,7 +131,7 @@
                                 <div class="grid gap-8 grid-cols-1 md:grid-cols-2 mb-4">
                                     <div class="mb-4">
                                         <label for="buyer_role" class="block mb-3 text-sm">Your are a(n)</label>
-                                        <select name="buyer_role" id="seller_role" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
+                                        <select name="buyer_role" id="buyer_role" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
                                           <option value="">&mdash; select &mdash;</option>
                                           @foreach (['Individual investor/buyer', 'Corporate investor/buyer'] as $role)
                                             <option value="{{ $role }}" @if (old('buyer_role') == $role) selected @endif>{{ $role }}</option>
@@ -141,24 +141,24 @@
                                       </div>
 
                                       <div class="mb-4">
-                                        <label for="seller_interest" class="block mb-3 text-sm">Select industries you are interested in. </label>
-                                        <select name="seller_interest" id="seller_interest" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
+                                        <label for="buyer_interest" class="block mb-3 text-sm">Select industries you are interested in. </label>
+                                        <select name="buyer_interest" id="buyer_interest" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
                                           <option value="">&mdash; select &mdash;</option>
-                                          @foreach (['Select all','Education', 'Technology', 'Building, construction and maintanance'] as $interest)
-                                            <option value="{{ $interest }}" @if (old('seller_interest') == $interest) selected @endif>{{ $interest }}</option>
+                                          @foreach (['Select all','Education', 'Technology', 'Building construction and maintanance'] as $interest)
+                                            <option value="{{ $interest }}" @if (old('buyer_interest') == $interest) selected @endif>{{ $interest }}</option>
                                           @endforeach
                                         </select>
-                                        @error('seller_interest') <span class="text-red-600">{{ $message }}</span> @enderror
+                                        @error('buyer_interest') <span class="text-red-600">{{ $message }}</span> @enderror
                                       </div>
                                       <div class="mb-4">
-                                        <label for="seller_location_interest" class="block mb-3 text-sm">Select locations you are interested in.  </label>
-                                        <select name="seller_location_interest" id="seller_location_interest" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
+                                        <label for="buyer_location_interest" class="block mb-3 text-sm">Select locations you are interested in.  </label>
+                                        <select name="buyer_location_interest" id="buyer_location_interest" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
                                           <option value="">&mdash; select &mdash;</option>
                                           @foreach (['Nairobi','Mombasa', 'Kisumu', 'Eldoret','Nakuru'] as $interest)
-                                            <option value="{{ $interest }}" @if (old('seller_interest') == $interest) selected @endif>{{ $interest }}</option>
+                                            <option value="{{ $interest }}" @if (old('buyer_interest') == $interest) selected @endif>{{ $interest }}</option>
                                           @endforeach
                                         </select>
-                                        @error('seller_location_interest') <span class="text-red-600">{{ $message }}</span> @enderror
+                                        @error('buyer_location_interest') <span class="text-red-600">{{ $message }}</span> @enderror
                                       </div>
 
                                       <div class="mb-4">
@@ -197,7 +197,7 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="linkedin_profile" class="block mb-3 text-sm">Company LinkedIn profile. Private</label>
-                                        <input type="text"
+                                        <input type="url"
                                                class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
                                                id="linkedin_profile" value="{{ old('linkedin_profile') }}" name="linkedin_profile">
                                         @error('linkedin_profile') <span
@@ -206,7 +206,7 @@
 
                                     <div class="mb-4">
                                         <label for="website_link" class="block mb-3 text-sm">Link to company website</label>
-                                        <input type="text"
+                                        <input type="url"
                                                class="bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm w-full"
                                                id="website_link" value="{{ old('website_link') }}" name="website_link">
                                         @error('website_link') <span
@@ -311,7 +311,7 @@
                                 <div class="flex justify-between cursor-pointer" @click="isOpen = !isOpen">
                                     <div class="flex space-x-8 items-center">
                                         <div>
-                                            <input type="checkbox" name="active_business" id="active_business"
+                                            <input type="radio" name="active_business" id="active_business" value="active business"
                                                    class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
                                         </div>
                                         <div>
@@ -328,7 +328,7 @@
                                 <div class="flex justify-between cursor-pointer" @click="isOpen = !isOpen">
                                     <div class="flex space-x-8 items-center">
                                         <div>
-                                            <input type="checkbox" name="active_business" id="active_business"
+                                            <input type="radio" name="active_business" id="active_business" value="premium plan"
                                                    class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
                                         </div>
                                         <div>
@@ -345,7 +345,7 @@
                                 <div class="flex justify-between cursor-pointer" @click="isOpen = !isOpen">
                                     <div class="flex space-x-8 items-center">
                                         <div>
-                                            <input type="checkbox" name="active_business" id="active_business"
+                                            <input type="radio" name="active_business" id="active_business" value="yearly plan"
                                                    class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
                                         </div>
                                         <div>
@@ -359,7 +359,7 @@
                                 </div>
                             </div>
                             <div class="flex">
-                                <input type="checkbox" class="rounded-sm self-center"> <span class="inline-flex ml-4">I accept terms of engagement. </span>
+                                <input type="checkbox" class="rounded-sm self-center" name="terms_of_engagement"> <span class="inline-flex ml-4">I accept terms of engagement. </span>
                             </div>
                         </div>
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\BusinessProfile;
+use App\Models\InvestorProfile;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Models\Contracts\HasName;
 use Spatie\Permission\Traits\HasRoles;
@@ -62,5 +63,10 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function businessProfile()
     {
         return $this->hasOne(BusinessProfile::class);
+    }
+
+    public function investorProfile()
+    {
+        return $this->hasOne(InvestorProfile::class);
     }
 }
