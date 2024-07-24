@@ -52,7 +52,7 @@ class User extends Authenticatable implements FilamentUser, HasName
 
     public function canAccessPanel(Panel|\Filament\Panel $panel): bool
     {
-        return true;
+        return $this->registration_type === 'Admin';
     }
 
     public function getFilamentName(): string

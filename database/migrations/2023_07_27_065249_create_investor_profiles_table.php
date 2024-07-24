@@ -38,7 +38,7 @@ return new class extends Migration
             $table->string('company_logo');
             $table->string('proof_of_business');
             $table->string('terms_of_engagement')->default('off');
-            $table->enum('active_business', ['active business', 'premium plan', 'yearly plan']);
+            $table->string('verification_status')->default('Pending')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -42,11 +42,12 @@ return new class extends Migration
             $table->string('liabilities');
             $table->string('physical_assets');
             $table->string('interested_in_quotations')->nullable();
-            $table->json('business_photos');
+            $table->string('business_photos');
             $table->string('information_memorandum');
             $table->string('financial_report');
             $table->string('valuation_worksheets');
             $table->string('active_business')->nullable();
+            $table->string('verification_status')->default('Pending')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

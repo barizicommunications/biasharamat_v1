@@ -36,11 +36,15 @@ class InvestorProfileRegistrationRequest extends FormRequest
             'website_link' => 'required|url|max:255',
             'business_factors' => 'required|string|max:1000',
             'about_company' => 'required|string|max:1000',
-            'corporate_profile' => 'required',
-            'company_logo' => 'required',
-            'proof_of_business' => 'required',
+            // 'corporate_profile' => 'required|file|mimes:pdf,docx,xlsx,pptx,txt|max:2048',
+            // 'company_logo' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            // 'proof_of_business' => 'required|file|mimes:pdf,docx,xlsx,pptx,txt|max:2048',
+
+            'corporate_profile' => 'required|file|mimes:pdf,docx,xlsx,pptx,txt|max:2048',
+            'company_logo' => 'required|file|mimes:jpg,jpeg,png|max:2048',
+            'proof_of_business' => 'required|file|mimes:pdf,docx,xlsx,pptx,txt|max:2048',
             'terms_of_engagement' => 'accepted',
-            'active_business' => 'required|string|in:active business,premium plan, yearly plan',
+            'active_business' => 'required|string|in:active business,premium plan,yearly plan',
         ];
     }
 }

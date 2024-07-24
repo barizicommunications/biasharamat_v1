@@ -44,7 +44,7 @@
 
             <div class="flex flex-wrap md:flex-nowrap space-x-20">
                 <div class="w-3/4">
-                    <form method="post" action="{{ route('investor.profile.store') }}">
+                    <form method="post" action="{{ route('investor.profile.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class=" bg-white p-8 mb-8">
                             <h3 class="text-primary font-semibold mb-4"><span class="text-xl">a. </span><span
@@ -144,7 +144,7 @@
                                         <label for="buyer_interest" class="block mb-3 text-sm">Select industries you are interested in. </label>
                                         <select name="buyer_interest" id="buyer_interest" class="w-full bg-[#f5f5f5] border-0 py-4 text-sm">
                                           <option value="">&mdash; select &mdash;</option>
-                                          @foreach (['Select all','Education', 'Technology', 'Building construction and maintanance'] as $interest)
+                                          @foreach (['Select all','Education', 'Technology', 'Building construction and maintenance'] as $interest)
                                             <option value="{{ $interest }}" @if (old('buyer_interest') == $interest) selected @endif>{{ $interest }}</option>
                                           @endforeach
                                         </select>
@@ -322,6 +322,8 @@
                                         <h5 class="font-bold">KES 17,000</h5>
                                     </div>
                                 </div>
+
+
 
                             </div>
                             <div class="plan-2 mb-4" x-data=" {isOpen : false}">

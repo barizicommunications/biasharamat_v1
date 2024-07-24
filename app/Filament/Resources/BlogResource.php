@@ -5,40 +5,19 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BlogResource\Pages;
 use App\Filament\Resources\BlogResource\RelationManagers;
 use App\Models\Blog;
-use App\Models\BlogCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class BlogResource extends Resource
 {
-
-    protected static ?string $recordTitleAttribute = 'title';
-
-    public static function getGloballySearchableAttributes(): array
-    {
-        return ['title', 'slug', 'status', 'category.name'];
-    }
-
-    public static function getGlobalSearchResultDetails(Model $record): array
-    {
-        return [
-            'Title' => $record->title,
-            'Category' => $record->category->name,
-            'Excerpt' => Str::limit(strip_tags($record->excerpt), 100),
-        ];
-    }
-
     protected static ?string $model = Blog::class;
 
-    protected static ?string $navigationIcon = 'icon-newspaper';
-
-    protected static ?string $navigationGroup = 'Resources';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -46,42 +25,31 @@ class BlogResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('title')
                     ->required()
-                    ->columnSpanFull()
-                    ->unique(ignoreRecord: true),
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('slug')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('excerpt')
+                    ->required()
+                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('content')
+                    ->required()
+                    ->columnSpanFull(),
                 Forms\Components\FileUpload::make('featured_image')
                     ->image()
-                    ->disk('public')
-                    ->visibility('public')
-                    ->previewable()
-                    ->maxSize(2048)
-                    ->columnSpanFull()
                     ->required(),
-                Forms\Components\Select::make('category_id')
-                    ->columnSpanFull()
-                    ->searchable()
-                    ->createOptionModalHeading('Create Blog Category')
-                    ->createOptionForm(function () {
-                        return [
-                            Forms\Components\TextInput::make('name')
-                                ->required(),
-                        ];
-                    })
-                    ->relationship('category', 'name')
-                    ->options(BlogCategory::all()->pluck('name', 'id')->toArray())
-                    ->createOptionUsing(fn($data) => BlogCategory::create($data))
-                    ->required(),
-                Forms\Components\RichEditor::make('excerpt')
-                    ->required()
+                Forms\Components\Textarea::make('keywords')
                     ->columnSpanFull(),
-                Forms\Components\RichEditor::make('content')
+                Forms\Components\TextInput::make('category_id')
                     ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'draft' => 'Draft',
-                        'published' => 'Published',
-                    ])
-                    ->default('draft')
+                    ->numeric(),
+                Forms\Components\TextInput::make('updated_by')
+                    ->numeric()
+                    ->default(null),
+                Forms\Components\TextInput::make('created_by')
+                    ->required()
+                    ->numeric(),
+                Forms\Components\TextInput::make('status')
                     ->required(),
             ]);
     }
@@ -91,45 +59,38 @@ class BlogResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable()
-                    ->limit(30)
-                    ->tooltip(fn($record) => $record->title)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('slug')
+                    ->searchable(),
+                Tables\Columns\ImageColumn::make('featured_image'),
+                Tables\Columns\TextColumn::make('category_id')
+                    ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('category.name')
-                    ->searchable()
+                Tables\Columns\TextColumn::make('updated_by')
+                    ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('excerpt')
-                    ->searchable()
-                    ->html()
-                    ->limit(40)
-                    ->tooltip(fn($record) => new HtmlString($record->excerpt))
-                    ->wrap()
+                Tables\Columns\TextColumn::make('created_by')
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->searchable()
-                    ->label('Created On')
-                    ->dateTime('M d, Y')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn($record) => match ($record->status) {
-                        'draft' => 'danger',
-                        'published' => 'success',
-                    })
-                    ->sortable(),
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('status'),
+            ])
+            ->filters([
+                //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->icon('icon-pen-line'),
+                Tables\Actions\EditAction::make(),
             ])
-            ->emptyStateHeading('No Blogs Yet')
-            ->emptyStateDescription('Click the button above to create your first blog.')
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->failureNotificationTitle('An error occurred while deleting the selected blogs. Please try again.')
-                        ->successNotificationTitle('The selected blogs were deleted')
-                        ->requiresConfirmation()
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -35,7 +35,8 @@
                        <div class="mb-8">
                         <h2 class="text-primary font-semibold text-lg mb-2">{{ $buyerProfile->buyer_role }}</h2>
 
-                        <p>Live business  |  Software development company for sale in Nairobi, Kenya</p>
+                        {{-- <p>Live business  |  Software development company for sale in Nairobi, Kenya</p> --}}
+                        <p>Live business  |  {{ $buyerProfile->company_name }}</p>
                        </div>
 
 
@@ -63,63 +64,68 @@
                         </div>
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Professional summary</h2>
-                            <p>We are 65 years old company. Grown into a multinational and multidisciplinary electrical engineering and contracting organization with established offices in many parts of the African continent and is still growing.
-                            </p>
+                            {{-- <p>We are 65 years old company. Grown into a multinational and multidisciplinary electrical engineering and contracting organization with established offices in many parts of the African continent and is still growing.
+                            </p> --}}
+                            <p>{{ $buyerProfile->about_company }}</p>
                         </div>
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Transaction preferences</h2>
-                            <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
-                            </p>
+                            {{-- <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
+                            </p> --}}
+
+                            <p>{{ $buyerProfile->business_factors }}</p>
                         </div>
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Investment Size</h2>
-                            <p>Between 80 million - 500 million KES.
-                            </p>
+                            {{-- <p>Between 80 million - 500 million KES.
+                            </p> --}}
+                            <p>{{ $buyerProfile->investment_range }}</p>
                         </div>
 
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Overall Rating</h2>
-                            <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
-                            </p>
+                            {{-- <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
+                            </p> --}}
+                            <p class="mb-4"><img src="{{ asset('images/rating.png') }}" alt=""></p>
                         </div>
 
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Status</h2>
-                            <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
-                            </p>
+                            {{-- <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
+                            </p> --}}
+
+                            <p class="text-green-600">Active</p>
                         </div>
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Local time</h2>
-                            <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
-                            </p>
+                            {{-- <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
+                            </p> --}}
+                            <p>{{ date('H:i:s:a') }}</p>
                         </div>
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Sector Prefence</h2>
-                            <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
-                            </p>
+                            {{-- <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
+                            </p> --}}
+                            <p>{{ $buyerProfile->buyer_interest }}</p>
                         </div>
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Location Prefence</h2>
-                            <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
-                            </p>
+                            {{-- <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
+                            </p> --}}
+                            <p>{{ $buyerProfile->buyer_location_interest }}</p>
                         </div>
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Recent Activity</h2>
-                            <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
-                            </p>
+                            {{-- <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
+                            </p> --}}
+                            <p>3hrs ago Connected with Allan Sang</p>
                         </div>
                         <div class="mb-4">
                             <h2 class="text-primary font-semibold">Preferences</h2>
-                            <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
-                            </p>
+                            {{-- <p>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
+                            </p> --}}
+                            <p>{{ str_replace('_', ' ', $buyerProfile->interested_in) }}</p>
                         </div>
-
-
-
-
-
-
-
 
                     </div>
 
@@ -140,8 +146,7 @@
                     <div class="mb-4">
                     <h5 class="mb-4 font-semibold">Preferences</h5>
                     <ul class="list-disc ml-4 max-w-xs">
-                        <li>50-55 hotel projects inside 1500 sq km of National Park. It is the most favourite natural wildlife reserve in the world.
-                        </li>
+                        <li>{{ str_replace('_', ' ', $buyerProfile->interested_in) }}</li>
                     </ul>
                     </div>
                     <div>

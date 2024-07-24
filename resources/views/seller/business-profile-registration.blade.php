@@ -352,14 +352,14 @@
 
                             <div class="grid gap-4 grid-cols-1 md:grid-cols-2">
                                 <div>
-                                    <h5 class="mb-4">Business photos</h5>
+                                    <h5 class="mb-4">Business photo</h5>
 
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
 
-                                        <input type="file" name="business_photos[]" id="business_photos"
-                                               accept=".jpg,.png,.jpeg" multiple>
+                                        <input type="file" name="business_photo" id="business_photo"
+                                               accept=".jpg,.png,.jpeg" >
                                     </div>
-                                    @error('business_photos') <span
+                                    @error('business_photo') <span
                                             class="text-red-600"> {{ $message }}</span> @enderror
                                 </div>
                                 <div>
@@ -386,10 +386,10 @@
                                     <h5 class="mb-4">Valuation Worksheet</h5>
                                     <div class="py-20 pl-20  border-2 border-dashed flex items-center ">
 
-                                        <input type="file" name="valuation_worksheet" id="valuation_worksheet"
+                                        <input type="file" name="valuation_worksheets" id="valuation_worksheets"
                                                accept=".xlsx">
                                     </div>
-                                    @error('valuation_worksheet') <span
+                                    @error('valuation_worksheets') <span
                                     class="text-red-600"> {{ $message }}</span> @enderror
                                 </div>
                             </div>

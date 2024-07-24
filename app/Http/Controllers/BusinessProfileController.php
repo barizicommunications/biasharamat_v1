@@ -39,23 +39,38 @@ class BusinessProfileController extends Controller
         // Validate the request data
         $validatedData = $request->validated();
 
-        $businessPhotosPaths = [];
+        // $businessPhotosPaths = [];
 
-        $businessPhotos = $request->file('business_photos');
+        // $businessPhoto = $request->file('business_photo');
 
 
-        if ($businessPhotos) {
-            foreach ($businessPhotos as $file) {
-                // Generate a unique name for the file before saving it
-                $fileName = time() . '-' . $file->getClientOriginalName();
+        // if ($businessPhotos) {
+        //     foreach ($businessPhotos as $file) {
+        //         // Generate a unique name for the file before saving it
+        //         $fileName = time() . '-' . $file->getClientOriginalName();
 
-                // Store the file in the storage directory (e.g., storage/app/public/files)
-                $filePath = $file->storeAs('public/businessPhotos', $fileName);
+        //         // Store the file in the storage directory (e.g., storage/app/public/files)
+        //         $filePath = $file->storeAs('public/businessPhotos', $fileName);
 
-                // Store the file path
-                $businessPhotosPaths[] = $filePath;
-            }
+        //         // Store the file path
+        //         $businessPhotosPaths[] = $filePath;
+        //     }
+        // }
+
+
+
+
+        $businessPhoto = $request->file('business_photo');
+
+
+        if ($businessPhoto) {
+            // Generate a unique name for the file before saving it
+            $fileName = time() . '-' . $businessPhoto->getClientOriginalName();
+
+            // Store the file in the specified directory (e.g., storage/app/public/information_memorandums)
+            $photofilePath = $businessPhoto->storeAs('public/business_photos', $fileName);
         }
+
 
 
 
@@ -83,7 +98,7 @@ class BusinessProfileController extends Controller
 
 
         // Handle the valuation worksheet file
-        $valuationWorksheet = $request->file('valuation_worksheet');
+        $valuationWorksheet = $request->file('valuation_worksheets');
 
         if ($valuationWorksheet) {
             // Generate a unique name for the file before saving it
@@ -103,7 +118,7 @@ class BusinessProfileController extends Controller
         // Create the business profile
         $businessProfile = new BusinessProfile($validatedData);
         $businessProfile->user_id = $user->id;
-        $businessProfile->business_photos = json_encode($filePaths);
+        $businessProfile->business_photos = $photofilePath;
         $businessProfile->information_memorandum = $memorandumfilePath;
         $businessProfile->financial_report = $financialfilePath;
         $businessProfile->valuation_worksheets = $valuationfilePath;

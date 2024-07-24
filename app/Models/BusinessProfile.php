@@ -42,7 +42,7 @@ class BusinessProfile extends Model
         'business_photos',
         'information_memorandum',
         'financial_report',
-        'valuation_worksheet',
+        'valuation_worksheets',
         'active_business',
     ];
 
@@ -50,7 +50,7 @@ class BusinessProfile extends Model
         // 'display_company_details' => 'boolean',
         // 'interested_in_quotations' => 'boolean',
         'active_business' => 'boolean',
-        'business_photos' => 'array',
+        // 'business_photos' => 'array',
     ];
 
     public function user()

@@ -25,7 +25,7 @@
                     <div class=" bg-white p-8 mb-8" >
 
 
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3 h-full mb-10 ">
+                    {{-- <div class="grid grid-cols-1 gap-4 md:grid-cols-3 h-full mb-10 ">
                         <div class="col-span-2">
                             <div class="h-full">
                                 <img src="{{ asset('images/profile-overview.png') }}" class="h-full" alt="">
@@ -43,19 +43,27 @@
                             </div>
                         </div>
 
+                    </div> --}}
+
+                    <div class="mb-6">
+                        <img src="{{ Storage::url($sellerProfile->business_photos) }}" alt="">
+
                     </div>
 
                     <div class="grid grid-cols-1 gap-10 md:grid-cols-3">
                         <div class="col-span-2">
-                            <h2 class="mb-3">Seeking investment</h2>
-                            <p>KES 1.3 billion for 40.0% stake (Native Currency: KES 1,280,000,000) Reason: Need funds to buy additional equipment and reduce expensive commercial bank loans. </p>
+                            <h2 class="mb-3">{{ $sellerProfile->seller_interest }}</h2>
+
+                            <p>{{ $sellerProfile->business_highlights }}</p>
+                            {{-- <p>KES 1.3 billion for 40.0% stake (Native Currency: KES 1,280,000,000) Reason: Need funds to buy additional equipment and reduce expensive commercial bank loans. </p>
                             <ul class="list-disc ml-4 mb-6">
                                 <li>Includes physical assets worth KES 2.5 billion </li>
                                 <li>nterested to connect with advisors</li>
 
-                            </ul>
+                            </ul> --}}
                             <h2 class="mb-3">Business overview</h2>
-                            <ul class="list-disc ml-4 mb-6">
+                            <p>{{ $sellerProfile->business_description }}</p>
+                            {{-- <ul class="list-disc ml-4 mb-6">
                                <li>Firm providing web, app, and software development services for 50+ categories with a specialization in mobile recharge and money transfer software including UPI, AEPS, etc. </li>
                                <li>Started operations 9 months back and have completed 18+ projects since then.</li>
                                <li>Currently, have around 2-3 ongoing projects.</li>
@@ -67,31 +75,37 @@
                                <li>Business has the potential of onboarding 10-15 new clients every month.</li>
                                <li>Business performed really well in the first 3 months of starting operations but the sales have declined due to the covid induced lockdown.</li>
 
-                            </ul>
+                            </ul> --}}
 
                             <h2 class="mb-3">Products and services overview</h2>
                             <p class="mb-1">The revenue stream are under:</p>
-                            <ul class="mb-6">
+
+                            <p>{{ $sellerProfile->product_services }}</p>
+                            {{-- <ul class="mb-6">
                                 <li><span class="font-bold">1. Room nights</span> – revenue from stay on full board.</li>
                                 <li><span class="font-bold">2. Safari</span> – revenue from jungle safaris.</li>
                                 <li><span class="font-bold">3. Light & balloon</span> – profit from flight & balloon booking.</li>
                                 <li><span class="font-bold">4. Gift shop</span> – revenue from the sale of merchandise in curio.</li>
                                 <li><span class="font-bold">5. Spa & massage</span> – revenue from such treatments.</li>
                                 <li><span class="font-bold">6. F&B</span> – revenue from bar and snacks sale.</li>
-                            </ul>
+                            </ul> --}}
                             <h2 class="mb-3">Assets Overview</h2>
 
-                            <ul class="mb-6 ml-4 list-disc">
+                            <p>{{ $sellerProfile->tangible_assets }}</p>
+
+                            {{-- <ul class="mb-6 ml-4 list-disc">
                                 <li>We have rented an office (on the ground and first floor) in a mall in Jaipur. We pay a rent of INR 25,000 every month.</li>
-                            </ul>
+                            </ul> --}}
 
                             <h2 class="mb-3">Capitalization Overview</h2>
 
-                            <ul class="mb-6 ml-4 list-disc">
+                            <p>{{ $sellerProfile->business_funds }}</p>
+
+                            {{-- <ul class="mb-6 ml-4 list-disc">
                                 <li>The business is funded through a loan. </li>
                                 <li>3 directors and 1 shareholder with 100% shareholding.</li>
                                 <li>Company has a bank loan of KES 1.5 billion.</li>
-                            </ul>
+                            </ul> --}}
 
 
 
@@ -116,13 +130,13 @@
                             <div class="mb-10"><a href="#" class="text-blue-400 text-sm">Compare with industry</a></div>
                             <div class="mb-3">
                               <h3 class="mb-2">Name, phone, email</h3>
-                              <p class="text-sm">John  Doe</p>
-                              <p class="text-sm">+254 - 714704440</p>
-                              <p class="text-sm">johndoe@gmail.com</p>
+                              <p class="text-sm">{{ $sellerProfile->name }}</p>
+                              <p class="text-sm">{{ $sellerProfile->mobile_number }}</p>
+                              <p class="text-sm">{{ $sellerProfile->email }}</p>
                           </div>
                           <div class="mb-3">
                               <h3 class="mb-2">Business name</h3>
-                              <p class="text-sm">John Doe Enterprises</p>
+                              <p class="text-sm">{{ $sellerProfile->company_name }}</p>
                           </div>
                           <div class="mb-16">
                               <h3 class="mb-2">User verification</h3>
@@ -174,7 +188,7 @@
                     <div class="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">
                         <div class="col-span-2">
                             <h5 class="text-sm mb-1">Industry</h5>
-                            <h2 class="font-bold text-gray-400">Software development</h2>
+                            <h2 class="font-bold text-gray-400">{{ $sellerProfile->business_industry }}</h2>
                         </div>
                         <div>
                             <h5 class="text-sm mb-1">Employees</h5>
@@ -199,7 +213,18 @@
                     <div class="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">
                         <div class="col-span-2">
                             <h5 class="text-sm mb-1">Established from</h5>
-                            <h2 class="font-bold text-gray-400">1 - 5 year(s)</h2>
+                            {{-- <h2 class="font-bold text-gray-400">{{ $sellerProfile->business_start_date }}</h2> --}}
+
+                            @php
+                    $businessStartDate = \Carbon\Carbon::parse($sellerProfile->business_start_date);
+                    $yearsInBusiness = \Carbon\Carbon::now()->year - $businessStartDate->year + 1;
+                    $yearRange = $yearsInBusiness <= 1 ? '1 year' : "1 - $yearsInBusiness years";
+                @endphp
+
+                <h2 class="font-bold text-gray-400">{{ $yearRange }}</h2>
+
+
+
                         </div>
                         <div>
                             <h5 class="text-sm mb-1">Legal entity</h5>
@@ -209,21 +234,22 @@
                     <div class="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">
                         <div class="col-span-2">
                             <h5 class="text-sm mb-1">EBITDA margin</h5>
-                            <h2 class="font-bold text-gray-400">10 - 20 %</h2>
+                            {{-- <h2 class="font-bold text-gray-400">10 - 20 %</h2> --}}
+                            <h2 class="font-bold text-gray-400">{{ $sellerProfile->profit_margin }}</h2>
                         </div>
                         <div>
                             <h5 class="text-sm mb-1">Location</h5>
-                            <h2 class="font-bold text-gray-400">Nairobi , Kenya</h2>
+                            <h2 class="font-bold text-gray-400"><span>{{ $sellerProfile->country }}</span> , <span>{{ $sellerProfile->city }}</span></h2>
                         </div>
                     </div>
                     <div class="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">
                         <div class="col-span-2">
                             <h5 class="text-sm mb-1">Local time</h5>
-                            <h2 class="font-bold text-gray-400">8:00am</h2>
+                            <h2 class="font-bold text-gray-400">{{ date('H:i:s') }}</h2>
                         </div>
                         <div>
                             <h5 class="text-sm mb-1">Listed by</h5>
-                            <h2 class="font-bold text-gray-400">Business Owner</h2>
+                            <h2 class="font-bold text-gray-400">{{ $sellerProfile->user->registration_type }}</h2>
                         </div>
                     </div>
                     <div>

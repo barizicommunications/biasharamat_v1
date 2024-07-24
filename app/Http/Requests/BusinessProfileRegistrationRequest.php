@@ -50,10 +50,10 @@ class BusinessProfileRegistrationRequest extends FormRequest
             'liabilities' => 'required',
             'physical_assets' => 'required',
             'interested_in_quotations' => 'sometimes|accepted',
-            'business_photos.*' => 'required|mimes:jpg,jpeg,png',
-            'information_memorandum' => 'required|file|mimes:application/pdf,docx,xlsx,pptx,txt',
-            'financial_report' => 'required|file|mimes:application/pdf,docx,xlsx,pptx,txt',
-            'valuation_worksheet' => 'required|file|mimes:xlsx',
+            'business_photos.*' => 'required|mimes:jpg,jpeg,png|max:2048',
+            'information_memorandum' => 'required|file|mimes:application/pdf,docx,xlsx,pptx,txt|max:2048',
+            'financial_report' => 'required|file|mimes:application/pdf,docx,xlsx,pptx,txt|max:2048',
+            'valuation_worksheets' => 'required|file|mimes:xlsx|max:2048',
             'active_business' => 'sometimes|accepted',
         ];
     }

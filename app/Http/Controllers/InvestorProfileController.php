@@ -38,6 +38,46 @@ class InvestorProfileController extends Controller
             // Validate the request data
             $validatedData = $request->validated();
 
+
+            $proofOfBusiness = $request->file('proof_of_business');
+
+
+            if ($proofOfBusiness) {
+                // Generate a unique name for the file before saving it
+                $fileName = time() . '-' . $proofOfBusiness->getClientOriginalName();
+
+                // Store the file in the specified directory (e.g., storage/app/public/information_memorandums)
+                $proofbusinessfilePath = $proofOfBusiness->storeAs('public/proof_of_business', $fileName);
+            }
+
+
+
+
+            $companyLogo = $request->file('company_logo');
+
+
+            if ($companyLogo) {
+                // Generate a unique name for the file before saving it
+                $fileName = time() . '-' . $companyLogo->getClientOriginalName();
+
+                // Store the file in the specified directory (e.g., storage/app/public/information_memorandums)
+                $companylogofilePath = $companyLogo->storeAs('public/investor_company_logos', $fileName);
+            }
+
+
+            $corporateProfile = $request->file('corporate_profile');
+
+
+            if ($corporateProfile) {
+                // Generate a unique name for the file before saving it
+                $fileName = time() . '-' . $corporateProfile->getClientOriginalName();
+
+                // Store the file in the specified directory (e.g., storage/app/public/information_memorandums)
+                $corporateprofilefilePath = $corporateProfile->storeAs('public/investor_corporate_profiles', $fileName);
+            }
+
+
+
             // Get the authenticated user
             $user = Auth::user();
 
@@ -45,6 +85,9 @@ class InvestorProfileController extends Controller
             // Create the business profile
             $investorProfile = new InvestorProfile($validatedData);
             $investorProfile->user_id = $user->id;
+            $investorProfile->proof_of_business = $proofbusinessfilePath;
+            $investorProfile->company_logo = $companylogofilePath;
+            $investorProfile->corporate_profile = $corporateprofilefilePath;
             $investorProfile->save();
 
 
