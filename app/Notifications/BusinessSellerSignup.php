@@ -55,7 +55,7 @@ class BusinessSellerSignup extends Notification implements ShouldQueue
         return [
             'name' => $this->user->first_name,
             'email' => $this->user->email,
-            'message' => 'A new business seller has signed up on your platform.'
+            'message' => "A new business {$this->user->registration_type} has signed up on your platform."
         ];
     }
 }

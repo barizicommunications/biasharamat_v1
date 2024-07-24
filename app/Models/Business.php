@@ -42,6 +42,7 @@ class Business extends Model
         'business_documents',
         'proof_of_business',
         'active_business',
+        'reason_for_decline'
     ];
 
     protected $casts = [

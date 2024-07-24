@@ -47,6 +47,7 @@ return new class extends Migration
             $table->string('financial_report');
             $table->string('valuation_worksheets');
             $table->string('active_business')->nullable();
+            $table->text('reason_for_decline')->nullable();
             $table->string('verification_status')->default('Pending')->nullable();
             $table->timestamps();
 

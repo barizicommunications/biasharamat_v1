@@ -131,9 +131,7 @@ class BusinessProfileResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('company_name')
@@ -142,57 +140,15 @@ class BusinessProfileResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('display_company_details')
-                    ->searchable(),
+
                 Tables\Columns\TextColumn::make('seller_role'),
-                Tables\Columns\TextColumn::make('seller_interest')
+
+
+                Tables\Columns\TextColumn::make('verification_status')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('business_start_date')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('business_industry')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('country')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('city')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('county')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('number_employees')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('business_legal_entity')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('website_link')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('business_funds')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('number_shareholders')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('monthly_turnover')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('yearly_turnover')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('profit_margin')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('tangible_assets')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('liabilities')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('physical_assets')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('interested_in_quotations')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('business_photos')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('information_memorandum')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('financial_report')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('valuation_worksheets')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('active_business')
-                    ->searchable(),
+
+                // Tables\Columns\TextColumn::make('active_business')
+                //     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -206,11 +162,12 @@ class BusinessProfileResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -227,6 +184,7 @@ class BusinessProfileResource extends Resource
         return [
             'index' => Pages\ListBusinessProfiles::route('/'),
             'create' => Pages\CreateBusinessProfile::route('/create'),
+            'view' => Pages\ViewBusiness::route('/{record}'),
             'edit' => Pages\EditBusinessProfile::route('/{record}/edit'),
         ];
     }

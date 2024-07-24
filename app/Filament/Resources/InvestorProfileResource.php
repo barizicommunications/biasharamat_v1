@@ -88,42 +88,19 @@ class InvestorProfileResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('mobile_number')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('interested_in'),
-                Tables\Columns\TextColumn::make('buyer_role'),
-                Tables\Columns\TextColumn::make('buyer_interest'),
-                Tables\Columns\TextColumn::make('buyer_location_interest'),
-                Tables\Columns\TextColumn::make('investment_range')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('current_location')
+
+                Tables\Columns\TextColumn::make('company_name'),
+                Tables\Columns\TextColumn::make('verification_status')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('company_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('linkedin_profile')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('website_link')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('business_factors')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('about_company')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('corporate_profile')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('company_logo')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('proof_of_business')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('terms_of_engagement')
-                    ->searchable(),
+
+
+
                 Tables\Columns\TextColumn::make('active_business'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -138,11 +115,12 @@ class InvestorProfileResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -159,6 +137,7 @@ class InvestorProfileResource extends Resource
         return [
             'index' => Pages\ListInvestorProfiles::route('/'),
             'create' => Pages\CreateInvestorProfile::route('/create'),
+            'view' => Pages\ViewInvestor::route('/{record}'),
             'edit' => Pages\EditInvestorProfile::route('/{record}/edit'),
         ];
     }

@@ -30,6 +30,7 @@ class InvestorProfile extends Model
         'proof_of_business',
         'terms_of_engagement',
         'active_business',
+        'reason_for_decline'
     ];
 
 

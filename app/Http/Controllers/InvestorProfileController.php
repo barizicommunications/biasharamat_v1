@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\InvestorProfile;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\BusinessSellerSignup;
+use App\Notifications\ApplicationUnderReview;
 use App\Http\Requests\InvestorProfileRegistrationRequest;
 
 class InvestorProfileController extends Controller
@@ -89,6 +92,15 @@ class InvestorProfileController extends Controller
             $investorProfile->company_logo = $companylogofilePath;
             $investorProfile->corporate_profile = $corporateprofilefilePath;
             $investorProfile->save();
+
+
+            // Notify the user that their application is under review
+            $user->notify(new ApplicationUnderReview());
+
+
+            // Notify the admin about the new signup
+            $admin = User::where('registration_type', 'Admin')->first();
+            $admin->notify(new BusinessSellerSignup($user));
 
 
 
