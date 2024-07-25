@@ -44,6 +44,13 @@ class RegisterController extends Controller
         // return redirect()->route('sellerProfileOverview');
         return redirect()->route('activeIntro');
 
+        // if($user->registration_type == "Business Seller"){
+        //     return redirect()->route('business.profile.create');
+        // }
+        // if($user->registration_type == "Business Investor"){
+        //     return redirect()->route('investor.profile.create');
+        // }
+
 
     }
 }

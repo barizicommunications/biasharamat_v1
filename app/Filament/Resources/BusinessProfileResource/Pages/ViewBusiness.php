@@ -42,7 +42,7 @@ class ViewBusiness extends ViewRecord
                $user = User::where('user_id',$record->user_id)->first();
 
 
-               $user->notify(new ApplicationAccepted($user));
+            //    $user->notify(new ApplicationAccepted($user));
 
 
                return redirect()->route('filament.admin.resources.investor-profiles.index');

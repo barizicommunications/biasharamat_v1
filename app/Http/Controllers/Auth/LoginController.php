@@ -12,7 +12,7 @@ class LoginController extends Controller
         $data = $request->validated();
 
         if (auth()->attempt($data)) {
-            return redirect()->route('sellerProfileOverview');
+            return redirect()->route('activeIntro');
         }
 
         return redirect()->back()->withErrors(['email' => 'Invalid credentials']);
