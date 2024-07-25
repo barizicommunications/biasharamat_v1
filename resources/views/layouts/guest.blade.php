@@ -94,8 +94,8 @@
                         @if (Auth::guest() || (Auth::check() && (!Auth::user()->businessProfile && !Auth::user()->investorProfile)))
 
                         <a href="#" @click="open = !open"
-                           class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                          + Add Profile
+                           class="px-3 py-2 mx-3 mt-2 text-white transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-primary  ">
+                          Sign up
                         </a>
 
                       @endif
@@ -106,17 +106,17 @@
                             @if(!Auth::check())
                                 <a href="{{ route('business.create') }}"
                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    Add business profile
+                                   As a business seller
                                 </a>
                                 <a href="{{ route('investor.create') }}"
                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    Add investor profile
+                                    As a business business buyer
                                 </a>
                             @else
                                @if(auth()->user()->registration_type == "Business Seller" && !\App\Models\BusinessProfile::where('user_id',auth()->user()->id)->first())
                                <a href="{{ route('business.profile.create') }}"
                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                Add business profile
+                               As a business seller
                             </a>
 
                                @endif
@@ -124,7 +124,7 @@
 
                                 <a href="{{ route('investor.profile.create') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                 Add investor profile
+                                 As a business business buyer
                              </a>
 
 
@@ -140,10 +140,10 @@
 
                     @if(!Auth::check())
                         <a href="{{ route('login') }}"
-                           class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Login</a>
-                        <a href="{{ route('register') }}"
+                           class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 border">Login</a>
+                        {{-- <a href="{{ route('register') }}"
                            class="px-4 py-3 mx-3 mt-2 text-white transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-primary/95 dark:hover:bg-gray-700 bg-primary">Sign
-                            up</a>
+                            up</a> --}}
                     @else
                         <a href="{{ route('activeIntro') }}"
                            class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
