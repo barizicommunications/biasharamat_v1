@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\BlogResource\Pages;
+namespace App\Filament\Resources\RoleResource\Pages;
 
-use App\Filament\Resources\BlogResource;
+use App\Filament\Resources\RoleResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditBlog extends EditRecord
+class EditRole extends EditRecord
 {
-    protected static string $resource = BlogResource::class;
+    protected static string $resource = RoleResource::class;
 
     protected function getRedirectUrl(): string
     {

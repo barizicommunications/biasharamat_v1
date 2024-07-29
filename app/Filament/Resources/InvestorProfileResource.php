@@ -17,7 +17,9 @@ class InvestorProfileResource extends Resource
 {
     protected static ?string $model = InvestorProfile::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-circle';
+    protected static ?string $navigationGroup = 'Manage user profiles';
+    protected static ?int $navigationSort= 2;
 
     public static function form(Form $form): Form
     {
@@ -117,6 +119,7 @@ class InvestorProfileResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -2,15 +2,16 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Forms;
+use App\Models\Role;
+use App\Models\User;
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
@@ -21,6 +22,8 @@ class UserResource extends Resource
     protected static ?string $navigationGroup = 'Administration';
 
     protected static ?string $modelLabel = 'System Users';
+
+    protected static ?int $navigationSort= 1;
 
     public static function form(Form $form): Form
     {
@@ -33,6 +36,10 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->unique(ignoreRecord: true)
                     ->required(),
+                    Forms\Components\Select::make('registration_type')
+                    ->label('Registration type')
+                    ->options(Role::all()->pluck('name', 'name'))
+                    ->searchable()->preload(),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->autocomplete('new-password')
@@ -53,6 +60,7 @@ class UserResource extends Resource
                     ->tooltip('Click to email this user')
                     ->sortable()
                     ->url(fn($record) => "mailto:{$record->email}"),
+                Tables\Columns\TextColumn::make('registration_type'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->sortable()
             ])
@@ -60,14 +68,15 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->icon('pen-line')
+                Tables\Actions\EditAction::make()->icon('pen-line'),
+                Tables\Actions\DeleteAction::make()
+
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
-                        ->requiresConfirmation()
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make()
+                //         ->requiresConfirmation()
+                // ]),
             ]);
     }
 

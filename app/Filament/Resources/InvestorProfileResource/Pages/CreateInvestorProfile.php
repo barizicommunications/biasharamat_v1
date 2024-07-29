@@ -9,4 +9,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateInvestorProfile extends CreateRecord
 {
     protected static string $resource = InvestorProfileResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

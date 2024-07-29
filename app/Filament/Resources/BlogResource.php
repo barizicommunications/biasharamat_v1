@@ -2,55 +2,133 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BlogResource\Pages;
-use App\Filament\Resources\BlogResource\RelationManagers;
-use App\Models\Blog;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Blog;
 use Filament\Tables;
+use App\Models\Author;
+use App\Models\Category;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\BlogResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\BlogResource\RelationManagers;
 
 class BlogResource extends Resource
 {
     protected static ?string $model = Blog::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
+    protected static ?string $navigationGroup = 'Manage blogs';
+    protected static ?int $navigationSort= 1;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('slug')
+                ->required()
+                ->maxLength(255)
+                ->hidden(),
+                Forms\Components\Select::make('category_id')
+                ->required()
+                ->label('Category')
+                ->options(function(){
+                    return Category::all()
+                    ->pluck('category_name', 'id');
+                })
+                ->preload()
+                ->reactive()
+                ->createOptionForm([
+                    TextInput::make('category_name')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
+                    ->autofocus()
+                    ->placeholder('Enter category name'),
+
+        ])
+                ->createOptionUsing(function(array $data){
+                  $category =  Category::updateOrCreate( [
+                        'category_name' => $data['category_name'],
+
+                    ]);
+
+                    Notification::make('Add category')
+                        ->success()
+                        ->title('Success')
+                        ->body('Category added successfully')
+                        ->send();
+
+
+                }),
+
+                TagsInput::make('tags')
+                ->label('Tags')
+                ->placeholder('Add one or multiple tags'),
+                TagsInput::make('keywords')
+                ->label('Keywords')
+                ->placeholder('Add one or multiple keywords'),
+
+
+
+            Forms\Components\Textarea::make('excerpt')
+                ->required()
+                ->maxLength(65535)
+                ->columnSpanFull(),
+            // Forms\Components\TextInput::make('tags'),
+            Forms\Components\FileUpload::make('featured_image')
+                ->image()
+                ->required()
+                ->maxSize(1024)
+                ->columnSpanFull()
+                ,
+            Forms\Components\RichEditor::make('body')
+                ->required()->columnSpan('full')
+                ,
+                Forms\Components\Select::make('author_id')
+                ->required()
+                ->label('Author')
+                ->options(function(){
+                    return Author::all()
+                    ->pluck('author_name', 'id');
+                })
+                ->preload()
+                ->reactive()
+                ->createOptionForm([
+                    TextInput::make('author_name')
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('excerpt')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('content')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\FileUpload::make('featured_image')
-                    ->image()
-                    ->required(),
-                Forms\Components\Textarea::make('keywords')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('category_id')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('updated_by')
-                    ->numeric()
-                    ->default(null),
-                Forms\Components\TextInput::make('created_by')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('status')
-                    ->required(),
+                    ->autofocus()
+                    ->placeholder('Enter author name'),
+
+
+        ])
+                ->createOptionUsing(function(array $data){
+                  $author =  Author::updateOrCreate( [
+                        'author_name' => $data['author_name'],
+
+                    ]);
+
+                    Notification::make('Add author')
+                        ->success()
+                        ->title('Success')
+                        ->body('Author added successfully')
+                        ->send();
+
+
+                }),
+                Select::make('status')
+                ->options([
+                    'draft' => 'Draft',
+                    'reviewing' => 'Reviewing',
+                    'published' => 'Published',
+                ])->required()
             ]);
     }
 
@@ -58,29 +136,16 @@ class BlogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
                 Tables\Columns\ImageColumn::make('featured_image'),
+                Tables\Columns\TextColumn::make('title')->searchable(),
                 Tables\Columns\TextColumn::make('category_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('updated_by')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_by')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ->label('Category name')
+                ->getStateUsing(function (Blog $record){
+                    $category = Category::where('id',$record->category_id)->pluck('category_name')->first();
+                    return $category;
+                }),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('status'),
+                    ->dateTime(),
             ])
             ->filters([
                 //
@@ -89,9 +154,9 @@ class BlogResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 

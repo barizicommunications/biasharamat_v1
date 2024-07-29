@@ -16,17 +16,17 @@ return new class extends Migration
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug');
+            $table->unsignedBigInteger('author_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('category_id');
             $table->text('excerpt');
-            $table->longText('content');
-            $table->string('featured_image');
+            $table->json('tags')->nullable();
             $table->json('keywords')->nullable();
-            $table->bigInteger('category_id')->index('fk_blogs_categories_idx');
-            $table->bigInteger('updated_by')->nullable()->index('fk_blogs_1_idx');
-            $table->bigInteger('created_by');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->nullable();
-            $table->enum('status', ['draft', 'published'])->default('draft');
+            $table->string('featured_image');
+            $table->string('status');
+            $table->text('body');
+            $table->timestamps();
         });
     }
 
