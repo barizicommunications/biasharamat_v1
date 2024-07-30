@@ -11,12 +11,15 @@ class ApplicationUnderReview extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    protected $user;
+    
+
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -52,7 +55,7 @@ class ApplicationUnderReview extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'name'=> 'Hardy kathurima'
+            'user'=>$this->user
         ];
     }
 }

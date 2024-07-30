@@ -9,6 +9,7 @@ use Filament\Pages\Actions\Action;
 use Filament\Forms\Components\Textarea;
 use Filament\Resources\Pages\ViewRecord;
 use App\Notifications\ApplicationAccepted;
+use App\Notifications\ApplicationDeclined;
 use App\Filament\Resources\BusinessProfileResource;
 
 class ViewBusiness extends ViewRecord
@@ -39,10 +40,10 @@ class ViewBusiness extends ViewRecord
                $application->verification_status = "Accepted";
                $application->save();
 
-               $user = User::where('user_id',$record->user_id)->first();
+               $user = User::where('user_id',$this->record->user_id)->first();
 
 
-            //    $user->notify(new ApplicationAccepted($user));
+               $user->notify(new ApplicationAccepted($user));
 
 
                return redirect()->route('filament.admin.resources.investor-profiles.index');
@@ -77,6 +78,13 @@ class ViewBusiness extends ViewRecord
 
                $application->verification_status = "Declined";
                $application->save();
+
+
+               $user = User::where('user_id',$this->record->user_id)->first();
+               $reason =$application->reason_for_decline;
+
+
+               $user->notify(new ApplicationDeclined($user,$reason));
 
 
                return redirect()->route('filament.admin.resources.investor-profiles.index');

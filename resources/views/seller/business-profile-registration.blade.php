@@ -75,9 +75,9 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="mobile_number" class="block mb-3 text-sm">Your mobile number</label>
-                                        <input value="{{ old('mobile_number') }}" type="text" id="mobile_number"
+                                        <input value="{{ old('mobile_number') }}" type="tel" id="mobile_number"
                                                class=" w-full bg-[#f5f5f5] border-0 py-4 text-gray-700 text-sm"
-                                               placeholder="Enter your mobile number" name="mobile_number">
+                                               placeholder="Enter your mobile number" name="mobile_number" maxlength="10" pattern="[0-9]{10}">
                                         @error('mobile_number') <span
                                                 class="text-red-600">{{ $message }}</span> @enderror
                                     </div>
@@ -412,7 +412,7 @@
                                 <div class="flex justify-between cursor-pointer" @click="isOpen = !isOpen">
                                     <div class="flex space-x-8 items-center">
                                         <div>
-                                            <input type="checkbox" name="active_business" id="active_business"
+                                            <input type="radio" name="active_business" id="active_business"
                                                    class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
                                         </div>
                                         <div>
@@ -424,11 +424,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="plan-2 mb-4" x-data=" {isOpen : false}">
+                            <div class="plan-2 mb-12" x-data=" {isOpen : false}">
                                 <div class="flex justify-between cursor-pointer" @click="isOpen = !isOpen">
                                     <div class="flex space-x-8 items-center">
                                         <div>
-                                            <input type="checkbox" name="active_business" id="active_business"
+                                            <input type="radio" name="active_business" id="active_business"
                                                    class="text-sm rounded-sm h-3 w-3"  @if (old('active_business')) checked @endif>
                                         </div>
                                         <div>

@@ -11,13 +11,17 @@ class ApplicationDeclined extends Notification
 {
     use Queueable;
 
+    protected $user;
+    protected $reason; // Additional variable
+
     /**
      * Create a new notification instance.
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct($user, $reason)
+   {
+       $this->user = $user;
+       $this->reason = $reason;
+   }
 
     /**
      * Get the notification's delivery channels.
@@ -26,7 +30,7 @@ class ApplicationDeclined extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -35,8 +39,9 @@ class ApplicationDeclined extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
+                    ->line('Your application has been declined')
+                    ->line('Reason: ' . $this->reason)
+                    ->action('Get in touch', url('/'))
                     ->line('Thank you for using our application!');
     }
 
@@ -48,7 +53,7 @@ class ApplicationDeclined extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'user' => $this->user,
         ];
     }
 }

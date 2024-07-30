@@ -24,7 +24,7 @@ class InvestorProfileRegistrationRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'mobile_number' => 'required|string|max:15',
+            'mobile_number' => 'required|numeric|digits:10',
             'interested_in' => 'required|string|in:acquiring_business,investing_in_a_business,lending_to_a_business,buying_property_plant_machinery,taking_up_franchise',
             'buyer_role' => 'required|string|in:Individual investor/buyer,Corporate investor/buyer',
             'buyer_interest' => 'required|string|in:Select all,Education,Technology,Building construction and maintenance',

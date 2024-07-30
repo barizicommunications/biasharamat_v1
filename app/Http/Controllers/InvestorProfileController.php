@@ -95,12 +95,12 @@ class InvestorProfileController extends Controller
 
 
             // Notify the user that their application is under review
-            // $user->notify(new ApplicationUnderReview());
+            $user->notify(new ApplicationUnderReview($user));
 
 
             // Notify the admin about the new signup
             $admin = User::where('registration_type', 'Admin')->first();
-            // $admin->notify(new BusinessSellerSignup($user));
+            $admin->notify(new BusinessSellerSignup($user));
 
 
 

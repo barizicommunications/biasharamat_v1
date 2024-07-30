@@ -24,7 +24,7 @@ class BusinessProfileRegistrationRequest extends FormRequest
         return [
             'name' => 'required',
             'company_name' => 'required',
-            'mobile_number' => 'required',
+            'mobile_number' => 'required|numeric|digits:10',
             'email' => 'required|email',
             'display_company_details' => 'sometimes|accepted',
             'seller_role' => 'required|in:Director,Adviser,Shareholder,Other',
