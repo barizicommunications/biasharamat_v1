@@ -26,9 +26,9 @@ class BusinessProfileResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
+                // Forms\Components\TextInput::make('user_id')
+                //     ->required()
+                //     ->numeric(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),

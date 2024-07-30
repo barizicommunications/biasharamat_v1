@@ -40,13 +40,13 @@ class ViewBusiness extends ViewRecord
                $application->verification_status = "Accepted";
                $application->save();
 
-               $user = User::where('user_id',$this->record->user_id)->first();
+               $user = User::where('id',$this->record->user_id)->first();
 
 
                $user->notify(new ApplicationAccepted($user));
 
 
-               return redirect()->route('filament.admin.resources.investor-profiles.index');
+               return redirect()->route('filament.admin.resources.business-profiles.index');
 
 
             }
@@ -77,17 +77,18 @@ class ViewBusiness extends ViewRecord
                $application = BusinessProfile::where('user_id',$this->record->user_id)->first();
 
                $application->verification_status = "Declined";
+               $application->reason_for_decline = $data['reason_for_decline'];
                $application->save();
 
 
-               $user = User::where('user_id',$this->record->user_id)->first();
-               $reason =$application->reason_for_decline;
+               $user = User::where('id',$this->record->user_id)->first();
+               $reason = $data['reason_for_decline'];
 
 
                $user->notify(new ApplicationDeclined($user,$reason));
 
 
-               return redirect()->route('filament.admin.resources.investor-profiles.index');
+               return redirect()->route('filament.admin.resources.business-profiles.index');
 
 
             }
