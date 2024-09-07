@@ -22,6 +22,10 @@
     </div>
 @endif
 
+<div class="my-8 bg-green-400">
+    @livewire('sellerComponents.register-seller')
+</div>
+
         <article class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:py-8">
             <div class="flex items-center py-4 overflow-x-auto whitespace-nowrap mb-8">
                 <a href="#" class="text-gray-600 dark:text-gray-200 hover:underline">
