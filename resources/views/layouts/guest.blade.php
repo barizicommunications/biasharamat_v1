@@ -106,7 +106,7 @@
                             @if(!Auth::check())
                                 <a href="{{ route('business.create') }}"
                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                   As a business seller
+                                   As a business owner
                                 </a>
                                 <a href="{{ route('investor.create') }}"
                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -116,7 +116,7 @@
                                @if(auth()->user()->registration_type == "Business Seller" && !\App\Models\BusinessProfile::where('user_id',auth()->user()->id)->first())
                                <a href="{{ route('business.profile.create') }}"
                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                               As a business seller
+                               As a business owner
                             </a>
 
                                @endif
@@ -124,7 +124,7 @@
 
                                 <a href="{{ route('investor.profile.create') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                 As a business business buyer
+                                 As a business buyer
                              </a>
 
 
