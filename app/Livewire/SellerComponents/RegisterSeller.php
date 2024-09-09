@@ -20,10 +20,17 @@ class RegisterSeller extends Component implements HasForms
     return $form
         ->schema([
             Wizard::make([
-                Wizard\Step::make('Order')
+                Wizard\Step::make('Client Information')
+                ->description('The information provided will remain confidential and will not be publicly displayed.')
                     ->schema([
+
+                        TextInput::make('name')
+                        ->required(),
+                        TextInput::make('company_name')
+                        ->required(),
+
                         // ...
-                    ]),
+                    ])->columns(2),
                 Wizard\Step::make('Delivery')
                     ->schema([
                         // ...
