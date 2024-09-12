@@ -35,10 +35,41 @@ class RegisterSeller extends Component implements HasForms
     public $documentsinfo;
     public $businessinfo;
     public $selectaplan;
-    public $step = 1; // Track the current step
-    public $name, $company_name, $mobile_number, $email;
-    public $seller_role, $seller_interest, $business_start_date, $business_industry;
-    public $business_photos, $information_memorandum, $financial_report, $valuation_worksheets;
+    public $name;
+    public $company_name;
+    public $mobile_number;
+    public $email;
+    public $display_company_details;
+    public $seller_role;
+    public $seller_interest;
+    public $business_start_date;
+    public $business_industry;
+    public $country;
+    public $city;
+    public $county;
+    public $number_employees;
+    public $business_legal_entity;
+    public $website_link;
+    public $business_description;
+    public $product_services;
+    public $business_highlights;
+    public $facility_description;
+    public $business_funds;
+    public $number_shareholders;
+    public $monthly_turnover;
+    public $yearly_turnover;
+    public $profit_margin;
+    public $tangible_assets;
+    public $liabilities;
+    public $physical_assets;
+    public $interested_in_quotations;
+    public $business_photos;
+    public $information_memorandum;
+    public $financial_report;
+    public $valuation_worksheets;
+    public $active_business;
+    public $reason_for_decline;
+    public $verification_status;
 
 
 
@@ -50,50 +81,54 @@ class RegisterSeller extends Component implements HasForms
             'financial_report' => null,
             'valuation_worksheets' => null,
         ]);
+
+
     }
 
 
-
-
-    public function validateData()
-    {
-        return $this->validate([
-            'name' => 'required|string|max:255',
-            'company_name' => 'required|string|max:255',
-            'mobile_number' => 'required|string|max:255',
-            'email' => 'required|email|unique:business_profiles,email',
-            'display_company_details' => 'nullable|string',
-            'seller_role' => ['required'],
-            'seller_interest' => 'required|string',
-            'business_start_date' => 'required|date',
-            'business_industry' => 'required|string',
-            'country' => 'required|string',
-            'city' => 'required|string',
-            'county' => 'required|string',
-            'number_employees' => 'required|integer',
-            'business_legal_entity' => 'required|string',
-            'website_link' => 'nullable|url',
-            'business_description' => 'required|string',
-            'product_services' => 'required|string',
-            'business_highlights' => 'required|string',
-            'facility_description' => 'required|string',
-            'business_funds' => 'required|string',
-            'number_shareholders' => 'required|string',
-            'monthly_turnover' => 'required|string',
-            'yearly_turnover' => 'required|string',
-            'profit_margin' => 'required|string',
-            'tangible_assets' => 'required|string',
-            'liabilities' => 'required|string',
-            'physical_assets' => 'required|string',
-            'interested_in_quotations' => 'nullable|string',
-            'business_photos' => 'nullable|string',
-            'information_memorandum' => 'nullable|string',
-            'financial_report' => 'nullable|string',
-            'valuation_worksheets' => 'nullable|string',
-            'active_business' => 'nullable|string',
-            'reason_for_decline' => 'nullable|string',
+    public function submit(){
+        $formData =$this->form->getState();
+        BusinessProfile::create([
+            'user_id' => auth()->user()->id,
+            'name' => $formData['name'],
+            'company_name' => $formData['company_name'],
+            'mobile_number' => $formData['mobile_number'],
+            'email' => $formData['email'],
+            'display_company_details' => $formData['display_company_details'] ?? null,
+            'seller_role' => $formData['seller_role'],
+            'seller_interest' => $formData['seller_interest'],
+            'business_start_date' => $formData['business_start_date'],
+            'business_industry' => $formData['business_industry'],
+            'country' => $formData['country'],
+            'city' => $formData['city'],
+            'county' => $formData['county'],
+            'number_employees' => $formData['number_employees'],
+            'business_legal_entity' => $formData['business_legal_entity'],
+            'website_link' => $formData['website_link'],
+            'business_description' => $formData['business_description'],
+            'product_services' => $formData['product_services'],
+            'business_highlights' => $formData['business_highlights'],
+            'facility_description' => $formData['facility_description'],
+            'business_funds' => $formData['business_funds'],
+            'number_shareholders' => $formData['number_shareholders'],
+            'monthly_turnover' => $formData['monthly_turnover'],
+            'yearly_turnover' => $formData['yearly_turnover'],
+            'profit_margin' => $formData['profit_margin'],
+            'tangible_assets' => $formData['tangible_assets'],
+            'liabilities' => $formData['liabilities'],
+            'physical_assets' => $formData['physical_assets'],
+            'interested_in_quotations' => $formData['interested_in_quotations'] ?? null,
+            'business_photos' => $formData['business_photos'] ?? null,
+            'information_memorandum' => $formData['information_memorandum'] ?? null,
+            'financial_report' => $formData['financial_report'] ?? null,
+            'valuation_worksheets' => $formData['valuation_worksheets'] ?? null,
+            'active_business' => $formData['active_business'],
+            'verification_status' => $formData['verification_status'] ?? 'Pending',
         ]);
     }
+
+
+
 
 
     public function form(Form $form): Form
@@ -111,7 +146,8 @@ class RegisterSeller extends Component implements HasForms
 
                         TextInput::make('name')
                         ->required()
-                        ->label('Name'),
+                        ->label('Name')->reactive()
+                        ->afterStateUpdated(fn ($state) => $this->validateOnly('name')),
                     TextInput::make('company_name')
                         ->required()
                         ->label('Company Name'),
@@ -227,37 +263,18 @@ class RegisterSeller extends Component implements HasForms
                         Shout::make('selectaplan')
                         ->columnSpanFull(),
                         Checkbox::make('active_business')
-                        ->label('Active Business'),
+                        ->label('Active Business')
+                        ->required(),
                     Hidden::make('verification_status')
                         ->default('Pending'),
                     ]),
 
-            ])->skippable()->submitAction(new HtmlString('<button type="submit" style="background-color:red;">Submit</button>'))
+            ])->skippable()->submitAction(new HtmlString('<button type="submit" style="background-color:orange; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
         ]);
 }
 
 
-public function submit(): void
-{
 
-    // dd($this->form->getState());
-    $validatedData = $this->validateData();
-
-    dd($validatedData);
-
-    // // Create or update the BusinessProfile record
-    // $businessProfile = BusinessProfile::updateOrCreate(
-    //     ['user_id' => auth()->user->id],
-    //     $validatedData
-    // );
-
-    // // Handle success or failure
-    // if ($businessProfile) {
-    //     // Redirect or show a success message
-    // } else {
-    //     // Handle errors
-    // }
-}
 
     public function render()
     {

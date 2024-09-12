@@ -6,6 +6,10 @@
     background-color: orange !important;
   }
 
+  .fi-fo-field-wrp-error-message{
+    color: red !important;
+  }
+
   .hero-bg{
     background-image: url(images/left-vector.png), url(images/right-vector.png);
     background-position: left 10px,center right 158px;;

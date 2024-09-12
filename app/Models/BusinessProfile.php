@@ -11,6 +11,7 @@ class BusinessProfile extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'name',
         'company_name',
         'mobile_number',
