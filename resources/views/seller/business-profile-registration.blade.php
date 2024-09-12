@@ -22,7 +22,7 @@
     </div>
 @endif
 
-<div class="my-8 bg-green-400">
+<div class="my-8 bg-black">
     @livewire('sellerComponents.register-seller')
 </div>
 
