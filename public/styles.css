@@ -10,6 +10,10 @@
     color: red !important;
   }
 
+  sup{
+    color:red !important;
+  }
+
   .hero-bg{
     background-image: url(images/left-vector.png), url(images/right-vector.png);
     background-position: left 10px,center right 158px;;
