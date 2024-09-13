@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
@@ -106,6 +107,20 @@ Route::get('blog/{id}', function () {
 // Route::get('business-buyer-profile-overview', function () {
 //     return view('buyer.buyer-profile');
 // })->name('buyerProfile');
+
+
+
+// Route to generate access token (optional, for testing)
+Route::get('/payment/token', [PaymentController::class, 'generateAccessToken']);
+
+// Route to register IPN
+Route::get('/payment/register-ipn', [PaymentController::class, 'registerIPN']);
+
+// Route to submit an order
+Route::post('/payment/submit-order', [PaymentController::class, 'submitOrder']);
+
+// Route to check transaction status
+Route::get('/payment/status', [PaymentController::class, 'getTransactionStatus']);
 
 
 Route::get('/dashboard', function () {

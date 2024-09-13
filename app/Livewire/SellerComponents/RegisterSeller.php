@@ -20,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
+use App\Http\Controllers\PaymentController;
 use Filament\Forms\Concerns\InteractsWithForms;
 
 class RegisterSeller extends Component implements HasForms
@@ -126,193 +127,50 @@ class RegisterSeller extends Component implements HasForms
             'verification_status' => $formData['verification_status'] ?? 'Pending',
         ]);
 
+          // Call PaymentController methods to handle the payment process
+          $paymentController = new PaymentController();
+
+          // Get access token
+          $token = $paymentController->generateAccessToken();
+          if (!$token) {
+              return session()->flash('error', 'Failed to get access token');
+          }
+
+          // Register IPN
+          $ipnId = $paymentController->registerIPN($token);
+          if (!$ipnId) {
+              return session()->flash('error', 'Failed to register IPN');
+          }
+
+          // Prepare order data
+          $orderData = [
+            'amount' => 1.00,
+            'description' => 'Payment for service',
+            'callback_url' => 'https://9524-41-90-69-67.ngrok-free.app/verification-call-page',
+            'branch' => 'Town Branch',
+            'first_name' => 'Hardy',
+            'middle_name' => 'Kathurima',
+            'last_name' => 'Kimaita',
+            'email_address' => 'hardykathurima@gmail.com',
+            'phone_number' => '0703642687'
+          ];
+
+          // Submit Order
+          $redirectUrl = $paymentController->submitOrder($token, $ipnId, $orderData);
+          if (!$redirectUrl) {
+              return session()->flash('error', 'Failed to submit order');
+          }
+
+          // Redirect to payment URL
+          return redirect()->to($redirectUrl);
 
 
-        
-// Set content type for logging IPN callback later
-header("Content-Type: application/json");
 
-// Define environment and API details for token generation
-$apiUrl = "https://cybqa.pesapal.com/pesapalv3/api/Auth/RequestToken";
-$consumerKey = "qkio1BGGYAXTu2JOfm7XSXNruoZsrqEW";
-$consumerSecret = "osGQ364R49cXKeOYSpaOnT++rHs=";
 
-// Headers for the token request
-$headers = [
-    "Accept: application/json",
-    "Content-Type: application/json"
-];
 
-// Data to be sent in the token request
-$data = [
-    "consumer_key" => $consumerKey,
-    "consumer_secret" => $consumerSecret
-];
 
-// Initialize cURL to request access token
-$ch = curl_init($apiUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-$response = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
 
-// Decode the response to get the token
-$data = json_decode($response);
-if (isset($data->token)) {
-    $token = $data->token;
-} else {
-    echo "Failed to get access token. Response: $response";
-    exit;
-}
 
-// Register the IPN
-
-$ipnUrl = "https://bd03-41-90-228-219.ngrok-free.app/pin.php";
-$ipnRegistrationUrl = "https://cybqa.pesapal.com/pesapalv3/api/URLSetup/RegisterIPN";
-
-// Headers for the IPN registration request
-$headers = [
-    "Accept: application/json",
-    "Content-Type: application/json",
-    "Authorization: Bearer $token"
-];
-
-// Data to be sent in the IPN registration request
-$data = [
-    "url" => $ipnUrl,
-    "ipn_notification_type" => "GET"
-];
-
-// Initialize cURL to register the IPN
-$ch = curl_init($ipnRegistrationUrl);
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
-
-// Decode the response to get the IPN ID
-$data = json_decode($response);
-if (isset($data->ipn_id)) {
-    $ipn_id = $data->ipn_id;
-    echo "IPN registered successfully. IPN ID: $ipn_id<br>";
-} else {
-    echo "Failed to register IPN. Response: $response";
-    exit;
-}
-
-// Log the IPN callback response to a file (this section logs when Pesapal sends an IPN notification)
-$pinCallbackResponse = file_get_contents('php://input'); // Read incoming IPN data
-$logFile = "pin.json"; // Log file for storing callback data
-$log = fopen($logFile, "a"); // Open file in append mode
-fwrite($log, $pinCallbackResponse); // Write the IPN callback response
-fclose($log); // Close the file
-
-// Submit the Order
-
-$merchantreference = rand(1, 1000000000000000000); // Generate a random merchant reference
-$phone = "0703642687"; // Phone number
-$amount = 1.00; // Transaction amount
-$callbackurl = "https://bd03-41-90-228-219.ngrok-free.app/response-page.php"; // Callback URL after payment
-$branch = "Town Branch"; // Branch name
-$first_name = "Hardy"; // Customer first name
-$middle_name = "Kathurima"; // Customer middle name
-$last_name = "Kimaita"; // Customer last name
-$email_address = "hardykathurima@gmail.com"; // Customer email address
-
-// Pesapal Submit Order API URL
-$submitOrderUrl = "https://cybqa.pesapal.com/pesapalv3/api/Transactions/SubmitOrderRequest";
-
-// Headers for the Submit Order request
-$headers = [
-    "Accept: application/json",
-    "Content-Type: application/json",
-    "Authorization: Bearer $token"
-];
-
-// Data payload for submitting the order
-$data = [
-    "id" => "$merchantreference",
-    "currency" => "KES",
-    "amount" => $amount,
-    "description" => "Payment description goes here",
-    "callback_url" => "$callbackurl",
-    "notification_id" => "$ipn_id", // Use the IPN ID received earlier
-    "branch" => "$branch",
-    "billing_address" => [
-        "email_address" => "$email_address",
-        "phone_number" => "$phone",
-        "country_code" => "KE",
-        "first_name" => "$first_name",
-        "middle_name" => "$middle_name",
-        "last_name" => "$last_name",
-        "line_1" => "Pesapal Limited",
-        "line_2" => "",
-        "city" => "",
-        "state" => "",
-        "postal_code" => "",
-        "zip_code" => ""
-    ]
-];
-
-// Initialize cURL to submit the order
-$ch = curl_init($submitOrderUrl);
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-$responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-curl_close($ch);
-
-// Decode the response to get the redirect URL for payment
-$data = json_decode($response);
-if (isset($data->redirect_url)) {
-    $redirect_url = $data->redirect_url;
-    // Redirect to the Pesapal payment page
-    echo "<script>window.location.href='$redirect_url'</script>";
-} else {
-    echo "Failed to submit the order. Response: $response";
-}
-
-// Transaction Status Check
-
-$OrderTrackingId = $_GET['OrderTrackingId'] ?? null;
-$OrderMerchantReference = $_GET['OrderMerchantReference'] ?? null;
-
-if ($OrderTrackingId && $OrderMerchantReference) {
-    // Pesapal transaction status check URL
-    $getTransactionStatusUrl = "https://cybqa.pesapal.com/pesapalv3/api/Transactions/GetTransactionStatus?orderTrackingId=$OrderTrackingId";
-
-    // Headers for the transaction status request
-    $headers = [
-        "Accept: application/json",
-        "Content-Type: application/json",
-        "Authorization: Bearer $token"
-    ];
-
-    // Initialize cURL to get transaction status
-    $ch = curl_init($getTransactionStatusUrl);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    // Decode the response to get the payment status
-    $data = json_decode($response);
-    if (isset($data->payment_status_description)) {
-        $payment_status_description = $data->payment_status_description;
-        echo "Payment Status: $payment_status_description";
-    } else {
-        echo "Failed to retrieve payment status. Response: $response";
-    }
-}
 
 
     }
