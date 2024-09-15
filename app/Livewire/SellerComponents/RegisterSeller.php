@@ -2,6 +2,7 @@
 
 namespace App\Livewire\SellerComponents;
 
+use Carbon\Carbon;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Livewire\Component;
@@ -193,6 +194,9 @@ class RegisterSeller extends Component implements HasForms
         ->schema([
             Wizard::make([
                 Wizard\Step::make('Client Information')
+
+                ->icon('heroicon-m-user')
+                ->completedIcon('heroicon-m-user')
                     ->schema([
 
                         Shout::make('clientInfo')
@@ -209,8 +213,8 @@ class RegisterSeller extends Component implements HasForms
                         ->required()
                         ->label('Company name'),
                     TextInput::make('mobile_number')
-                    ->tel()
-                    ->telRegex('/^(0|\+254)7[0-9]{7}$/')
+                    // ->tel()
+                    // ->telRegex('/^(0|\+254)7[0-9]{7}$/')
                     ->hint('Why is this needed?')
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: "We'll use this to contact you for verification and activation of your account. We will never share your number with telemarketers.")
                         ->required()
@@ -231,6 +235,7 @@ class RegisterSeller extends Component implements HasForms
                         // ...
                     ])->columns(2),
                 Wizard\Step::make('Business Information')
+                ->icon('heroicon-m-briefcase')
                     ->schema([
 
                         Shout::make('businessinfo')
@@ -264,22 +269,76 @@ class RegisterSeller extends Component implements HasForms
 
                             Select::make('seller_interest')
                             ->label('What are you interested in')
+                            ->live()
                             ->options([
-                                'Full sale of a business' => 'Full sale of a business',
-                                'Partial stake sale of business/investment' => 'Partial stake sale of business/investment',
-                                'Loan for business' => 'Loan for business',
-                                'Other' => 'Other',
-                            ]),
-                        DatePicker::make('business_start_date')
+                                'Sale of shares' => 'Sale of shares',
+                                'Sale of assets' => 'Sale of assets',
+                                'Financing' => 'Financing',
+
+                            ])->afterStateUpdated(function (Set $set, $state) {
+                                $set('type_of_sale', null);
+                            }),
+                            Select::make('type_of_sale')
+                            ->label('Type of sale')
+                            ->live()
+                            ->options(function(Get $get){
+
+                                if($get('seller_interest')=='Sale of shares'){
+                                    return [
+                                        'Full sale of shares'=>'Full sale of shares',
+                                        'Partial sale of shares'=>'Partial sale of shares',
+                                    ];
+                                }
+
+                                if($get('seller_interest')=='Sale of assets'){
+                                    return [
+                                        'Full sale of assets'=>'Full sale of assets',
+                                        'Partial sale of assets'=>'Partial sale of assets',
+                                    ];
+                                }
+
+                            })->hidden(function(Get $get){
+
+                                if($get('seller_interest') == 'Financing'){
+                                    return true;
+                                }
+                                return false;
+                            }),
+                        Select::make('business_start_date')
                             ->required()
-                            ->label('When was the business established?'),
+                            ->label('When was the business established?')
+                            ->options(
+                                array_merge(
+                                    ['Not operational yet' => 'Not operational yet'], // Static option
+                                    collect(range(Carbon::now()->year, Carbon::now()->year - 50)) // Generate years dynamically
+                                        ->mapWithKeys(fn ($year) => [$year => $year]) // Map the years as both the key and value
+                                        ->toArray() // Convert collection to array
+                    )),
 
                             Select::make('business_industry')
                             ->label('Select business industry')
+                            ->multiple()
                             ->options([
                                 'Technology' => 'Technology',
-                                'Building,construction and maintenance' => 'Building,construction and maintenance',
+                                'Building, construction and maintenance' => 'Building, construction and maintenance',
                                 'Education' => 'Education',
+                                'Healthcare' => 'Healthcare',
+                                'Finance and Insurance' => 'Finance and Insurance',
+                                'Real Estate' => 'Real Estate',
+                                'Manufacturing' => 'Manufacturing',
+                                'Retail' => 'Retail',
+                                'Hospitality and Tourism' => 'Hospitality and Tourism',
+                                'Transportation and Logistics' => 'Transportation and Logistics',
+                                'Agriculture and Farming' => 'Agriculture and Farming',
+                                'Energy and Utilities' => 'Energy and Utilities',
+                                'Telecommunications' => 'Telecommunications',
+                                'Media and Entertainment' => 'Media and Entertainment',
+                                'Legal Services' => 'Legal Services',
+                                'Government and Public Services' => 'Government and Public Services',
+                                'Non-profit Organizations' => 'Non-profit Organizations',
+                                'Consulting and Professional Services' => 'Consulting and Professional Services',
+                                'Food and Beverage' => 'Food and Beverage',
+                                'Automotive' => 'Automotive',
                                 'Other' => 'Other',
                             ]),
 
@@ -306,11 +365,31 @@ class RegisterSeller extends Component implements HasForms
                                 Select::make('business_legal_entity')
                                 ->label('Select business legal entity type')
                                 ->options([
-                                    'Sole propreitorship/sole trader' => 'Sole propreitorship/sole trader',
+                                    'Sole proprietorship/sole trader' => 'Sole proprietorship/sole trader',
                                     'General partnership' => 'General partnership',
-                                    'Limited liablility partnership LLP' => 'Limited liablility partnership LLP',
+                                    'Limited liability partnership (LLP)' => 'Limited liability partnership (LLP)',
+                                    'Private limited company (Ltd)' => 'Private limited company (Ltd)',
+                                    'Public limited company (PLC)' => 'Public limited company (PLC)',
+                                    'Limited liability company (LLC)' => 'Limited liability company (LLC)',
+                                    'Corporation (Inc)' => 'Corporation (Inc)',
+                                    'Non-profit organization (NPO)' => 'Non-profit organization (NPO)',
+                                    'Cooperative' => 'Cooperative',
+                                    'Joint venture' => 'Joint venture',
+                                    'Franchise' => 'Franchise',
+                                    'Trust' => 'Trust',
+                                    'Association' => 'Association',
+                                    'Company limited by guarantee' => 'Company limited by guarantee',
+                                    'Unlimited company' => 'Unlimited company',
                                     'Other' => 'Other',
-                                ]),
+                                ])->live(),
+
+                                TextInput::make('other_business_legal_entity')->hidden(function(Get $get){
+
+                                    if($get('business_legal_entity') != "Other"){
+                                        return true;
+                                    }
+
+                                })->live(),
                             TextInput::make('website_link')
                             ->url()
                                 ->label('Link to your business website'),
@@ -319,12 +398,13 @@ class RegisterSeller extends Component implements HasForms
 
                             Textarea::make('business_description')
                             ->required()
-                            ->label('Describe the business'),
-                        Textarea::make('product_services')
-                            ->required()
-                            ->label('List products and services of the business'),
-                        Textarea::make('business_highlights')
-                            ->label('Mention highlights of the business including number of clients, growth rate, promoter experience, business relationships, awards, etc'),
+                            ->placeholder('Mention highlights of your business......')
+                            ->label('Describe the business (Do not mention business name/information which can identify the business.)'),
+                        // Textarea::make('product_services')
+                        //     ->required()
+                        //     ->label('List products and services of the business'),
+                        // Textarea::make('business_highlights')
+                        //     ->label('Mention highlights of the business including number of clients, growth rate, promoter experience, business relationships, awards, etc'),
                         Textarea::make('facility_description')
                             ->label('Describe your facility such as built-up area, number of floors, rental/lease details'),
 
@@ -332,47 +412,56 @@ class RegisterSeller extends Component implements HasForms
                         // ...
                     ])->columns(2),
                 Wizard\Step::make('Transactional Information')
+                ->icon('heroicon-m-banknotes')
                     ->schema([
                         Shout::make('transactionalinfo')
                         ->columnSpanFull()
                         ->content("Please enter your own details here. Information entered here is not publicly displayed."),
                         Textarea::make('business_funds')
                         ->label('How is the business funded presently? Mention all debts, securities registered, equity funding, etc.'),
-                    Textarea::make('number_shareholders')
-                        ->label('Current number of shareholders and shareholding '),
+                    FileUpload::make('number_shareholders')
+                        ->label('Upload the current list of shareholders and shareholding'),
                     TextInput::make('monthly_turnover')
                         ->numeric()
-                        ->label('At present, what is your average monthly turnover?'),
+                        ->label('At present, what is your average monthly turnover?')
+                        ->hint('Why is this needed?')
+                        ->hintIcon('heroicon-m-question-mark-circle', tooltip: "Investors/Buyers evaluate your business proposal based on this information. It is best to communicate this information upfront instead of wasting your time and theirs."),
                     TextInput::make('yearly_turnover')
                         ->numeric()
-                        ->label('Indicate turnover for the preceding year'),
+                        ->label('Indicate turnover for the preceding year')->hint('Why is this needed?')
+                        ->hintIcon('heroicon-m-question-mark-circle', tooltip: "Investors/Buyers evaluate your business proposal based on this information. It is best to communicate this information upfront instead of wasting your time and theirs."),
                     TextInput::make('profit_margin')
-                        ->label('What is the EBITDA / Operating Profit Margin Percentage/Last reported profit/loss'),
-                    TextInput::make('tangible_assets')
-                        ->label('List all tangible and intangible assets the business owns. '),
-                    TextInput::make('liabilities')
-                        ->label('List all liabilities the business owns'),
+                    ->postfix('%')
+                        ->label('What is the EBITDA / Operating Profit Margin Percentage or Last Reported Profit Margin Percentage'),
+                    FileUpload::make('tangible_assets')
+                        ->label('Upload the list of tangible and intangible assets of the business'),
+                    FileUpload::make('liabilities')
+                        ->label('Upload the list of liabilities of the business'),
                     TextInput::make('physical_assets')
                         ->label('What is the value of physical assets owned by the business that would be part of the transaction? '),
-                    Checkbox::make('interested_in_quotations')
-                        ->label('I’m interested in receiving quotations from Advisors / Boutique Investment Banks who can manage this transaction. ')->columnSpan('full'),
+                    // Checkbox::make('interested_in_quotations')
+                    //     ->label('I’m interested in receiving quotations from Advisors / Boutique Investment Banks who can manage this transaction. ')->columnSpan('full'),
                     ])->columns(2),
                     Wizard\Step::make('Documents')
+                    ->icon('heroicon-m-document')
                     ->schema([
 
                         Shout::make('documentsinfo')
                         ->columnSpanFull()
                         ->content("Photos are an important part of your profile and are publicly displayed. Documents help us verify and approve your profile faster. Documents names entered here are publicly visible but are accessible only to introduced members."),
                         FileUpload::make('business_photos')
-                        ->label('Business Photos')->required(),
-                    FileUpload::make('information_memorandum')
-                        ->label('Information Memorandum'),
-                    FileUpload::make('financial_report')
-                        ->label('Financial Report'),
-                    FileUpload::make('valuation_worksheets')
-                        ->label('Valuation Worksheets'),
+                        ->label('Photos of the business premises and include the following information ')->required(),
+                    FileUpload::make('business_profile')
+                        ->label('Business profile'),
+                    FileUpload::make('kra_pin')
+                        ->label('KRA pin'),
+                    FileUpload::make('certificate_of_Incorporation ')
+                        ->label('Certificate of Incorporation '),
+                    FileUpload::make('valuation_report')
+                        ->label('Valuation report'),
                     ])->columns(2),
                     Wizard\Step::make('Select a Plan')
+                    ->icon('heroicon-m-cursor-arrow-ripple')
                     ->schema([
                         // Shout::make('selectaplan')
                         // ->columnSpanFull(),
@@ -384,13 +473,13 @@ class RegisterSeller extends Component implements HasForms
                         ]),
 
                         Checkbox::make('finders_fee')
-                        ->label("I accept 1% finder's fee (payable post transaction) and other terms of engagement. ")
+                        ->label("I undertake to pay 1% finder’s fee (payable post transaction) to Biasharamart and other terms of engagement")
                         ->inline(),
                     Hidden::make('verification_status')
                         ->default('Pending'),
                     ]),
 
-            ])->submitAction(new HtmlString('<button type="submit" style="background-color:orange; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
+            ])->skippable()->submitAction(new HtmlString('<button type="submit" style="background-color:orange; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
         ]);
 }
 
