@@ -44,7 +44,7 @@ class PaymentController extends Controller
 
     public function registerIPN($token)
     {
-        $ipnUrl = "https://9524-41-90-69-67.ngrok-free.app/pin.php";
+        $ipnUrl = "https://a9fb-41-90-228-219.ngrok-free.app/pin.php";
         $ipnRegistrationUrl = "https://cybqa.pesapal.com/pesapalv3/api/URLSetup/RegisterIPN";
 
         $headers = [

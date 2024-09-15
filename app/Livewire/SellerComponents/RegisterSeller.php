@@ -146,7 +146,7 @@ class RegisterSeller extends Component implements HasForms
           $orderData = [
             'amount' => 1.00,
             'description' => 'Payment for service',
-            'callback_url' => 'https://9524-41-90-69-67.ngrok-free.app/verification-call-page',
+            'callback_url' => 'https://a9fb-41-90-228-219.ngrok-free.app/verification-call-page',
             'branch' => 'Town Branch',
             'first_name' => 'Hardy',
             'middle_name' => 'Kathurima',
@@ -311,7 +311,7 @@ class RegisterSeller extends Component implements HasForms
                         Shout::make('selectaplan')
                         ->columnSpanFull(),
                         Checkbox::make('active_business')
-                        ->label('Active Business')
+                        ->label('Monthly KES 12,0000')
                         ->required(),
                     Hidden::make('verification_status')
                         ->default('Pending'),
