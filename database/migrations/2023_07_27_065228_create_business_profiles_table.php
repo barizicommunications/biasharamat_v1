@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('mobile_number');
             $table->string('email')->unique();
             $table->string('display_company_details')->nullable();
+            $table->string('display_contact_details')->nullable();
             $table->enum('seller_role', ['Director', 'Adviser', 'Shareholder', 'Other']);
             $table->string('seller_interest');
             $table->date('business_start_date');
@@ -47,6 +48,7 @@ return new class extends Migration
             $table->string('financial_report');
             $table->string('valuation_worksheets');
             $table->string('active_business')->nullable();
+            $table->string('finders_fee')->nullable();
             $table->text('reason_for_decline')->nullable();
             $table->string('verification_status')->default('Pending')->nullable();
             $table->timestamps();

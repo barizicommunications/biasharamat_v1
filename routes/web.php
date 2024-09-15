@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\TestComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
@@ -24,6 +25,10 @@ use App\Http\Controllers\InvestorRegistrationController;
 Route::get('/', function () {
     return view('homepage');
 });
+
+Route::get('test',TestComponent::class)->name('teat');
+
+
 Route::get('/about', function () {
     return view('about');
 })->name('about');

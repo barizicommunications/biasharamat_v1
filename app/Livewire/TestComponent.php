@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\SellerComponents;
+namespace App\Livewire;
 
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -29,10 +29,10 @@ use App\Http\Controllers\PaymentController;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Concerns\InteractsWithForms;
 
-class RegisterSeller extends Component implements HasForms
+class TestComponent extends Component implements HasForms
 {
-    use InteractsWithForms , WithFileUploads;
 
+    use InteractsWithForms , WithFileUploads;
 
 
     public $user_id;
@@ -404,9 +404,8 @@ class RegisterSeller extends Component implements HasForms
 
 
 
-
     public function render()
     {
-        return view('livewire.seller-components.register-seller');
+        return view('livewire.test-component')->layout('layouts.guest');
     }
 }

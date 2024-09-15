@@ -13,6 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('styles.css') }}">
 
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <style>
         [x-cloak] {
             display: none !important;
@@ -118,7 +120,7 @@
                                 </a>
                                 <a href="{{ route('investor.create') }}"
                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    As a business business buyer
+                                    Investor
                                 </a>
                             @else
                                @if(auth()->user()->registration_type == "Business Seller" && !\App\Models\BusinessProfile::where('user_id',auth()->user()->id)->first())
@@ -132,7 +134,7 @@
 
                                 <a href="{{ route('investor.profile.create') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                 As a business buyer
+                                 Investor
                              </a>
 
 

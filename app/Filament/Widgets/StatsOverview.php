@@ -18,8 +18,8 @@ class StatsOverview extends BaseWidget
             ->description('view all users')
             ->descriptionIcon('heroicon-m-arrow-long-right')
             ->color('success'),
-            Stat::make('Registered business sellers', BusinessProfile::all()->count())->url('/admin/business-profiles')
-            ->description('view all business sellers')
+            Stat::make('Registered Business Owner', BusinessProfile::all()->count())->url('/admin/business-profiles')
+            ->description('view all Business Owner')
             ->descriptionIcon('heroicon-m-arrow-long-right')
             ->color('success'),
             Stat::make('Registered Investors',InvestorProfile::all()->count())->url('/admin/investor-profiles')

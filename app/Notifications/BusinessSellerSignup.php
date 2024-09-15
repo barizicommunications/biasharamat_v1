@@ -39,7 +39,7 @@ class BusinessSellerSignup extends Notification implements ShouldQueue
         return (new MailMessage)
                 ->subject('New Business Profile Registration')
                 ->greeting('Hello Admin,')
-                ->line('A new business seller has signed up on your platform.')
+                ->line('A new business owner has signed up on your platform.')
                 ->line('Name: ' . $this->user->first_name)
                 ->line('Email: ' . $this->user->email)
                 ->line('Thank you for using Biasharamat !');
