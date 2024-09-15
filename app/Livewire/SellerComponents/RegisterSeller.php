@@ -77,6 +77,8 @@ class RegisterSeller extends Component implements HasForms
     public $active_business;
     public $reason_for_decline;
     public $verification_status;
+    public $display_contact_details;
+    public $finders_fee;
 
 
 
@@ -235,16 +237,6 @@ class RegisterSeller extends Component implements HasForms
                         ->columnSpanFull()
                         ->content("Information entered here is displayed publicly to match you with the right set of investors and buyers. Do not mention business name/information which can identify the business."),
 
-                        Select::make('status')
-                        ->options([
-                            'draft' => 'Draft',
-                            'reviewing' => 'Reviewing',
-                            'published' => 'Published',
-                        ])
-                        ->required()
-                        ->live(),
-                    DateTimePicker::make('published_at')
-                        ->hidden(fn (Get $get) => $get('status') !== 'published'),
 
                         Select::make('seller_role')
                             ->options([
@@ -398,7 +390,7 @@ class RegisterSeller extends Component implements HasForms
                         ->default('Pending'),
                     ]),
 
-            ])->skippable()->submitAction(new HtmlString('<button type="submit" style="background-color:orange; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
+            ])->submitAction(new HtmlString('<button type="submit" style="background-color:orange; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
         ]);
 }
 
