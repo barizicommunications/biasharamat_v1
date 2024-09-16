@@ -304,6 +304,83 @@ class RegisterSeller extends Component implements HasForms
                                 }
                                 return false;
                             }),
+
+                            // Full sale of shares if user selects full sale of shares
+
+                            TextInput::make('tentative_selling_price')
+                            ->label('What is the tentative selling price for the business?')
+                            ->numeric()
+                            ->visible(function(Get $get){
+
+                                return $get('seller_interest') == 'Sale of shares' && $get('type_of_sale') == 'Full sale of shares';
+
+
+                            }),
+                            // ->hidden(function (Get $get) {
+                            //     return !($get('seller_interest') == 'Sale of shares') && $get('type_of_sale') == 'full sale of shares';
+                            // }),
+
+                            Textarea::make('reason_for_sale')
+                            ->label('What is the reason for the sale of the business?'),
+
+
+                            // Partial sale of shares if user selects partial sale of shares
+
+                            TextInput::make('maximum_stake')
+                            ->label('What is the maximum stake that you are willing to sell?'),
+
+                            TextInput::make('investment_amount')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('What investment amount are you seeking for this stake'),
+
+                            Textarea::make('reason_for_investment')
+                            ->label('Provide reason for investment?'),
+
+
+                            // sale of assets if user selects full sale of assets or partial sale of assets
+
+                            TextInput::make('value_of_physical_assets')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('What is the value of the physical assets you are selling?'),
+
+                            TextInput::make('asset_selling_price')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('At what price are you selling/leasing?'),
+
+
+                            Textarea::make('reason_for_selling_assets')
+                            ->label('What is the reason for selling the business assets?'),
+
+
+
+
+                            // Financing if user selects financing
+
+                            TextInput::make('colateral_value')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('What is the value of the collateral you can provide?'),
+
+                            TextInput::make('loan_amount')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('What loan amount are you seeking?'),
+
+                            TextInput::make('yearly_interest_pay')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('What is the maximum yearly investment you can pay?'),
+
+                            TextInput::make('years_repay_loan')
+                            ->numeric()
+                            ->label('In how many years will you repay the loan?'),
+
+                            Textarea::make('reason_for_seekin_loan')
+                            ->label('Reason for seeking a loan?'),
+
                         Select::make('business_start_date')
                             ->required()
                             ->label('When was the business established?')
