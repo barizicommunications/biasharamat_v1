@@ -265,8 +265,6 @@ class RegisterSeller extends Component implements HasForms
 
                         })->live(),
 
-
-
                             Select::make('seller_interest')
                             ->label('What are you interested in')
                             ->live()
@@ -310,15 +308,11 @@ class RegisterSeller extends Component implements HasForms
                             TextInput::make('tentative_selling_price')
                             ->label('What is the tentative selling price for the business?')
                             ->numeric()
-                            ->visible(function(Get $get){
-
-                                return $get('seller_interest') == 'Sale of shares' && $get('type_of_sale') == 'Full sale of shares';
-
-
+                            ->hidden(function (Get $get) {
+                                // return !($get('seller_interest') === 'Sale of shares');
+                                // return !($get('seller_interest') === 'Sale of shares' && $get('type_of_sale') === 'Full sale of shares');
                             }),
-                            // ->hidden(function (Get $get) {
-                            //     return !($get('seller_interest') == 'Sale of shares') && $get('type_of_sale') == 'full sale of shares';
-                            // }),
+
 
                             Textarea::make('reason_for_sale')
                             ->label('What is the reason for the sale of the business?'),
