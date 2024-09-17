@@ -1,6 +1,6 @@
 <x-guest-layout>
     <section class="bg-[#f4f4f4]">
-        <article class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:py-8">
+        <article class="mx-auto max-w-screen-2xl px-4 py-16 sm:px-6 lg:py-8">
             <div class="flex items-center py-4 overflow-x-auto whitespace-nowrap mb-8">
 
 
@@ -46,7 +46,12 @@
                     </div> --}}
 
                     <div class="mb-6">
-                        <img src="{{ Storage::url($sellerProfile->business_photos) }}" alt="">
+
+                        @foreach ($sellerProfile->business_photos as $photo)
+                        <img src="{{ Storage::url($photo) }}" alt="">
+
+                        @endforeach
+
 
                     </div>
 
@@ -152,21 +157,19 @@
                           </div>
                           <div>
                               <h3 class="mb-4">Documents</h3>
-                              <div class="flex mb-3">
+                              <div class=" mb-3">
                                   <div class="mb-2">
-                                      <img src="{{ asset('images/pdf.png') }}" class="mb-2" alt="">
-                                      <p class="text-xs">Information <br> memorandum</p>
-                                  </div>
-                                  <div class="mb-2 ml-4">
-                                      <img src="{{ asset('images/pdf.png') }}" class="mb-2" alt="">
-                                      <p class="text-xs text-center">Financial <br> Reports</p>
+                                        <a href="{{ Storage::url($sellerProfile->certificate_of_incorporation)  }}" target="_blank" class="underline text-[#c75126] block text-xs">Certificate of incorporation</a>
+                                        <a href="{{ Storage::url($sellerProfile->kra_pin)  }}" target="_blank" class="underline text-[#c75126] block text-xs">KRA pin</a>
+                                        <a href="{{ Storage::url($sellerProfile->number_shareholders)  }}" target="_blank" class="underline text-[#c75126] block text-xs">Number of shareholders</a>
+                                        <a href="{{ Storage::url($sellerProfile->liabilities)  }}" target="_blank" class="underline text-[#c75126] block text-xs">Liabilities</a>
+                                        <a href="{{ Storage::url($sellerProfile->business_profile)  }}" target="_blank" class="underline text-[#c75126] block text-xs">Business profile</a>
+                                        <a href="{{ Storage::url($sellerProfile->valuation_report)  }}" target="_blank" class="underline text-[#c75126] block text-xs">Valuation report</a>
                                   </div>
 
+
                               </div>
-                              <div class="mb-2">
-                                  <img src="{{ asset('images/excel.png') }}" class="mb-2" alt="">
-                                  <p class="text-xs">Valuation <br> Worksheets</p>
-                              </div>
+
                           </div>
                         </div>
 

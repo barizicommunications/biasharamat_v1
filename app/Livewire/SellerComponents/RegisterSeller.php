@@ -3,6 +3,7 @@
 namespace App\Livewire\SellerComponents;
 
 use Carbon\Carbon;
+use App\Models\User;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Livewire\Component;
@@ -14,6 +15,7 @@ use Illuminate\Support\HtmlString;
 use Awcodes\Shout\Components\Shout;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Radio;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
@@ -27,6 +29,8 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use App\Http\Controllers\PaymentController;
+use App\Notifications\BusinessSellerSignup;
+use App\Notifications\ApplicationUnderReview;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Concerns\InteractsWithForms;
 
@@ -57,10 +61,10 @@ class RegisterSeller extends Component implements HasForms
     public $county;
     public $number_employees;
     public $business_legal_entity;
+    public $other_business_legal_entity;
     public $website_link;
     public $business_description;
     public $product_services;
-    public $business_highlights;
     public $facility_description;
     public $business_funds;
     public $number_shareholders;
@@ -73,40 +77,135 @@ class RegisterSeller extends Component implements HasForms
     public $interested_in_quotations;
     public $business_photos;
     public $information_memorandum;
-    public $financial_report;
     public $valuation_worksheets;
     public $active_business;
     public $reason_for_decline;
     public $verification_status;
     public $display_contact_details;
     public $finders_fee;
-
+    public $tentative_selling_price;
+    public $reason_for_sale;
+    public $maximum_stake;
+    public $investment_amount;
+    public $reason_for_investment;
+    public $value_of_physical_assets;
+    public $asset_selling_price;
+    public $reason_for_selling_assets;
+    public $colateral_value;
+    public $loan_amount;
+    public $other_seller_role;
+    public $yearly_interest_pay;
+    public $years_repay_loan;
+    public $reason_for_seeking_loan;
+    public $business_profile;
+    public $certificate_of_incorporation;
+    public $kra_pin;
+    public $valuation_report;
+    public $formData = [];
 
 
     public function mount()
     {
         $this->form->fill([
             'business_photos' => [],
-            'information_memorandum' => null,
-            'financial_report' => null,
-            'valuation_worksheets' => null,
+            'certificate_of_incorporation' => null,
+            'business_legal_entity'=>null,
+            'business_industry'=> null
         ]);
 
 
     }
 
 
+    protected $rules = [
+       // Ensure the user ID is unique and exists in the users table
+        'name' => 'required|string|min:3|max:255',
+        'company_name' => 'required|string|max:255',
+        'mobile_number' => 'required|string|max:20',
+        'email' => 'required|email|unique:table_name,email',
+        'display_company_details' => 'nullable|string|max:255',
+        'display_contact_details' => 'nullable|string|max:255',
+        'seller_role' => 'required|in:Director,Adviser,Shareholder,Other', // Enum validation for seller role
+        'seller_interest' => 'required|string|max:255',
+        'tentative_selling_price' => 'nullable|numeric|min:0|max:999999999999.99',
+        'reason_for_sale' => 'nullable|string',
+        'maximum_stake' => 'nullable|numeric|min:0|max:100',
+        'investment_amount' => 'nullable|numeric|min:0|max:999999999999.99',
+        'reason_for_investment' => 'nullable|string',
+        'value_of_physical_assets' => 'nullable|numeric|min:0|max:999999999999.99',
+        'asset_selling_price' => 'nullable|numeric|min:0|max:999999999999.99',
+        'reason_for_selling_assets' => 'nullable|string',
+        'colateral_value' => 'nullable|numeric|min:0|max:999999999999.99',
+        'loan_amount' => 'nullable|numeric|min:0|max:999999999999.99',
+        'yearly_interest_pay' => 'nullable|numeric|min:0|max:999999999999.99',
+        'years_repay_loan' => 'nullable|integer|min:0',
+        'reason_for_seeking_loan' => 'nullable|string',
+        'business_start_date' => 'required|date',
+        'business_industry' => 'required|string|max:255',
+        'country' => 'required|string|max:255',
+        'city' => 'required|string|max:255',
+        'county' => 'required|string|max:255',
+        'number_employees' => 'required|integer|min:0',
+        'business_legal_entity' => 'required|string|max:255',
+        'website_link' => 'required|url|max:255',
+        'business_description' => 'required|string',
+        'facility_description' => 'required|string',
+        'business_funds' => 'required|string|max:255',
+        'number_shareholders' => 'required|string|max:255',
+        'monthly_turnover' => 'required|string|max:255',
+        'yearly_turnover' => 'required|string|max:255',
+        'profit_margin' => 'required|string|max:255',
+        'tangible_assets' => 'required|string|max:255',
+        'liabilities' => 'required|string|max:255',
+        'physical_assets' => 'required|string|max:255',
+        'interested_in_quotations' => 'nullable|string|max:255',
+        'business_photos' => 'nullable|json',
+        'business_profile' => 'nullable|file|mimes:pdf|max:1024', // Validate as PDF with a max size of 1MB
+        'kra_pin' => 'nullable|file|mimes:pdf|max:1024', // Validate as PDF with a max size of 1MB
+        'certificate_of_incorporation' => 'nullable|file|mimes:pdf|max:1024', // Validate as PDF with a max size of 1MB
+        'valuation_report' => 'nullable|file|mimes:pdf|max:1024', // Validate as PDF with a max size of 1MB
+        'other_seller_role' => 'nullable|string|max:255',
+        'active_business' => 'nullable|string|max:255',
+        'finders_fee' => 'nullable|string|max:255',
+        'reason_for_decline' => 'nullable|string',
+        'verification_status' => 'nullable|string|in:Pending,Approved,Declined',
+    ];
+
+
+
     public function submit(){
         $formData =$this->form->getState();
-        BusinessProfile::create([
+
+        $this->form->validate();
+
+
+         BusinessProfile::create([
             'user_id' => auth()->user()->id,
             'name' => $formData['name'],
             'company_name' => $formData['company_name'],
             'mobile_number' => $formData['mobile_number'],
             'email' => $formData['email'],
             'display_company_details' => $formData['display_company_details'] ?? null,
+            'display_contact_details' => $formData['display_contact_details'] ?? null,
             'seller_role' => $formData['seller_role'],
             'seller_interest' => $formData['seller_interest'],
+            'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
+            'reason_for_sale' => $formData['reason_for_sale'] ?? null,
+            'maximum_stake' => $formData['maximum_stake'] ?? null,
+            'investment_amount' => $formData['investment_amount'] ?? null,
+            'reason_for_investment' => $formData['reason_for_investment'] ?? null,
+            'value_of_physical_assets' => $formData['value_of_physical_assets'] ?? null,
+            'asset_selling_price' => $formData['asset_selling_price'] ?? null,
+            'reason_for_selling_assets' => $formData['reason_for_selling_assets'] ?? null,
+            'colateral_value' => $formData['colateral_value'] ?? null,
+            'loan_amount' => $formData['loan_amount'] ?? null,
+            'yearly_interest_pay' => $formData['yearly_interest_pay'] ?? null,
+            'years_repay_loan' => $formData['years_repay_loan'] ?? null,
+            'reason_for_seeking_loan' => $formData['reason_for_seeking_loan'] ?? null,
+            'business_profile' => $formData['business_profile'] ?? null,
+            'certificate_of_incorporation' => $formData['certificate_of_incorporation'] ?? null,
+            'kra_pin' => $formData['kra_pin'] ?? null,
+            'valuation_report' => $formData['valuation_report'] ?? null,
             'business_start_date' => $formData['business_start_date'],
             'business_industry' => $formData['business_industry'],
             'country' => $formData['country'],
@@ -116,8 +215,6 @@ class RegisterSeller extends Component implements HasForms
             'business_legal_entity' => $formData['business_legal_entity'],
             'website_link' => $formData['website_link'],
             'business_description' => $formData['business_description'],
-            'product_services' => $formData['product_services'],
-            'business_highlights' => $formData['business_highlights'],
             'facility_description' => $formData['facility_description'],
             'business_funds' => $formData['business_funds'],
             'number_shareholders' => $formData['number_shareholders'],
@@ -126,65 +223,71 @@ class RegisterSeller extends Component implements HasForms
             'profit_margin' => $formData['profit_margin'],
             'tangible_assets' => $formData['tangible_assets'],
             'liabilities' => $formData['liabilities'],
+            'other_seller_role' => $formData['other_seller_role'] ?? null,
             'physical_assets' => $formData['physical_assets'],
-            'interested_in_quotations' => $formData['interested_in_quotations'] ?? null,
             'business_photos' => $formData['business_photos'] ?? null,
-            'information_memorandum' => $formData['information_memorandum'] ?? null,
-            'financial_report' => $formData['financial_report'] ?? null,
-            'valuation_worksheets' => $formData['valuation_worksheets'] ?? null,
             'active_business' => $formData['active_business'],
-            'verification_status' => $formData['verification_status'] ?? 'Pending',
+
         ]);
 
-          // Call PaymentController methods to handle the payment process
-          $paymentController = new PaymentController();
+          // Get the authenticated user
+          $user = Auth::user();
 
-          // Get access token
-          $token = $paymentController->generateAccessToken();
-          if (!$token) {
-              return session()->flash('error', 'Failed to get access token');
-          }
 
-          // Register IPN
-          $ipnId = $paymentController->registerIPN($token);
-          if (!$ipnId) {
-              return session()->flash('error', 'Failed to register IPN');
-          }
+       // Notify the user that their application is under review
+       $user->notify(new ApplicationUnderReview($user));
 
-          // Prepare order data
-          $orderData = [
-            'amount' => 1.00,
-            'description' => 'Payment for service',
-            'callback_url' => 'https://a9fb-41-90-228-219.ngrok-free.app/verification-call-page',
-            'branch' => 'Town Branch',
-            'first_name' => 'Hardy',
-            'middle_name' => 'Kathurima',
-            'last_name' => 'Kimaita',
-            'email_address' => 'hardykathurima@gmail.com',
-            'phone_number' => '0703642687'
-          ];
 
-          // Submit Order
-          $redirectUrl = $paymentController->submitOrder($token, $ipnId, $orderData);
-          if (!$redirectUrl) {
-              return session()->flash('error', 'Failed to submit order');
-          }
+       // Notify the admin about the new signup
+       $admin = User::where('registration_type', 'Admin')->first();
+       $admin->notify(new BusinessSellerSignup($user));
 
-          // Redirect to payment URL
-          return redirect()->to($redirectUrl);
+
+
+       return redirect()->route('businessVerificationCallPage');
 
 
 
 
 
+        // //   Call PaymentController methods to handle the payment process
+        //   $paymentController = new PaymentController();
 
+        //   // Get access token
+        //   $token = $paymentController->generateAccessToken();
+        //   if (!$token) {
+        //       return session()->flash('error', 'Failed to get access token');
+        //   }
 
+        //   // Register IPN
+        //   $ipnId = $paymentController->registerIPN($token);
+        //   if (!$ipnId) {
+        //       return session()->flash('error', 'Failed to register IPN');
+        //   }
 
+        // //   Prepare order data
+        //   $orderData = [
+        //     'amount' => 1.00,
+        //     'description' => 'Payment for service',
+        //     'callback_url' => 'https://a9fb-41-90-228-219.ngrok-free.app/verification-call-page',
+        //     'branch' => 'Town Branch',
+        //     'first_name' => 'Hardy',
+        //     'middle_name' => 'Kathurima',
+        //     'last_name' => 'Kimaita',
+        //     'email_address' => 'hardykathurima@gmail.com',
+        //     'phone_number' => '0703642687'
+        //   ];
 
+        //   // Submit Order
+        //   $redirectUrl = $paymentController->submitOrder($token, $ipnId, $orderData);
+        //   if (!$redirectUrl) {
+        //       return session()->flash('error', 'Failed to submit order');
+        //   }
+
+        //   // Redirect to payment URL
+        //   return redirect()->to($redirectUrl);
 
     }
-
-
 
 
 
@@ -194,9 +297,8 @@ class RegisterSeller extends Component implements HasForms
         ->schema([
             Wizard::make([
                 Wizard\Step::make('Client Information')
-
                 ->icon('heroicon-m-user')
-                ->completedIcon('heroicon-m-user')
+                ->completedIcon('heroicon-o-hand-thumb-up')
                     ->schema([
 
                         Shout::make('clientInfo')
@@ -205,8 +307,8 @@ class RegisterSeller extends Component implements HasForms
 
                         TextInput::make('name')
                         ->required()
-                        ->label('Name')->reactive()
-                        ->afterStateUpdated(fn ($state) => $this->validateOnly('name')),
+                        ->label('Name'),
+                        // ->afterStateUpdated(fn ($state) => $this->validateOnly('name')),
                     TextInput::make('company_name')
                     ->hint('Why is this needed?')
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: 'This information is required for our verification process. Biasharamat may ask for supporting documentation without which we are unable to activate your profile. This information is never disclosed to anyone without your permission.')
@@ -235,6 +337,7 @@ class RegisterSeller extends Component implements HasForms
                         // ...
                     ])->columns(2),
                 Wizard\Step::make('Business Information')
+                ->completedIcon('heroicon-o-hand-thumb-up')
                 ->icon('heroicon-m-briefcase')
                     ->schema([
 
@@ -263,73 +366,67 @@ class RegisterSeller extends Component implements HasForms
                                 return true;
                             }
 
-                        })->live(),
+                        }),
 
                             Select::make('seller_interest')
                             ->label('What are you interested in')
                             ->live()
                             ->options([
-                                'Sale of shares' => 'Sale of shares',
-                                'Sale of assets' => 'Sale of assets',
+                               'Full sale of shares'=>'Full sale of shares',
+                                'Partial sale of shares'=>'Partial sale of shares',
+                                'Full sale of assets'=>'Full sale of assets',
+                                // 'Partial sale of assets'=>'Partial sale of assets',
                                 'Financing' => 'Financing',
 
-                            ])->afterStateUpdated(function (Set $set, $state) {
-                                $set('type_of_sale', null);
-                            }),
-                            Select::make('type_of_sale')
-                            ->label('Type of sale')
-                            ->live()
-                            ->options(function(Get $get){
+                            ]),
 
-                                if($get('seller_interest')=='Sale of shares'){
-                                    return [
-                                        'Full sale of shares'=>'Full sale of shares',
-                                        'Partial sale of shares'=>'Partial sale of shares',
-                                    ];
-                                }
-
-                                if($get('seller_interest')=='Sale of assets'){
-                                    return [
-                                        'Full sale of assets'=>'Full sale of assets',
-                                        'Partial sale of assets'=>'Partial sale of assets',
-                                    ];
-                                }
-
-                            })->hidden(function(Get $get){
-
-                                if($get('seller_interest') == 'Financing'){
-                                    return true;
-                                }
-                                return false;
-                            }),
-
-                            // Full sale of shares if user selects full sale of shares
 
                             TextInput::make('tentative_selling_price')
                             ->label('What is the tentative selling price for the business?')
                             ->numeric()
                             ->hidden(function (Get $get) {
-                                // return !($get('seller_interest') === 'Sale of shares');
-                                // return !($get('seller_interest') === 'Sale of shares' && $get('type_of_sale') === 'Full sale of shares');
+
+                                return !($get('seller_interest') === 'Full sale of shares');
+
                             }),
 
 
                             Textarea::make('reason_for_sale')
-                            ->label('What is the reason for the sale of the business?'),
+                            ->label('What is the reason for the sale of the business?')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Full sale of shares');
+
+                            }),
 
 
                             // Partial sale of shares if user selects partial sale of shares
 
                             TextInput::make('maximum_stake')
-                            ->label('What is the maximum stake that you are willing to sell?'),
+                            ->label('What is the maximum stake that you are willing to sell?')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Partial sale of shares');
+
+                            }),
 
                             TextInput::make('investment_amount')
                             ->prefix('Ksh')
                             ->numeric()
-                            ->label('What investment amount are you seeking for this stake'),
+                            ->label('What investment amount are you seeking for this stake')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Partial sale of shares');
+
+                            }),
 
                             Textarea::make('reason_for_investment')
-                            ->label('Provide reason for investment?'),
+                            ->label('Provide reason for investment?')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Partial sale of shares');
+
+                            }),
 
 
                             // sale of assets if user selects full sale of assets or partial sale of assets
@@ -337,16 +434,31 @@ class RegisterSeller extends Component implements HasForms
                             TextInput::make('value_of_physical_assets')
                             ->prefix('Ksh')
                             ->numeric()
-                            ->label('What is the value of the physical assets you are selling?'),
+                            ->label('What is the value of the physical assets you are selling?')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Full sale of assets');
+
+                            }),
 
                             TextInput::make('asset_selling_price')
                             ->prefix('Ksh')
                             ->numeric()
-                            ->label('At what price are you selling/leasing?'),
+                            ->label('At what price are you selling/leasing?')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Full sale of assets');
+
+                            }),
 
 
                             Textarea::make('reason_for_selling_assets')
-                            ->label('What is the reason for selling the business assets?'),
+                            ->label('What is the reason for selling the business assets?')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Full sale of assets');
+
+                            }),
 
 
 
@@ -356,39 +468,70 @@ class RegisterSeller extends Component implements HasForms
                             TextInput::make('colateral_value')
                             ->prefix('Ksh')
                             ->numeric()
-                            ->label('What is the value of the collateral you can provide?'),
+                            ->label('What is the value of the collateral you can provide?')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Financing');
+
+                            }),
 
                             TextInput::make('loan_amount')
                             ->prefix('Ksh')
                             ->numeric()
-                            ->label('What loan amount are you seeking?'),
+                            ->label('What loan amount are you seeking?')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Financing');
+
+                            }),
 
                             TextInput::make('yearly_interest_pay')
                             ->prefix('Ksh')
                             ->numeric()
-                            ->label('What is the maximum yearly investment you can pay?'),
+                            ->label('What is the maximum yearly investment you can pay?')
+                            ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Financing');
+
+                            }),
 
                             TextInput::make('years_repay_loan')
                             ->numeric()
-                            ->label('In how many years will you repay the loan?'),
+                            ->label('In how many years will you repay the loan?')
+                            ->hidden(function (Get $get) {
 
-                            Textarea::make('reason_for_seekin_loan')
-                            ->label('Reason for seeking a loan?'),
+                                return !($get('seller_interest') === 'Financing');
+
+                            }),
+
+                            Textarea::make('reason_for_seeking_loan')
+                            ->label('Reason for seeking a loan?')  ->hidden(function (Get $get) {
+
+                                return !($get('seller_interest') === 'Financing');
+
+                            }),
 
                         Select::make('business_start_date')
                             ->required()
                             ->label('When was the business established?')
-                            ->options(
-                                array_merge(
-                                    ['Not operational yet' => 'Not operational yet'], // Static option
-                                    collect(range(Carbon::now()->year, Carbon::now()->year - 50)) // Generate years dynamically
-                                        ->mapWithKeys(fn ($year) => [$year => $year]) // Map the years as both the key and value
-                                        ->toArray() // Convert collection to array
-                    )),
+                            ->options([
+                                'Not operational yet' => 'Not operational yet',
+                                '2024'=>'2024',
+                                '2023'=>'2023',
+                                '2022'=>'2022',
+                                '2021'=>'2021',
+                                '2020'=>'2020',
+                                '2019'=>'2019',
+                                '2018'=>'2018',
+                                '2017'=>'2017',
+                                '2016'=>'2016',
+                                '2015'=>'2015',
+                            ]),
+
 
                             Select::make('business_industry')
                             ->label('Select business industry')
-                            ->multiple()
+
                             ->options([
                                 'Technology' => 'Technology',
                                 'Building, construction and maintenance' => 'Building, construction and maintenance',
@@ -435,6 +578,8 @@ class RegisterSeller extends Component implements HasForms
 
                                 Select::make('business_legal_entity')
                                 ->label('Select business legal entity type')
+                                // ->multiple()
+                                // ->maxItems(2)
                                 ->options([
                                     'Sole proprietorship/sole trader' => 'Sole proprietorship/sole trader',
                                     'General partnership' => 'General partnership',
@@ -484,6 +629,7 @@ class RegisterSeller extends Component implements HasForms
                     ])->columns(2),
                 Wizard\Step::make('Transactional Information')
                 ->icon('heroicon-m-banknotes')
+                ->completedIcon('heroicon-o-hand-thumb-up')
                     ->schema([
                         Shout::make('transactionalinfo')
                         ->columnSpanFull()
@@ -491,7 +637,9 @@ class RegisterSeller extends Component implements HasForms
                         Textarea::make('business_funds')
                         ->label('How is the business funded presently? Mention all debts, securities registered, equity funding, etc.'),
                     FileUpload::make('number_shareholders')
-                        ->label('Upload the current list of shareholders and shareholding'),
+                        ->label('Upload the current list of shareholders and shareholding')
+                        ->required()
+                        ->acceptedFileTypes(['application/pdf']),
                     TextInput::make('monthly_turnover')
                         ->numeric()
                         ->label('At present, what is your average monthly turnover?')
@@ -505,9 +653,13 @@ class RegisterSeller extends Component implements HasForms
                     ->postfix('%')
                         ->label('What is the EBITDA / Operating Profit Margin Percentage or Last Reported Profit Margin Percentage'),
                     FileUpload::make('tangible_assets')
-                        ->label('Upload the list of tangible and intangible assets of the business'),
+                        ->label('Upload the list of tangible and intangible assets of the business')
+                        ->required()
+                        ->acceptedFileTypes(['application/pdf']),
                     FileUpload::make('liabilities')
-                        ->label('Upload the list of liabilities of the business'),
+                        ->label('Upload the list of liabilities of the business')
+                        ->required()
+                        ->acceptedFileTypes(['application/pdf']),
                     TextInput::make('physical_assets')
                         ->label('What is the value of physical assets owned by the business that would be part of the transaction? '),
                     // Checkbox::make('interested_in_quotations')
@@ -515,42 +667,59 @@ class RegisterSeller extends Component implements HasForms
                     ])->columns(2),
                     Wizard\Step::make('Documents')
                     ->icon('heroicon-m-document')
+                    ->completedIcon('heroicon-o-hand-thumb-up')
                     ->schema([
 
                         Shout::make('documentsinfo')
                         ->columnSpanFull()
                         ->content("Photos are an important part of your profile and are publicly displayed. Documents help us verify and approve your profile faster. Documents names entered here are publicly visible but are accessible only to introduced members."),
                         FileUpload::make('business_photos')
-                        ->label('Photos of the business premises and include the following information ')->required(),
+                        ->required()
+                        ->label('Photos of the business premises(Min: 5, Max: 7, File type .jpeg,.png .webp to be uploaded below 1MB )')->required()
+                        ->image()
+                        ->downloadable()
+                        ->multiple()
+                        ,
                     FileUpload::make('business_profile')
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->required()
                         ->label('Business profile'),
                     FileUpload::make('kra_pin')
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->required()
                         ->label('KRA pin'),
-                    FileUpload::make('certificate_of_Incorporation ')
+                    FileUpload::make('certificate_of_incorporation')
+                       ->acceptedFileTypes(['application/pdf'])
+                       ->required()
                         ->label('Certificate of Incorporation '),
                     FileUpload::make('valuation_report')
+                        ->acceptedFileTypes(['application/pdf'])
+                        ->required()
                         ->label('Valuation report'),
                     ])->columns(2),
                     Wizard\Step::make('Select a Plan')
                     ->icon('heroicon-m-cursor-arrow-ripple')
+                    ->completedIcon('heroicon-o-hand-thumb-up')
                     ->schema([
                         // Shout::make('selectaplan')
                         // ->columnSpanFull(),
                         Radio::make('active_business')
                         ->label('Select a plan')
                         ->options([
-                            '12000' => 'Monthly 12,000',
-                            '143000' => 'Yearly (recommended 143,999)',
+                            '12000' =>'Monthly 12,000',
+                            '143999' => 'Yearly (recommended 143,999)',
                         ]),
 
                         Checkbox::make('finders_fee')
                         ->label("I undertake to pay 1% finder’s fee (payable post transaction) to Biasharamart and other terms of engagement")
                         ->inline(),
+                        Hidden::make('user_id')
+                        ->default(auth()->user()->id),
                     Hidden::make('verification_status')
                         ->default('Pending'),
                     ]),
 
-            ])->skippable()->submitAction(new HtmlString('<button type="submit" style="background-color:orange; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
+            ])->persistStepInQueryString()->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
         ]);
 }
 

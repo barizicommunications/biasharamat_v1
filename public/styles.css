@@ -1,9 +1,13 @@
 [x-cloak] {
     display: none !important;
   }
+  .fi-completed .fi-fo-wizard-header-step-icon-ctn{
+    background: #c75126 !important;
+  }
 
   .fi-btn{
-    background-color: orange !important;
+    background-color: #c75126 !important;
+    color:white !important;
   }
 
   .fi-fo-field-wrp-error-message{
