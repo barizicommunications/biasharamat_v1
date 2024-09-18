@@ -17,7 +17,8 @@
         "laravel/tinker": "^2.8",
         "leandrocfe/filament-apex-charts": "^3.0",
         "nesbot/carbon": "^2.72",
-        "spatie/laravel-permission": "^6.9"
+        "spatie/laravel-permission": "^6.9",
+        "yepsua/filament-range-field": "^0.3.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

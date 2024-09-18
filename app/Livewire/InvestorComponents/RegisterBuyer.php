@@ -7,6 +7,7 @@ use Filament\Forms\Set;
 use Livewire\Component;
 use Filament\Forms\Form;
 use Livewire\WithFileUploads;
+use Illuminate\Support\HtmlString;
 use Awcodes\Shout\Components\Shout;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Select;
@@ -16,7 +17,9 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Yepsua\Filament\Forms\Components\RangeSlider;
 
 class RegisterBuyer extends Component implements HasForms
 {
@@ -79,6 +82,66 @@ class RegisterBuyer extends Component implements HasForms
                         ->label('Display contact details to investment-seeking businesses so that they can contact me directly')
 
                     ])->columns(2),
+                    Wizard\Step::make('Additional information')
+                    ->icon('heroicon-m-clipboard-document-check')
+                    ->completedIcon('heroicon-o-hand-thumb-up')
+                        ->schema([
+
+                            Shout::make('additionalInformation')
+                            ->columnSpanFull()
+                            ->content("Please provide your additional information here. The information provided will remain confidential and will not be publicly displayed."),
+
+
+
+                        TextInput::make('company_name')
+                            ->label('Name of company'),
+
+                            TextInput::make('current_location')
+                            ->label('Your current location'),
+
+                            TextInput::make('your_designation')
+                            ->label('Your current designation'),
+
+                            Select::make('company_industry')
+                            ->label('Select your company industry')
+                            ->options([
+                                'education' => 'Education',
+                                'technology' => 'Technology',
+                                'building_construction_and_maintenance' => 'Building Construction and Maintenance',
+                                'agriculture' => 'Agriculture',
+                                'healthcare' => 'Healthcare',
+                                'manufacturing' => 'Manufacturing',
+                                'retail' => 'Retail',
+                                'hospitality' => 'Hospitality',
+                                'finance' => 'Finance',
+                                'transportation' => 'Transportation',
+                                'media_and_entertainment' => 'Media and Entertainment',
+                                'professional_services' => 'Professional Services',
+                                'government' => 'Government',
+                                'renewable_energy' => 'Renewable Energy',
+                                'e_commerce' => 'E-commerce',
+                                'artificial_intelligence' => 'Artificial Intelligence',
+                                'biotechnology' => 'Biotechnology'
+                            ]),
+
+                        TextInput::make('linkedin_profile')
+                            ->label('Company LinkedIn profile. Private')
+                            ->type('url'),
+
+                        TextInput::make('website_link')
+                            ->label('Link to company website')
+                            ->type('url'),
+
+                            Textarea::make('about_company')
+                                ->label('About the investor'),
+
+                            Textarea::make('business_factors')
+                            ->label('Factors the company looks for in a business'),
+
+    
+
+
+                        ])->columns(2),
                     Wizard\Step::make('Your preferences')
                     ->icon('heroicon-m-shield-check')
                     ->completedIcon('heroicon-o-hand-thumb-up')
@@ -162,46 +225,14 @@ class RegisterBuyer extends Component implements HasForms
 
                         TextInput::make('investment_range')
                             ->label('Provide your investment range')
-                            ->type('number'),
+                            ,
 
-                            TextInput::make('current_location')
-                            ->label('Your current location'),
 
-                        TextInput::make('company_name')
-                            ->label('Name of company'),
-
-                        TextInput::make('linkedin_profile')
-                            ->label('Company LinkedIn profile. Private')
-                            ->type('url'),
-
-                        TextInput::make('website_link')
-                            ->label('Link to company website')
-                            ->type('url'),
 
 
                         ])->columns(2),
 
-                        Wizard\Step::make('Additional information')
-                        ->icon('heroicon-m-clipboard-document-check')
-                        ->completedIcon('heroicon-o-hand-thumb-up')
-                            ->schema([
 
-                                Shout::make('additionalInformation')
-                                ->columnSpanFull()
-                                ->content("Documents help us verify and approve your profile faster. Document names entered here are publicly visible but are accessible only to introduced members."),
-
-                                Textarea::make('business_factors')
-                                ->label('Factors the company looks for in a business'),
-
-                                Textarea::make('about_company')
-                                    ->label('About the company'),
-
-                                FileUpload::make('corporate_profile')
-                                    ->label('Attach Corporate Profile and/or Terms of Engagement if any')
-                                    ->acceptedFileTypes(['pdf', 'docx', 'pptx', 'xlsx', 'txt']),
-
-
-                            ])->columns(2),
 
                             Wizard\Step::make('Documents & proof')
                             ->icon('heroicon-m-document')
@@ -212,13 +243,15 @@ class RegisterBuyer extends Component implements HasForms
                                     ->columnSpanFull()
                                     ->content("Documents help us verify and approve your profile faster. Document names entered here are publicly visible but are accessible only to introduced members."),
 
-                                    FileUpload::make('company_logo')
-                                    ->label('Company logo')
-                                    ->acceptedFileTypes(['jpg', 'jpeg', 'png']),
+                                    FileUpload::make('business_profile')
+                                    ->acceptedFileTypes(['application/pdf'])
+                                    ->required()
+                                    ->label('Business profile'),
 
-                                  FileUpload::make('proof_of_business')
-                                    ->label('Attach proof of business for faster verification')
-                                    ->acceptedFileTypes(['pdf', 'docx', 'pptx', 'xlsx', 'txt']),
+                                    FileUpload::make('certificate_of_incorporation')
+                                    ->acceptedFileTypes(['application/pdf'])
+                                    ->required()
+                                     ->label('Certificate of Incorporation '),
 
 
                                 ])->columns(2),
@@ -238,8 +271,9 @@ class RegisterBuyer extends Component implements HasForms
                                         ->columns(3),
 
                                     Checkbox::make('terms_of_engagement')
-                                        ->label('I accept terms of engagement')
+                                        ->label(new HtmlString('<a href="#" target="_blank" style="color:red; text-decoration:underline;">Accept our terms of agreement</a>'))
                                         ->columnSpan('full'),
+
 
 
 
