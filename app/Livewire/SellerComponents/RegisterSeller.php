@@ -248,8 +248,6 @@ class RegisterSeller extends Component implements HasForms
 
 
 
-
-
         // //   Call PaymentController methods to handle the payment process
         //   $paymentController = new PaymentController();
 
