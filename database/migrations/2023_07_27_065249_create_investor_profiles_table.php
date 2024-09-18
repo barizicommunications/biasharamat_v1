@@ -17,30 +17,28 @@ return new class extends Migration
             $table->string('name', 255);
             $table->string('email', 255);
             $table->string('mobile_number', 15);
-            $table->enum('interested_in', [
-                'acquiring_business',
-                'investing_in_a_business',
-                'lending_to_a_business',
-                'buying_property_plant_machinery',
-                'taking_up_franchise'
-            ]);
-            $table->enum('buyer_role', ['Individual investor/buyer', 'Corporate investor/buyer']);
-            $table->enum('buyer_interest', ['Select all', 'Education', 'Technology', 'Building construction and maintenance']);
-            $table->enum('buyer_location_interest', ['Nairobi', 'Mombasa', 'Kisumu', 'Eldoret', 'Nakuru']);
-            $table->decimal('investment_range', 15, 2)->default(0);
+            $table->string('interested_in');
+            $table->string('buyer_role');
+            $table->string('buyer_interest');
+            $table->string('buyer_location_interest');
+            $table->string('investment_range',255);
             $table->string('current_location', 255);
             $table->string('company_name', 255);
+            $table->string('other_interest', 255)->nullable();
             $table->string('linkedin_profile', 255);
             $table->string('website_link', 255);
             $table->string('business_factors', 1000);
             $table->string('about_company', 1000);
-            $table->string('corporate_profile');
-            $table->string('company_logo');
-            $table->string('proof_of_business');
-            $table->string('terms_of_engagement')->default('off');
+            $table->boolean('terms_of_engagement')->default(false);
             $table->string('active_business')->nullable();
             $table->string('verification_status')->default('Pending')->nullable();
             $table->text('reason_for_decline')->nullable();
+            $table->boolean('display_contact_details')->default(false);
+            $table->string('your_designation')->nullable();
+            $table->string('company_industry')->nullable();
+            $table->string('other_buyer_role')->nullable();
+            $table->string('business_profile')->nullable();
+            $table->string('certificate_of_incorporation')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

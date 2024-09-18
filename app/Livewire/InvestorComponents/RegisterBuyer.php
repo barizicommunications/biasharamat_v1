@@ -7,6 +7,7 @@ use Filament\Forms\Set;
 use Livewire\Component;
 use Filament\Forms\Form;
 use Livewire\WithFileUploads;
+use App\Models\InvestorProfile;
 use Illuminate\Support\HtmlString;
 use Awcodes\Shout\Components\Shout;
 use Filament\Forms\Components\Radio;
@@ -31,25 +32,92 @@ class RegisterBuyer extends Component implements HasForms
     public $email;
     public $mobile_number;
     public $display_contact_details;
-
+    public $company_name;
+    public $current_location;
+    public $your_designation;
+    public $company_industry;
+    public $linkedin_profile;
+    public $website_link;
+    public $about_company;
+    public $business_factors;
     public $interested_in;
     public $other_interest;
-    public $other_buyer_role;
     public $buyer_role;
+    public $other_buyer_role;
     public $buyer_interest;
     public $buyer_location_interest;
     public $investment_range;
-    public $current_location;
-    public $company_name;
-    public $linkedin_profile;
-    public $website_link;
-    public $business_factors;
-    public $about_company;
-    public $corporate_profile;
-    public $company_logo;
-    public $proof_of_business;
+    public $business_profile;
+    public $certificate_of_incorporation;
     public $active_business;
     public $terms_of_engagement;
+    public $additionalInformation;
+    public $investorInfo;
+    public $yourPreferences;
+    public $documentsProof;
+
+
+
+
+    public function mount()
+    {
+        $this->form->fill([
+            'business_profile' => null,
+            'certificate_of_incorporation' => null,
+            'buyer_location_interest'=>null,
+            'buyer_interest'=>null,
+            'other_interest'=>null,
+            'other_buyer_role'=>null,
+        ]);
+
+
+    }
+
+
+    public function submit(){
+
+        $formData = $this->form->getState();
+
+        $validatedData = $this->form->validate();
+
+
+        $InvestorProfile = InvestorProfile::create([
+            'user_id'=> auth()->user()->id,
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'mobile_number' => $validatedData['mobile_number'],
+            'display_contact_details' => $validatedData['display_contact_details'],
+            'company_name' => $validatedData['company_name'],
+            'current_location' => $validatedData['current_location'],
+            'your_designation' => $validatedData['your_designation'],
+            'company_industry' => $validatedData['company_industry'],
+            'linkedin_profile' => $validatedData['linkedin_profile'],
+            'website_link' => $validatedData['website_link'],
+            'about_company' => $validatedData['about_company'],
+            'business_factors' => $validatedData['business_factors'],
+            'interested_in' => $validatedData['interested_in'],
+            'other_interest' => $validatedData['other_interest']?? null,
+            'buyer_role' => $validatedData['buyer_role'],
+            'other_buyer_role' => $validatedData['other_buyer_role'] ?? null,
+            'buyer_interest' => $validatedData['buyer_interest'],
+            'buyer_location_interest' => $validatedData['buyer_location_interest'],
+            'investment_range' => $validatedData['investment_range'],
+            'business_profile' => $validatedData['business_profile'],
+            'certificate_of_incorporation' => $validatedData['certificate_of_incorporation'],
+            'active_business' => $validatedData['active_business'],
+            'terms_of_engagement' => $validatedData['terms_of_engagement'],
+        ]);
+
+        if($InvestorProfile){
+            dd('success');
+        }else{
+            dd('error');
+        }
+
+
+
+
+    }
 
 
     public function form(Form $form): Form
@@ -80,6 +148,7 @@ class RegisterBuyer extends Component implements HasForms
 
                         Checkbox::make('display_contact_details')
                         ->label('Display contact details to investment-seeking businesses so that they can contact me directly')
+                        ->columnSpan('full')
 
                     ])->columns(2),
                     Wizard\Step::make('Additional information')
@@ -138,7 +207,7 @@ class RegisterBuyer extends Component implements HasForms
                             Textarea::make('business_factors')
                             ->label('Factors the company looks for in a business'),
 
-    
+
 
 
                         ])->columns(2),
@@ -191,7 +260,7 @@ class RegisterBuyer extends Component implements HasForms
 
                         Select::make('buyer_interest')
                             ->label('Select industries you are interested in')
-                            ->multiple()
+
                             ->options([
                                 'education' => 'Education',
                                 'technology' => 'Technology',
@@ -210,11 +279,11 @@ class RegisterBuyer extends Component implements HasForms
                                 'e_commerce' => 'E-commerce',
                                 'artificial_intelligence' => 'Artificial Intelligence',
                                 'biotechnology' => 'Biotechnology'
-                            ])->maxItems(2),
+                            ]),
 
                         Select::make('buyer_location_interest')
                             ->label('Select locations you are interested in')
-                            ->multiple()
+
                             ->options([
                                 'Nairobi',
                                 'Mombasa',
@@ -280,7 +349,7 @@ class RegisterBuyer extends Component implements HasForms
 
                                     ])->columns(2),
 
-                ])->skippable()
+                ])->persistStepInQueryString()->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
 
             ]);
     }
