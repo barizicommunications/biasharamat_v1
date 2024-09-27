@@ -29,6 +29,9 @@ Route::get('/', function () {
 Route::get('test',TestComponent::class)->name('teat');
 
 
+
+
+
 Route::get('/about', function () {
     return view('about');
 })->name('about');
@@ -47,6 +50,8 @@ Route::group(['controller' => SellerRegistrationController::class], function () 
 });
 
 Route::group(['controller' => InvestorRegistrationController::class], function () {
+    Route::get('/make-payments', 'makePayment')
+        ->name('investor.pay');
     Route::get('/register-business-investor', 'create')
         ->name('investor.create');
     Route::post('/register-business-investor', 'store')

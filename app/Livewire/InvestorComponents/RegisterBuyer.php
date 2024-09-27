@@ -108,10 +108,12 @@ class RegisterBuyer extends Component implements HasForms
             'terms_of_engagement' => $validatedData['terms_of_engagement'],
         ]);
 
-        if($InvestorProfile){
-            dd('success');
-        }else{
-            dd('error');
+        if ($InvestorProfile) {
+            // Redirect to the desired normal route with data
+            return redirect()->route('investor.pay')->with('data', $InvestorProfile);
+        } else {
+            // Handle errors and return to the form with error messages
+            return back()->withErrors(['error' => 'Failed to create investor profile. Please try again.'])->withInput();
         }
 
 

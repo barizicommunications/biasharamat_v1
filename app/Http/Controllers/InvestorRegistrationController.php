@@ -18,6 +18,21 @@ class InvestorRegistrationController extends Controller
         //
     }
 
+
+    public function makePayment(){
+
+        $data = [
+
+            'amount' => 1.00,
+            'description' => 'KRA PIN Registration Request',
+            'callback' => '/',
+        ];
+
+
+
+        return view('buyer.payment',['data'=>$data]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

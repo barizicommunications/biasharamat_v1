@@ -6,6 +6,17 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+
+
+
+    public function makePayment(){
+
+        return view('buyer.payment');
+    }
+
+
+
+
     private $consumerKey = "qkio1BGGYAXTu2JOfm7XSXNruoZsrqEW";
     private $consumerSecret = "osGQ364R49cXKeOYSpaOnT++rHs=";
     private $token = null;
