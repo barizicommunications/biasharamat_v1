@@ -108,6 +108,8 @@ class RegisterBuyer extends Component implements HasForms
             'terms_of_engagement' => $validatedData['terms_of_engagement'],
         ]);
 
+        
+
         if ($InvestorProfile) {
             // Redirect to the desired normal route with data
             return redirect()->route('investor.pay')->with('data', $InvestorProfile);
