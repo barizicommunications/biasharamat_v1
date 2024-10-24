@@ -173,119 +173,198 @@ class RegisterSeller extends Component implements HasForms
 
 
 
-    public function submit(){
-        $formData =$this->form->getState();
+    // public function submit(){
+    //     $formData =$this->form->getState();
 
+    //     $this->form->validate();
+
+
+    //      BusinessProfile::create([
+    //         'user_id' => auth()->user()->id,
+    //         'name' => $formData['name'],
+    //         'company_name' => $formData['company_name'],
+    //         'mobile_number' => $formData['mobile_number'],
+    //         'email' => $formData['email'],
+    //         'display_company_details' => $formData['display_company_details'] ?? null,
+    //         'display_contact_details' => $formData['display_contact_details'] ?? null,
+    //         'seller_role' => $formData['seller_role'],
+    //         'seller_interest' => $formData['seller_interest'],
+    //         'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
+    //         'reason_for_sale' => $formData['reason_for_sale'] ?? null,
+    //         'maximum_stake' => $formData['maximum_stake'] ?? null,
+    //         'investment_amount' => $formData['investment_amount'] ?? null,
+    //         'reason_for_investment' => $formData['reason_for_investment'] ?? null,
+    //         'value_of_physical_assets' => $formData['value_of_physical_assets'] ?? null,
+    //         'asset_selling_price' => $formData['asset_selling_price'] ?? null,
+    //         'reason_for_selling_assets' => $formData['reason_for_selling_assets'] ?? null,
+    //         'colateral_value' => $formData['colateral_value'] ?? null,
+    //         'loan_amount' => $formData['loan_amount'] ?? null,
+    //         'yearly_interest_pay' => $formData['yearly_interest_pay'] ?? null,
+    //         'years_repay_loan' => $formData['years_repay_loan'] ?? null,
+    //         'reason_for_seeking_loan' => $formData['reason_for_seeking_loan'] ?? null,
+    //         'business_profile' => $formData['business_profile'] ?? null,
+    //         'certificate_of_incorporation' => $formData['certificate_of_incorporation'] ?? null,
+    //         'kra_pin' => $formData['kra_pin'] ?? null,
+    //         'valuation_report' => $formData['valuation_report'] ?? null,
+    //         'business_start_date' => $formData['business_start_date'],
+    //         'business_industry' => $formData['business_industry'],
+    //         'country' => $formData['country'],
+    //         'city' => $formData['city'],
+    //         'county' => $formData['county'],
+    //         'number_employees' => $formData['number_employees'],
+    //         'business_legal_entity' => $formData['business_legal_entity'],
+    //         'website_link' => $formData['website_link'],
+    //         'business_description' => $formData['business_description'],
+    //         'facility_description' => $formData['facility_description'],
+    //         'business_funds' => $formData['business_funds'],
+    //         'number_shareholders' => $formData['number_shareholders'],
+    //         'monthly_turnover' => $formData['monthly_turnover'],
+    //         'yearly_turnover' => $formData['yearly_turnover'],
+    //         'profit_margin' => $formData['profit_margin'],
+    //         'tangible_assets' => $formData['tangible_assets'],
+    //         'liabilities' => $formData['liabilities'],
+    //         'other_seller_role' => $formData['other_seller_role'] ?? null,
+    //         'physical_assets' => $formData['physical_assets'],
+    //         'business_photos' => $formData['business_photos'] ?? null,
+    //         'active_business' => $formData['active_business'],
+
+    //     ]);
+
+    //       // Get the authenticated user
+    //       $user = Auth::user();
+
+
+    //    // Notify the user that their application is under review
+    //    $user->notify(new ApplicationUnderReview($user));
+
+
+    //    // Notify the admin about the new signup
+    //    $admin = User::where('registration_type', 'Admin')->first();
+    //    $admin->notify(new BusinessSellerSignup($user));
+
+
+
+    //    return redirect()->route('businessVerificationCallPage');
+
+
+
+    //     // //   Call PaymentController methods to handle the payment process
+    //     //   $paymentController = new PaymentController();
+
+    //     //   // Get access token
+    //     //   $token = $paymentController->generateAccessToken();
+    //     //   if (!$token) {
+    //     //       return session()->flash('error', 'Failed to get access token');
+    //     //   }
+
+    //     //   // Register IPN
+    //     //   $ipnId = $paymentController->registerIPN($token);
+    //     //   if (!$ipnId) {
+    //     //       return session()->flash('error', 'Failed to register IPN');
+    //     //   }
+
+    //     // //   Prepare order data
+    //     //   $orderData = [
+    //     //     'amount' => 1.00,
+    //     //     'description' => 'Payment for service',
+    //     //     'callback_url' => 'https://a9fb-41-90-228-219.ngrok-free.app/verification-call-page',
+    //     //     'branch' => 'Town Branch',
+    //     //     'first_name' => 'Hardy',
+    //     //     'middle_name' => 'Kathurima',
+    //     //     'last_name' => 'Kimaita',
+    //     //     'email_address' => 'hardykathurima@gmail.com',
+    //     //     'phone_number' => '0703642687'
+    //     //   ];
+
+    //     //   // Submit Order
+    //     //   $redirectUrl = $paymentController->submitOrder($token, $ipnId, $orderData);
+    //     //   if (!$redirectUrl) {
+    //     //       return session()->flash('error', 'Failed to submit order');
+    //     //   }
+
+    //     //   // Redirect to payment URL
+    //     //   return redirect()->to($redirectUrl);
+
+    // }
+
+    public function submit()
+    {
+        $formData = $this->form->getState();
+
+        // Validate the form data
         $this->form->validate();
 
+        // Determine the plan type based on active_business value
+        $planType = null;
+        if ($formData['active_business'] == 12000) {
+            $planType = 'monthly';
+        } elseif ($formData['active_business'] == 143999) {
+            $planType = 'yearly';
+        }
 
-         BusinessProfile::create([
-            'user_id' => auth()->user()->id,
-            'name' => $formData['name'],
-            'company_name' => $formData['company_name'],
-            'mobile_number' => $formData['mobile_number'],
-            'email' => $formData['email'],
-            'display_company_details' => $formData['display_company_details'] ?? null,
-            'display_contact_details' => $formData['display_contact_details'] ?? null,
-            'seller_role' => $formData['seller_role'],
-            'seller_interest' => $formData['seller_interest'],
-            'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
-            'reason_for_sale' => $formData['reason_for_sale'] ?? null,
-            'maximum_stake' => $formData['maximum_stake'] ?? null,
-            'investment_amount' => $formData['investment_amount'] ?? null,
-            'reason_for_investment' => $formData['reason_for_investment'] ?? null,
-            'value_of_physical_assets' => $formData['value_of_physical_assets'] ?? null,
-            'asset_selling_price' => $formData['asset_selling_price'] ?? null,
-            'reason_for_selling_assets' => $formData['reason_for_selling_assets'] ?? null,
-            'colateral_value' => $formData['colateral_value'] ?? null,
-            'loan_amount' => $formData['loan_amount'] ?? null,
-            'yearly_interest_pay' => $formData['yearly_interest_pay'] ?? null,
-            'years_repay_loan' => $formData['years_repay_loan'] ?? null,
-            'reason_for_seeking_loan' => $formData['reason_for_seeking_loan'] ?? null,
+        // Collect non-file fields into application_data
+        $applicationData = collect($formData)->except([
+            'business_profile',
+            'kra_pin',
+            'certificate_of_incorporation',
+            'valuation_report',
+            'business_photos',
+            'business_industry',
+            'business_start_date',
+            'tentative_selling_price',
+            'maximum_stake',
+            'user_id',
+            'verification_status',
+            'active_business', // We'll set this manually
+        ])->toArray();
+
+        // Collect file fields directly
+        $documents = [
             'business_profile' => $formData['business_profile'] ?? null,
-            'certificate_of_incorporation' => $formData['certificate_of_incorporation'] ?? null,
             'kra_pin' => $formData['kra_pin'] ?? null,
+            'certificate_of_incorporation' => $formData['certificate_of_incorporation'] ?? null,
             'valuation_report' => $formData['valuation_report'] ?? null,
-            'business_start_date' => $formData['business_start_date'],
-            'business_industry' => $formData['business_industry'],
-            'country' => $formData['country'],
-            'city' => $formData['city'],
-            'county' => $formData['county'],
-            'number_employees' => $formData['number_employees'],
-            'business_legal_entity' => $formData['business_legal_entity'],
-            'website_link' => $formData['website_link'],
-            'business_description' => $formData['business_description'],
-            'facility_description' => $formData['facility_description'],
-            'business_funds' => $formData['business_funds'],
-            'number_shareholders' => $formData['number_shareholders'],
-            'monthly_turnover' => $formData['monthly_turnover'],
-            'yearly_turnover' => $formData['yearly_turnover'],
-            'profit_margin' => $formData['profit_margin'],
-            'tangible_assets' => $formData['tangible_assets'],
-            'liabilities' => $formData['liabilities'],
-            'other_seller_role' => $formData['other_seller_role'] ?? null,
-            'physical_assets' => $formData['physical_assets'],
             'business_photos' => $formData['business_photos'] ?? null,
-            'active_business' => $formData['active_business'],
+        ];
 
+        // Save the data into the database, including active_business and plan_type
+        BusinessProfile::create([
+            'user_id' => auth()->id(),
+            'email' => $formData['email'],
+            'status' => 'pending',
+            'verification_status' => $formData['verification_status'] ?? 'pending',
+            'application_data' => json_encode($applicationData),
+            'documents' => json_encode($documents),
+            'business_industry' => $formData['business_industry'] ?? null,
+            'business_start_date' => $formData['business_start_date'] ?? null,
+            'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
+            'maximum_stake' => $formData['maximum_stake'] ?? null,
+            // Add active_business and plan_type fields
+            'active_business' => $formData['active_business'], // Store the selected plan price
+            'plan_type' => $planType, // Store the plan type (monthly/yearly)
         ]);
 
-          // Get the authenticated user
-          $user = Auth::user();
+        // Notify the user
+        $user = Auth::user();
+        $user->notify(new ApplicationUnderReview($user));
 
+        // Fetch the admin user
+        $admin = User::where('registration_type', 'Admin')->first();
 
-       // Notify the user that their application is under review
-       $user->notify(new ApplicationUnderReview($user));
+        // Notify the admin if found
+        if ($admin) {
+            $admin->notify(new BusinessSellerSignup($user));
+        }
 
-
-       // Notify the admin about the new signup
-       $admin = User::where('registration_type', 'Admin')->first();
-       $admin->notify(new BusinessSellerSignup($user));
-
-
-
-       return redirect()->route('businessVerificationCallPage');
-
-
-
-        // //   Call PaymentController methods to handle the payment process
-        //   $paymentController = new PaymentController();
-
-        //   // Get access token
-        //   $token = $paymentController->generateAccessToken();
-        //   if (!$token) {
-        //       return session()->flash('error', 'Failed to get access token');
-        //   }
-
-        //   // Register IPN
-        //   $ipnId = $paymentController->registerIPN($token);
-        //   if (!$ipnId) {
-        //       return session()->flash('error', 'Failed to register IPN');
-        //   }
-
-        // //   Prepare order data
-        //   $orderData = [
-        //     'amount' => 1.00,
-        //     'description' => 'Payment for service',
-        //     'callback_url' => 'https://a9fb-41-90-228-219.ngrok-free.app/verification-call-page',
-        //     'branch' => 'Town Branch',
-        //     'first_name' => 'Hardy',
-        //     'middle_name' => 'Kathurima',
-        //     'last_name' => 'Kimaita',
-        //     'email_address' => 'hardykathurima@gmail.com',
-        //     'phone_number' => '0703642687'
-        //   ];
-
-        //   // Submit Order
-        //   $redirectUrl = $paymentController->submitOrder($token, $ipnId, $orderData);
-        //   if (!$redirectUrl) {
-        //       return session()->flash('error', 'Failed to submit order');
-        //   }
-
-        //   // Redirect to payment URL
-        //   return redirect()->to($redirectUrl);
-
+        // Redirect to the next page
+        return redirect()->route('businessVerificationCallPage');
     }
+
+
+
+
+
+
 
 
 
