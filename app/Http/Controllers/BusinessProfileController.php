@@ -26,11 +26,24 @@ class BusinessProfileController extends Controller
     /**
      * Display the specified resource.
      */
+    // public function show(string $id)
+    // {
+    //     $sellerProfile = BusinessProfile::where('id',$id)->first();
+    //     return view('seller.profile-overview', compact('sellerProfile'));
+    // }
+
+
     public function show(string $id)
-    {
-        $sellerProfile = BusinessProfile::where('id',$id)->first();
-        return view('seller.profile-overview', compact('sellerProfile'));
-    }
+{
+    $sellerProfile = BusinessProfile::where('id', $id)->first();
+
+    // Decode JSON fields
+    $applicationData = json_decode($sellerProfile->application_data, true);
+    $documents = json_decode($sellerProfile->documents, true);
+
+    // Pass them to the view
+    return view('seller.profile-overview', compact('sellerProfile', 'applicationData', 'documents'));
+}
 
 
     public function store(BusinessProfileRegistrationRequest $request)

@@ -8,6 +8,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BusinessProfileController;
 use App\Http\Controllers\InvestorProfileController;
+use App\Http\Controllers\InvestorsAndBuyersController;
 use App\Http\Controllers\SellerRegistrationController;
 use App\Http\Controllers\InvestorRegistrationController;
 
@@ -93,9 +94,11 @@ Route::group(['controller' => InvestorProfileController::class], function () {
 //     return view('seller.profile-overview');
 // })->name('sellerProfileOverview');
 
-Route::get('investors-and-buyers', function () {
-    return view('seller.investors-and-buyers');
-})->name('investorsAndBuyers');
+// Route::get('investors-and-buyers', function () {
+//     return view('seller.investors-and-buyers');
+// })->name('investorsAndBuyers');
+
+Route::get('investors-and-buyers', [InvestorsAndBuyersController::class, 'index'])->name('investorsAndBuyers');
 
 Route::get('active-introductions', [ProfileController::class, 'index'])
     ->name('activeIntro');
@@ -142,5 +145,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
 
 require __DIR__ . '/auth.php';

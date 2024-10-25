@@ -291,6 +291,11 @@ class RegisterSeller extends Component implements HasForms
     {
         $formData = $this->form->getState();
 
+        // Ensure the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login'); // Redirect to login if not authenticated
+        }
+
         // Validate the form data
         $this->form->validate();
 
@@ -302,39 +307,41 @@ class RegisterSeller extends Component implements HasForms
             $planType = 'yearly';
         }
 
-        // Collect non-file fields into application_data
-        $applicationData = collect($formData)->except([
-            'business_profile',
-            'kra_pin',
-            'certificate_of_incorporation',
-            'valuation_report',
-            'business_photos',
-            'business_industry',
-            'business_start_date',
-            'tentative_selling_price',
-            'maximum_stake',
-            'user_id',
-            'verification_status',
-            'active_business', // We'll set this manually
-        ])->toArray();
-
-        // Collect file fields directly
+        // Move file-related fields into the documents array
         $documents = [
             'business_profile' => $formData['business_profile'] ?? null,
             'kra_pin' => $formData['kra_pin'] ?? null,
             'certificate_of_incorporation' => $formData['certificate_of_incorporation'] ?? null,
             'valuation_report' => $formData['valuation_report'] ?? null,
             'business_photos' => $formData['business_photos'] ?? null,
+            // Move these file paths from application_data to documents
+            'number_shareholders' => $formData['number_shareholders'] ?? null,
+            'tangible_assets' => $formData['tangible_assets'] ?? null,
+            'liabilities' => $formData['liabilities'] ?? null,
         ];
 
-        // Save the data into the database, including active_business and plan_type
+        // Collect non-file fields into application_data, excluding the file-related fields
+        $applicationData = collect($formData)->except([
+            'business_profile',
+            'kra_pin',
+            'certificate_of_incorporation',
+            'valuation_report',
+            'business_photos',
+            'number_shareholders', // Moved to documents
+            'tangible_assets', // Moved to documents
+            'liabilities', // Moved to documents
+            'finders_fee',
+            'active_business', // We'll handle this separately
+        ])->toArray();
+
+        // Save the data into the database, including indexed fields like business_industry, etc.
         BusinessProfile::create([
-            'user_id' => auth()->id(),
+            'user_id' => auth()->id(), // Ensure the user is authenticated
             'email' => $formData['email'],
             'status' => 'pending',
             'verification_status' => $formData['verification_status'] ?? 'pending',
-            'application_data' => json_encode($applicationData),
-            'documents' => json_encode($documents),
+            'application_data' => json_encode($applicationData),  // Store non-file data as JSON
+            'documents' => json_encode($documents),  // Store all file paths as JSON
             'business_industry' => $formData['business_industry'] ?? null,
             'business_start_date' => $formData['business_start_date'] ?? null,
             'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
@@ -342,6 +349,8 @@ class RegisterSeller extends Component implements HasForms
             // Add active_business and plan_type fields
             'active_business' => $formData['active_business'], // Store the selected plan price
             'plan_type' => $planType, // Store the plan type (monthly/yearly)
+            // Separate the finders_fee field
+            'finders_fee' => $formData['finders_fee'] ?? false, // Default to false if not set
         ]);
 
         // Notify the user
@@ -359,6 +368,8 @@ class RegisterSeller extends Component implements HasForms
         // Redirect to the next page
         return redirect()->route('businessVerificationCallPage');
     }
+
+
 
 
 

@@ -206,63 +206,73 @@
 
                     </div>
                 </div>
-                <div x-show="activeTab === 'profile'">
-                <h2 class="font-bold text-primary text-lg md:text-4xl mb-8">Profile</h2>
-                <div class="bg-white p-6">
-                    <div class=" max-w-screen-md mb-6 ">
-                        <div class="flex space-x-10">
-                            <div>
-                                <img src="{{ asset('images/profile-picture.png') }}" alt="">
-                            </div>
-                            <div>
-                                <h5 class="text-primary text-2xl font-bold mb-3">{{ Auth::user()->full_name }}</h5>
-                                <p>johndoe@gmail.com</p>
-                                <p>Kenya</p>
-                                <p>Africa / Nairobi</p>
-                                <p>Joine Feb, 2023</p> <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-                                  </svg>
-                                  </span>
-                            </div>
-                            <div>
-                                <h5 class="text-primary text-2xl font-bold mb-3">Preferences</h5>
-                                <div class="flex space-x-4">
-                                    <div>
-                                        <p>Industries</p>
-                                        <p>Location</p>
-                                    </div>
-                                    <div>
-                                        <p>All industries</p>
-                                        <p>Kenya</p> <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-                                          </svg>
-                                          </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div x-show="activeTab === 'profile'" x-data="{ isModalOpen: false, showSuccess: {{ session('status') ? 'true' : 'false' }} }" x-init="if(showSuccess) { setTimeout(() => showSuccess = false, 4000) }">
+                    <h2 class="font-bold text-primary text-lg md:text-4xl mb-8">Profile</h2>
 
+                    <!-- Display success message with 4-second timeout -->
+                    <div x-show="showSuccess" x-transition x-cloak class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                        Profile updated successfully!
                     </div>
-                    <div class="max-w-2xl ml-28">
-                        <h5 class="text-primary text-2xl font-bold mb-3">Email preferences</h5>
-                        <div class="flex space-x-10">
-                            <div>
-                                <p>Important communication</p>
-                                <p>Business proposals</p>
-                                <p>New opportunity notifications</p>
-                            </div>
-                            <div>
-                                <p>Unsubscribed</p>
-                                <p>Real time</p>
-                                <p>Weekly</p> <span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
-                                  </svg>
-                                  </span>
-                            </div>
+
+                    <!-- Profile Info Section -->
+                    <div class="bg-white p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-semibold">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h3>
+                            <button @click="isModalOpen = true" class="text-blue-500 hover:underline">Edit Profile</button>
+                        </div>
+                        <p>Email: {{ Auth::user()->email }}</p>
+                        <p>Phone: {{ Auth::user()->phone }}</p>
+                    </div>
+
+                    <!-- Edit Profile Modal -->
+                    <div x-show="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                        <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-8" @click.away="isModalOpen = false">
+                            <h2 class="text-2xl font-bold text-primary mb-4">Edit Profile</h2>
+
+                            <form method="POST" action="{{ route('profile.update') }}">
+                                @csrf
+                                @method('PATCH')
+
+                                <!-- First Name Field -->
+                                <div class="mb-4">
+                                    <label for="first_name" class="block text-sm font-medium text-gray-700">First Name</label>
+                                    <input type="text" name="first_name" id="first_name" value="{{ old('first_name', Auth::user()->first_name) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                                </div>
+
+                                <!-- Last Name Field -->
+                                <div class="mb-4">
+                                    <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                                    <input type="text" name="last_name" id="last_name" value="{{ old('last_name', Auth::user()->last_name) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                                </div>
+
+                                <!-- Email Field -->
+                                <div class="mb-4">
+                                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                                    <input type="email" name="email" id="email" value="{{ old('email', Auth::user()->email) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                                </div>
+
+                                <!-- Phone Field -->
+                                <div class="mb-4">
+                                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                                    <input type="text" name="phone" id="phone" value="{{ old('phone', Auth::user()->phone) }}"
+                                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50">
+                                </div>
+
+                                <!-- Save and Cancel Buttons -->
+                                <div class="flex items-center justify-end space-x-4 mt-6">
+                                    <button type="button" @click="isModalOpen = false" class="px-4 py-2 text-gray-700 bg-gray-200 rounded-md">Cancel</button>
+                                    <button type="submit" class="px-4 py-2 text-white bg-primary rounded-md">Save Changes</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-                 </div>
+
+
+
             </div>
           </div>
 
