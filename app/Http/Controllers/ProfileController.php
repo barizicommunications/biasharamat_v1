@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\View\View;
+use App\Models\Conversation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -28,6 +29,16 @@ class ProfileController extends Controller
             return redirect()->route('login');
         }
         return view('seller.active-introductions');
+    }
+
+    public function inbox()
+    {
+        $conversations = Conversation::where('user_one_id', auth()->id())
+            ->orWhere('user_two_id', auth()->id())
+            ->with(['messages', 'userOne', 'userTwo'])
+            ->get();
+
+        return view('seller.active-introductions', compact('conversations'));
     }
 
     /**

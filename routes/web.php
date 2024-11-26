@@ -11,6 +11,7 @@ use App\Http\Controllers\InvestorProfileController;
 use App\Http\Controllers\InvestorsAndBuyersController;
 use App\Http\Controllers\SellerRegistrationController;
 use App\Http\Controllers\InvestorRegistrationController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +88,13 @@ Route::group(['controller' => InvestorProfileController::class], function () {
 });
 
 
+// Message routes
+Route::post('/messages/send/{recipient}', [MessageController::class, 'sendMessage'])->name('messages.send');
+// Route::get('/messages', [MessageController::class, 'inbox'])->name('messages.inbox');
+Route::post('/messages/reply/{conversation}', [MessageController::class, 'replyMessage'])->name('messages.reply');
+
+
+
 
 
 
@@ -101,6 +109,9 @@ Route::group(['controller' => InvestorProfileController::class], function () {
 Route::get('investors-and-buyers', [InvestorsAndBuyersController::class, 'index'])->name('investorsAndBuyers');
 
 Route::get('active-introductions', [ProfileController::class, 'index'])
+    ->name('activeIntro');
+
+Route::get('/active-introductions', [ProfileController::class, 'inbox'])  // Same method as above
     ->name('activeIntro');
 
 Route::get('seller-inbox', function () {

@@ -59,6 +59,111 @@
                     </div>
                     <hr>
 
+                    {{-- @foreach ($conversations as $conversation)
+                    <div class="p-4 flex flex-col border-b-2">
+                        <!-- Conversation Header with Alpine.js for Toggle -->
+                        <div class="flex items-center space-x-8" x-data="{ open: false }">
+                            <!-- Display User One's Profile Picture -->
+                            <div>
+                                <img src="{{ asset('images/logo.png') }}" alt="{{ $conversation->userOne->first_name }}" class="w-10 h-10 rounded-full">
+                            </div>
+
+                            <!-- Display Conversation Title and Toggle Button -->
+                            <h3 class="font-bold text-primary text-sm self-center ml-2 cursor-pointer"
+                                @click="open = ! open">
+                                {{ $conversation->userOne->first_name }} & {{ $conversation->userTwo->first_name }} Conversation
+                            </h3>
+                        </div>
+
+                        <!-- Accordion Content (Messages) -->
+                        <div x-show="open" x-transition class="self-center ml-3 mt-3 space-y-3">
+                            @if ($conversation->messages->isNotEmpty())
+                                @foreach ($conversation->messages as $message)
+                                    <div class="mb-2">
+                                        <p class="text-xs">
+                                            <strong>{{ $message->sender_id == auth()->id() ? 'You' : $message->sender->first_name }}:</strong>
+                                            {{ $message->content }}
+                                        </p>
+                                        <p class="text-xs text-gray-500">{{ $message->created_at->diffForHumans() }}</p>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div>
+                                    <p class="text-xs">No messages yet.</p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Last Message Timestamp (Always Visible) -->
+                        <div class="ml-12 self-center mt-3">
+                            @if ($conversation->messages->isNotEmpty())
+                                <p class="text-sm">
+                                    Last message sent {{ $conversation->messages->last()->created_at->diffForHumans() }}
+                                </p>
+                            @else
+                                <p class="text-sm">No messages yet</p>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach --}}
+
+
+                @foreach ($conversations as $conversation)
+    <div class="p-4 flex flex-col border-b-2">
+        <!-- Conversation Header with Alpine.js for Toggle -->
+        <div class="flex items-center space-x-8" x-data="{ open: false }">
+            <!-- Display User One's Profile Picture -->
+            <div>
+                <img src="{{ asset('images/logo.png') }}" alt="{{ $conversation->userOne->first_name }}" class="w-10 h-10 rounded-full">
+            </div>
+
+            <!-- Display Conversation Title and Toggle Button -->
+            <h3 class="font-bold text-primary text-sm self-center ml-2 cursor-pointer"
+                @click="open = !open">
+                {{ $conversation->userOne->first_name }} & {{ $conversation->userTwo->first_name }} Conversation
+            </h3>
+        </div>
+
+        <!-- Accordion Content (Messages) -->
+        <div x-show="open" x-transition class="self-center ml-3 mt-3 space-y-3">
+            @if ($conversation->messages->isNotEmpty())
+                @foreach ($conversation->messages as $message)
+                    <div class="mb-2">
+                        <p class="text-xs">
+                            <strong>{{ $message->sender_id == auth()->id() ? 'You' : $message->sender->first_name }}:</strong>
+                            {{ $message->content }}
+                        </p>
+                        <p class="text-xs text-gray-500">{{ $message->created_at->diffForHumans() }}</p>
+                    </div>
+                @endforeach
+            @else
+                <div>
+                    <p class="text-xs">No messages yet.</p>
+                </div>
+            @endif
+        </div>
+
+        <!-- Last Message Timestamp (Always Visible) -->
+        <div class="ml-12 self-center mt-3">
+            @if ($conversation->messages->isNotEmpty())
+                <p class="text-sm">
+                    Last message sent {{ $conversation->messages->last()->created_at->diffForHumans() }}
+                </p>
+            @else
+                <p class="text-sm">No messages yet</p>
+            @endif
+        </div>
+    </div>
+@endforeach
+
+
+
+
+
+
+
+
+
                     <div class="p-4 flex border-b-2">
                        <div class="flex space-x-8 justify-evenly">
                        <div> <img src="{{ asset('images/logo.png') }}" alt=""></div>

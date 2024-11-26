@@ -336,7 +336,7 @@ class RegisterSeller extends Component implements HasForms
 
         // Save the data into the database, including indexed fields like business_industry, etc.
         BusinessProfile::create([
-            'user_id' => auth()->id(), // Ensure the user is authenticated
+            'user_id' => auth()->user()->id, // Ensure the user is authenticated
             'email' => $formData['email'],
             'status' => 'pending',
             'verification_status' => $formData['verification_status'] ?? 'pending',

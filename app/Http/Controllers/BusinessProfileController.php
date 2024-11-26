@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Business;
+use App\Models\Conversation;
 use Illuminate\Http\Request;
 use App\Models\BusinessProfile;
 use Illuminate\Support\Facades\Auth;
@@ -23,14 +24,17 @@ class BusinessProfileController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     $sellerProfile = BusinessProfile::where('id',$id)->first();
-    //     return view('seller.profile-overview', compact('sellerProfile'));
-    // }
+    public function inbox()
+{
+    $conversations = Conversation::where('user_one_id', auth()->id())
+        ->orWhere('user_two_id', auth()->id())
+        ->with(['messages', 'userOne', 'userTwo'])
+        ->get();
+
+    return view('messages.inbox', compact('conversations'));
+}
+
+
 
 
     public function show(string $id)
@@ -51,25 +55,6 @@ class BusinessProfileController extends Controller
     try {
         // Validate the request data
         $validatedData = $request->validated();
-
-        // $businessPhotosPaths = [];
-
-        // $businessPhoto = $request->file('business_photo');
-
-
-        // if ($businessPhotos) {
-        //     foreach ($businessPhotos as $file) {
-        //         // Generate a unique name for the file before saving it
-        //         $fileName = time() . '-' . $file->getClientOriginalName();
-
-        //         // Store the file in the storage directory (e.g., storage/app/public/files)
-        //         $filePath = $file->storeAs('public/businessPhotos', $fileName);
-
-        //         // Store the file path
-        //         $businessPhotosPaths[] = $filePath;
-        //     }
-        // }
-
 
 
 
