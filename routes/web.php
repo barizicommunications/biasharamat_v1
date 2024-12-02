@@ -28,7 +28,13 @@ Route::get('/', function () {
     return view('homepage');
 });
 
-Route::get('test',TestComponent::class)->name('teat');
+Route::get('frequently-asked-questions', function () {
+    return view('faqs');
+})->name('faqs');
+
+
+
+Route::get('test',TestComponent::class)->name('test');
 
 
 

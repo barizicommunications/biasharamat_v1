@@ -129,29 +129,26 @@
                         </div>
                     </div>
 
-                    {{-- <div class="bg-white p-6">
-                        <h3 class="text-[#9D9D9D] mb-2">Introduce yourself and leave the business a message</h3>
-                        <textarea name="message" id="message" class="w-full border border-[#D9D9D9] rounded-sm mb-6" style="height: 140px; resize: none;"></textarea>
-                        <div>
-                            <button type="submit" class="text-white bg-primary py-3 px-8 rounded-md w-full">Contact business</button>
-                        </div>
-                    </div> --}}
 
 
 
+
+                    @if(auth()->id() !== $sellerProfile->user_id)
                     <form action="{{ route('messages.send', ['recipient' => $sellerProfile->user_id]) }}" method="POST">
                         @csrf
                         <div class="bg-white p-6">
                             <h3 class="text-[#9D9D9D] mb-2">Introduce yourself and leave the business a message</h3>
                             <textarea name="message" id="message" class="w-full border border-[#D9D9D9] rounded-sm mb-6" style="height: 140px; resize: none;"></textarea>
                             @error('message')
-                            <p class="text-red-500 text-sm my-6">{{ $message }}</p>
-                        @enderror
+                                <p class="text-red-500 text-sm my-6">{{ $message }}</p>
+                            @enderror
                             <div>
                                 <button type="submit" class="text-white bg-primary py-3 px-8 rounded-md w-full">Contact business</button>
                             </div>
                         </div>
                     </form>
+                @endif
+
 
                 </div>
             </div>
