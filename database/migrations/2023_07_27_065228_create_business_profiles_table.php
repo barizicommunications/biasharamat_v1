@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade'); // Foreign key to users table
             $table->string('email')->unique(); // Index for email to allow easy lookups
+
+            $table->string('name')->nullable(); // Owner's name
+            $table->string('company_name')->nullable(); // Business company name
+            $table->string('mobile_number')->nullable(); // Mobile number
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Status of the seller's application
             $table->enum('verification_status', ['Pending', 'Approved', 'Declined'])->default('Pending'); // Verification status
 

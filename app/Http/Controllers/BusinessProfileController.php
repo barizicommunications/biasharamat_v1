@@ -37,17 +37,37 @@ class BusinessProfileController extends Controller
 
 
 
-    public function show(string $id)
+//     public function show(string $id)
+// {
+//     $sellerProfile = BusinessProfile::where('id', $id)->first();
+
+//     // Decode JSON fields
+//     $applicationData = json_decode($sellerProfile->application_data, true);
+//     $documents = json_decode($sellerProfile->documents, true);
+
+//     // Pass them to the view
+//     return view('seller.profile-overview', compact('sellerProfile', 'applicationData', 'documents'));
+// }
+
+public function show(string $id)
 {
-    $sellerProfile = BusinessProfile::where('id', $id)->first();
+    $sellerProfile = BusinessProfile::where('id', $id)->firstOrFail();
 
-    // Decode JSON fields
-    $applicationData = json_decode($sellerProfile->application_data, true);
-    $documents = json_decode($sellerProfile->documents, true);
+    // Decode JSON fields with fallbacks
+    $applicationData = json_decode($sellerProfile->application_data, true) ?? [];
+    $documents = json_decode($sellerProfile->documents, true) ?? [];
 
-    // Pass them to the view
+    // Add default fallbacks for missing keys
+    $applicationData['business_industry'] = $applicationData['business_industry'] ?? 'Industry not specified';
+    $applicationData['company_name'] = $applicationData['company_name'] ?? 'Company name not provided';
+    $applicationData['business_description'] = $applicationData['business_description'] ?? 'Description not available';
+    $applicationData['number_employees'] = $applicationData['number_employees'] ?? 'Not specified';
+    $applicationData['business_highlights'] = $applicationData['business_highlights'] ?? 'No highlights available';
+    $applicationData['product_services'] = $applicationData['product_services'] ?? 'No product services available';
+
     return view('seller.profile-overview', compact('sellerProfile', 'applicationData', 'documents'));
 }
+
 
 
     public function store(BusinessProfileRegistrationRequest $request)

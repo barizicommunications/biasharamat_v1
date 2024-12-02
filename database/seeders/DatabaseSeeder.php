@@ -7,7 +7,11 @@ use App\Models\Blog;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Seeders\BusinessProfileSeeder;
+use Database\Seeders\InvestorProfileSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,28 +20,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Blog::factory(34)->create();
+        // Create Admin Role if not exists
+        $role = Role::firstOrCreate(['name' => 'Admin']);
 
-        $user = User::create([
-            'first_name' => "System",
-            'last_name' => "Admin",
-            'email' => "admin@gmail.com",
-            'registration_type' => "Admin",
-            'password' => Hash::make("password"),
+        // Create Admin User
+        $user = User::firstOrCreate([
+            'email' => 'admin@gmail.com',
+        ], [
+            'first_name' => 'System',
+            'last_name' => 'Admin',
+            'registration_type' => 'Admin',
+            'password' => Hash::make('password'),
         ]);
 
-
-
-
-
-
-        $role = Role::where('name', "Admin")->first(); // Find the first role matching the name
-
-        if (!$role) {
-            // Create the role if it doesn't exist
-            $role = Role::create(['name' => "Admin"]);
+        // Assign Admin Role
+        if (!$user->hasRole('Admin')) {
+            $user->assignRole($role);
         }
 
-        $user->assignRole($role);
+        // Call other seeders
+        $this->call([
+            RoleSeeder::class,              // Step 1: Create roles for sellers, investors, etc.
+            UserSeeder::class,              // Step 2: Seed users for sellers and investors
+            BusinessProfileSeeder::class,   // Step 3: Seed business profiles
+            InvestorProfileSeeder::class,   // Step 4: Seed investor profiles
+        ]);
     }
 }
