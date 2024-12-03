@@ -17,7 +17,18 @@ class InvestorProfileController extends Controller
      */
     public function index()
     {
-        //
+        // Fetch pending investor profiles with pagination
+        $investorProfiles = InvestorProfile::where('status', 'pending')
+            ->paginate(12);
+
+        // Decode JSON fields for each profile
+        $investorProfiles->getCollection()->transform(function ($profile) {
+            $profile->documents = is_string($profile->documents) ? json_decode($profile->documents, true) : $profile->documents;
+            $profile->application_data = is_string($profile->application_data) ? json_decode($profile->application_data, true) : $profile->application_data;
+            return $profile;
+        });
+
+        return view('buyer.investors', compact('investorProfiles'));
     }
 
     /**

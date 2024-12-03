@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name', 255);
             $table->string('email', 255);
             $table->string('mobile_number', 15);
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Status of the seller's application
             $table->string('interested_in');
             $table->string('buyer_role');
             $table->string('buyer_interest');

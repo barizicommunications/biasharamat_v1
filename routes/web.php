@@ -82,6 +82,8 @@ Route::group(['controller' => BusinessProfileController::class], function () {
         ->name('business.profile.store');
 });
 Route::group(['controller' => InvestorProfileController::class], function () {
+    Route::get('/investors', 'index')
+        ->name('investors');
     Route::get('/investor-profile-registration', 'create')
         ->name('investor.profile.create');
         Route::get('investor-verification-call-page', function () {
@@ -112,7 +114,7 @@ Route::post('/messages/reply/{conversation}', [MessageController::class, 'replyM
 //     return view('seller.investors-and-buyers');
 // })->name('investorsAndBuyers');
 
-Route::get('investors-and-buyers', [InvestorsAndBuyersController::class, 'index'])->name('investorsAndBuyers');
+Route::get('investment-opportunities', [InvestorsAndBuyersController::class, 'index'])->name('investorsAndBuyers');
 
 Route::get('active-introductions', [ProfileController::class, 'index'])
     ->name('activeIntro');
