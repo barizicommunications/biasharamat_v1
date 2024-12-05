@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('sender_id')->constrained('users'); // The user sending the message
             $table->text('body'); // Message content
             $table->boolean('is_read')->default(false);
-            $table->boolean('approved')->default(false);
             $table->timestamps();
         });
     }

@@ -15,18 +15,6 @@ class ListMessages extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
-            Actions\Action::make('approve')
-            ->label('Approve')
-            ->action(function (Message $message) {
-                $message->update(['approved' => true]);
-            })
-            ->color('success'),
-        Actions\Action::make('reject')
-            ->label('Reject')
-            ->action(function (Message $message) {
-                $message->update(['approved' => false]);
-            })
-            ->color('danger'),
         ];
     }
 }

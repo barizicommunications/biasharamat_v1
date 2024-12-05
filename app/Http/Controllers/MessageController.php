@@ -37,17 +37,25 @@ class MessageController extends Controller
         return redirect()->back();
     }
 
+
+
     // Function to show inbox with only approved messages
     public function inbox()
     {
-        // Retrieve only approved messages for the current user
-        $conversations = Conversation::where('user_one_id', auth()->id())
-            ->orWhere('user_two_id', auth()->id())
-            ->with(['messages' => function($query) {
-                $query->where('approved', true); // Show only approved messages
-            }, 'userOne', 'userTwo'])
-            ->get();
+        $conversations = Conversation::with(['messages' => function ($query) {
+            $query->latest();
+        }, 'userOne', 'userTwo'])
+        ->get()
+        ->map(function ($conversation) {
+            $conversation->unread_count = $conversation->messages()
+                ->where('is_read', false)
+                ->where('sender_id', '!=', auth()->id())
+                ->count();
+            return $conversation;
+        });
 
-        return view('messages.inbox', compact('conversations'));
+        return view('inbox', compact('conversations'));
     }
+
+
 }

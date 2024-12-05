@@ -20,7 +20,7 @@ class MessageResource extends Resource
 {
     protected static ?string $model = Message::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-envelope';
 
     public static function form(Form $form): Form
     {
@@ -29,10 +29,6 @@ class MessageResource extends Resource
                 Textarea::make('body')
                 ->label('Message Body')
                 ->disabled(), // Disable body input as messages can't be edited here
-               Toggle::make('approved')
-                ->label('Approved')
-                ->default(false)
-                ->required(), // Toggle for message approval
             ]);
     }
 
@@ -40,19 +36,12 @@ class MessageResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('conversation_id')
-                ->label('Conversation ID')
-                ->sortable(),
-            TextColumn::make('sender.name')
+            TextColumn::make('sender.first_name')
                 ->label('Sender')
                 ->sortable(),
             TextColumn::make('body')
                 ->label('Message Body')
                 ->limit(50),
-            // TextColumn::make('approved')
-            // ->boolean()
-            //     ->label('Approved')
-            //     ->sortable(),
             ])
             ->filters([
                 //
