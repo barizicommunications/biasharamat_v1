@@ -99,6 +99,55 @@
                             @endif
                         @endif
 
+                        <div x-data="{ open: false }" class="relative inline-block">
+                            <!-- Dropdown trigger using click -->
+                            @if (Auth::guest() || (Auth::check() && (!Auth::user()->businessProfile && !Auth::user()->investorProfile)))
+
+                            <a href="#" @click="open = !open"
+                               class="px-3 py-2 mx-3 mt-2 text-white transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-primary  ">
+                              Sign up
+                            </a>
+
+                          @endif
+
+                            <!-- Dropdown content -->
+                            <div x-show="open" @click.away="open = false"
+                                 class="origin-top-right absolute right-0 mt-6 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 dark:divide-gray-700 focus:outline-none">
+                                @if(!Auth::check())
+                                    <a href="{{ route('business.create') }}"
+                                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                       As a business owner
+                                    </a>
+                                    <a href="{{ route('investor.create') }}"
+                                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        Investor
+                                    </a>
+                                @else
+                                   @if(auth()->user()->registration_type == "Business Seller" && !\App\Models\BusinessProfile::where('user_id',auth()->user()->id)->first())
+                                   <a href="{{ route('business.profile.create') }}"
+                                   class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                   As a business owner
+                                </a>
+
+                                   @endif
+                                    @if(auth()->user()->registration_type == "Business Buyer" && !\App\Models\InvestorProfile::where('user_id',auth()->user()->id)->first())
+
+                                    <a href="{{ route('investor.profile.create') }}"
+                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                     Investor
+                                 </a>
+
+
+                                    @endif
+
+
+
+
+
+                                @endif
+                            </div>
+                        </div>
+
                         @if(!Auth::check())
                             <a href="{{ route('login') }}"
                                class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100 border">Login</a>
