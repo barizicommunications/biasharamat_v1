@@ -129,23 +129,8 @@
 
                 <!-- Right Sidebar -->
                 <div class="w-2/5 h-fit">
-                    {{-- <div class="bg-white p-6 mb-6">
-                        <h3 class="text-semibold text-primary text-lg">{{ $applicationData['company_name'] }}</h3>
-                        <hr class="mt-2 mb-6">
 
-                        <div class="grid gap-4 grid-cols-1 md:grid-cols-3 mb-6">
-                            <div class="col-span-2">
-                                <h5 class="text-sm mb-1">Industry</h5>
-                                <h2 class="font-bold text-gray-400">{{ $applicationData['business_industry'] }}</h2>
-                            </div>
-                            <div>
-                                <h5 class="text-sm mb-1">Employees</h5>
-                                <h2 class="font-bold text-gray-400">{{ $applicationData['number_employees'] }}</h2>
-                            </div>
-                        </div>
-                    </div> --}}
-
-                    @if(auth()->id() !== $sellerProfile->user_id && !auth()->user()->hasRole('Business Seller'))
+                    @if(auth()->id() !== $sellerProfile->user_id)
                         <form action="{{ route('messages.send', ['recipient' => $sellerProfile->user_id]) }}" method="POST">
                             @csrf
                             <div class="bg-white p-6">
