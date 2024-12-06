@@ -20,17 +20,21 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Wizard;
 use Illuminate\Support\Facades\Blade;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Placeholder;
 use App\Http\Controllers\PaymentController;
 use App\Notifications\BusinessSellerSignup;
+use Filament\Infolists\Components\TextEntry;
 use App\Notifications\ApplicationUnderReview;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -61,6 +65,7 @@ class RegisterSeller extends Component implements HasForms
     public $country;
     public $city;
     public $town;
+    public $confirmation;
     public $number_employees;
     public $business_legal_entity;
     public $other_business_legal_entity;
@@ -103,6 +108,7 @@ class RegisterSeller extends Component implements HasForms
     public $certificate_of_incorporation;
     public $kra_pin;
     public $valuation_report;
+    public $review_info;
     public $formData = [];
 
 
@@ -124,7 +130,7 @@ class RegisterSeller extends Component implements HasForms
         'name' => 'required|string|min:3|max:255',
         'company_name' => 'required|string|max:255',
         'mobile_number' => 'required|string|max:20',
-        'email' => 'required|email|unique:table_name,email',
+        'email' => 'required|email|unique:business_profile,email',
         'display_company_details' => 'nullable|string|max:255',
         'display_contact_details' => 'nullable|string|max:255',
         'seller_role' => 'required|in:Director,Adviser,Shareholder,Other', // Enum validation for seller role
@@ -274,6 +280,7 @@ class RegisterSeller extends Component implements HasForms
 
                         TextInput::make('name')
                         ->required()
+                        ->afterStateUpdated(fn (Set $set, $state) => $set('name', $state))
                         ->label('Contact person name'),
                         // ->afterStateUpdated(fn ($state) => $this->validateOnly('name')),
                     TextInput::make('company_name')
@@ -291,6 +298,7 @@ class RegisterSeller extends Component implements HasForms
                     TextInput::make('email')
                         ->email()
                         ->required()
+                        ->afterStateUpdated(fn (Set $set, $state) => $set('email', $state))
                         ->hint('Why is this needed?')
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: "Enter a valid official email address to ensure your profile is prioritized and verified faster. Please note that this email address is used only for verification purposes and all email communications will be sent only to your registered email address.")
                         ->label('Official email for quick verification'),
@@ -513,36 +521,34 @@ class RegisterSeller extends Component implements HasForms
                                 Select::make('country')
                                 ->label('Country')
                                 ->required()
+                                ->live()
                                 ->options(function () {
-                                    // Load and decode the JSON file
                                     $data = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true));
-
-                                    // Return country names as options
                                     return $data->keys()->mapWithKeys(fn ($country) => [$country => $country])->toArray();
                                 })
-                                ->reactive() // Enables dynamic updates
-                                ->afterStateUpdated(function (callable $set, $state) {
-                                    // Reset the city field when the country changes
-                                    $set('city', null);
+                                ->afterStateUpdated(function (Set $set, $state) {
+                                    if ($state !== $this->country) {
+                                        $set('city', null); // Reset city only if the country changes
+                                    }
                                 }),
 
-                            Select::make('city')
+                                Select::make('city')
                                 ->label('City')
                                 ->required()
                                 ->live()
                                 ->options(function (callable $get) {
-                                    // Get the selected country
                                     $country = $get('country');
 
                                     if ($country) {
-                                        // Load and decode the JSON file
+                                        // Load cities for the selected country
                                         $data = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true));
-
-                                        // Return the cities of the selected country
                                         return $data->get($country, []);
                                     }
 
-                                    return []; // Return an empty array if no country is selected
+                                    return []; // Return empty if no country is selected
+                                })
+                                ->afterStateUpdated(function (Set $set, $state) {
+                                    $set('city', $state); // Ensure city state is updated
                                 }),
 
                             TextInput::make('town')
@@ -627,9 +633,8 @@ class RegisterSeller extends Component implements HasForms
                         ->required()
                         ->acceptedFileTypes(['application/pdf']),
                     TextInput::make('physical_assets')
+                    ->numeric()
                         ->label('What is the value of physical assets owned by the business that would be part of the transaction? '),
-                    // Checkbox::make('interested_in_quotations')
-                    //     ->label('I’m interested in receiving quotations from Advisors / Boutique Investment Banks who can manage this transaction. ')->columnSpan('full'),
                     ])->columns(2),
                     Wizard\Step::make('Documents')
                     ->icon('heroicon-m-document')
@@ -663,7 +668,139 @@ class RegisterSeller extends Component implements HasForms
                         ->required()
                         ->label('Valuation report'),
                     ])->columns(2),
-                    
+                    Wizard\Step::make('Review Information')
+                    ->icon('heroicon-m-document-check')
+                    ->completedIcon('heroicon-o-hand-thumb-up')
+                    ->schema([
+                        Shout::make('review_info')
+                            ->columnSpanFull()
+                            ->content("Please review all the information you've provided before proceeding to payment."),
+
+                        Section::make('Client Information')
+                            ->schema([
+                                Placeholder::make('name')
+                                    ->label('Contact Person Name')
+                                    ->content(fn (Get $get): string => $get('name') ?? 'Not provided'),
+                                Placeholder::make('company_name')
+                                    ->label('Company Name')
+                                    ->content(fn (Get $get): string => $get('company_name') ?? 'Not provided'),
+                                Placeholder::make('mobile_number')
+                                    ->label('Contact Mobile Number')
+                                    ->content(fn (Get $get): string => $get('mobile_number') ?? 'Not provided'),
+                                Placeholder::make('email')
+                                    ->label('Official Email')
+                                    ->content(fn (Get $get): string => $get('email') ?? 'Not provided'),
+                            ])
+                            ->columns(2),
+
+                        Section::make('Business Information')
+                            ->schema([
+                                Placeholder::make('seller_role')
+                                    ->label('Your Role')
+                                    ->content(fn (Get $get): string => $get('seller_role') ?? 'Not provided'),
+                                Placeholder::make('seller_interest')
+                                    ->label('Interest Type')
+                                    ->content(fn (Get $get): string => $get('seller_interest') ?? 'Not provided'),
+                                Placeholder::make('business_industry')
+                                    ->label('Industry')
+                                    ->content(fn (Get $get): string => $get('business_industry') ?? 'Not provided'),
+                                Placeholder::make('business_start_date')
+                                    ->label('Establishment Date')
+                                    ->content(fn (Get $get): string => $get('business_start_date') ?? 'Not provided'),
+                                Placeholder::make('country')
+                                    ->label('Country')
+                                    ->content(fn (Get $get): string => $get('country') ?? 'Not provided'),
+                                Placeholder::make('city')
+                                    ->label('City')
+                                    ->content(fn (Get $get): string => $get('city') ?? 'Not provided'),
+                                Placeholder::make('number_employees')
+                                    ->label('Number of Employees')
+                                    ->content(fn (Get $get): string => (string) $get('number_employees') ?? 'Not provided'),
+                                Placeholder::make('business_description')
+                                    ->label('Business Description')
+                                    ->content(fn (Get $get): string => $get('business_description') ?? 'Not provided'),
+                            ])
+                            ->columns(2),
+
+                        Section::make('Financial Information')
+                            ->schema([
+                                Placeholder::make('monthly_turnover')
+                                    ->label('Monthly Turnover')
+                                    ->content(fn (Get $get): string => is_numeric($get('monthly_turnover')) ? 'Ksh ' . number_format((float) $get('monthly_turnover'), 2) : 'Not provided'),
+                                Placeholder::make('yearly_turnover')
+                                    ->label('Yearly Turnover')
+                                    ->content(fn (Get $get): string => is_numeric($get('yearly_turnover')) ? 'Ksh ' . number_format((float) $get('yearly_turnover'), 2) : 'Not provided'),
+                                Placeholder::make('profit_margin')
+                                    ->label('Profit Margin')
+                                    ->content(fn (Get $get): string => is_numeric($get('profit_margin')) ? $get('profit_margin') . '%' : 'Not provided'),
+                                Placeholder::make('physical_assets')
+                                    ->label('Physical Assets Value')
+                                    ->content(fn (Get $get): string => is_numeric($get('physical_assets')) ? 'Ksh ' . number_format((float) $get('physical_assets'), 2) : 'Not provided'),
+                            ])
+                            ->columns(2),
+
+                        Section::make('Sale Information')
+                            ->schema([
+                                Placeholder::make('tentative_selling_price')
+                                    ->label('Selling Price')
+                                    ->content(fn (Get $get): string => is_numeric($get('tentative_selling_price')) ? 'Ksh ' . number_format((float) $get('tentative_selling_price'), 2) : 'Not provided')
+                                    ->visible(fn (Get $get) => $get('seller_interest') === 'Sale of shares'),
+                                Placeholder::make('maximum_stake')
+                                    ->label('Maximum Stake')
+                                    ->content(fn (Get $get): string => is_numeric($get('maximum_stake')) ? $get('maximum_stake') . '%' : 'Not provided')
+                                    ->visible(fn (Get $get) => $get('seller_interest') === 'Partial sale of shares'),
+                                Placeholder::make('investment_amount')
+                                    ->label('Investment Amount')
+                                    ->content(fn (Get $get): string => is_numeric($get('investment_amount')) ? 'Ksh ' . number_format((float) $get('investment_amount'), 2) : 'Not provided')
+                                    ->visible(fn (Get $get) => $get('seller_interest') === 'Partial sale of shares'),
+                                Placeholder::make('value_of_physical_assets')
+                                    ->label('Physical Assets Value')
+                                    ->content(fn (Get $get): string => is_numeric($get('value_of_physical_assets')) ? 'Ksh ' . number_format((float) $get('value_of_physical_assets'), 2) : 'Not provided')
+                                    ->visible(fn (Get $get) => $get('seller_interest') === 'Sale of assets'),
+                                Placeholder::make('asset_selling_price')
+                                    ->label('Asset Selling Price')
+                                    ->content(fn (Get $get): string => is_numeric($get('asset_selling_price')) ? 'Ksh ' . number_format((float) $get('asset_selling_price'), 2) : 'Not provided')
+                                    ->visible(fn (Get $get) => $get('seller_interest') === 'Sale of assets'),
+                                Placeholder::make('loan_amount')
+                                    ->label('Loan Amount')
+                                    ->content(fn (Get $get): string => is_numeric($get('loan_amount')) ? 'Ksh ' . number_format((float) $get('loan_amount'), 2) : 'Not provided')
+                                    ->visible(fn (Get $get) => $get('seller_interest') === 'Financing'),
+                                Placeholder::make('colateral_value')
+                                    ->label('Collateral Value')
+                                    ->content(fn (Get $get): string => is_numeric($get('colateral_value')) ? 'Ksh ' . number_format((float) $get('colateral_value'), 2) : 'Not provided')
+                                    ->visible(fn (Get $get) => $get('seller_interest') === 'Financing'),
+                            ])
+                            ->columns(2)
+                            ->visible(fn (Get $get) => $get('seller_interest')),
+
+                        Section::make('Uploaded Documents')
+                            ->schema([
+                                Placeholder::make('business_photos')
+                                    ->label('Business Photos')
+                                    ->content(fn (Get $get): string => $get('business_photos') ? 'Uploaded' : 'Not uploaded'),
+                                Placeholder::make('business_profile')
+                                    ->label('Business Profile')
+                                    ->content(fn (Get $get): string => $get('business_profile') ? 'Uploaded' : 'Not uploaded'),
+                                Placeholder::make('kra_pin')
+                                    ->label('KRA Pin')
+                                    ->content(fn (Get $get): string => $get('kra_pin') ? 'Uploaded' : 'Not uploaded'),
+                                Placeholder::make('certificate_of_incorporation')
+                                    ->label('Certificate of Incorporation')
+                                    ->content(fn (Get $get): string => $get('certificate_of_incorporation') ? 'Uploaded' : 'Not uploaded'),
+                                Placeholder::make('valuation_report')
+                                    ->label('Valuation Report')
+                                    ->content(fn (Get $get): string => $get('valuation_report') ? 'Uploaded' : 'Not uploaded'),
+                            ])
+                            ->columns(2),
+
+                            Shout::make('confirmation')
+                            ->columnSpanFull()
+                            ->content('By proceeding to the next step, you confirm that all the information provided is accurate and complete.')
+                            ->type('info') // Options: 'info', 'success', 'warning', 'danger'
+
+                    ]),
+
+
                     Wizard\Step::make('Select a Plan')
                     ->icon('heroicon-m-cursor-arrow-ripple')
                     ->completedIcon('heroicon-o-hand-thumb-up')
@@ -688,7 +825,7 @@ class RegisterSeller extends Component implements HasForms
 
             ])
             ->persistStepInQueryString()
-            ->skippable()
+            // ->skippable()
             // ->startOnStep(2)
             ->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
         ]);
