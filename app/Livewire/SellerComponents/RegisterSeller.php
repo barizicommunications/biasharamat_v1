@@ -24,6 +24,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Textarea;
+use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -47,6 +48,7 @@ class RegisterSeller extends Component implements HasForms
     public $documentsinfo;
     public $businessinfo;
     public $selectaplan;
+    public $other_business_industry;
     public $name;
     public $company_name;
     public $mobile_number;
@@ -58,7 +60,7 @@ class RegisterSeller extends Component implements HasForms
     public $business_industry;
     public $country;
     public $city;
-    public $county;
+    public $town;
     public $number_employees;
     public $business_legal_entity;
     public $other_business_legal_entity;
@@ -144,7 +146,7 @@ class RegisterSeller extends Component implements HasForms
         'business_industry' => 'required|string|max:255',
         'country' => 'required|string|max:255',
         'city' => 'required|string|max:255',
-        'county' => 'required|string|max:255',
+        'town' => 'required|string|max:255',
         'number_employees' => 'required|integer|min:0',
         'business_legal_entity' => 'required|string|max:255',
         'website_link' => 'required|url|max:255',
@@ -256,15 +258,6 @@ class RegisterSeller extends Component implements HasForms
     }
 
 
-
-
-
-
-
-
-
-
-
     public function form(Form $form): Form
 {
     return $form
@@ -281,7 +274,7 @@ class RegisterSeller extends Component implements HasForms
 
                         TextInput::make('name')
                         ->required()
-                        ->label('Name'),
+                        ->label('Contact person name'),
                         // ->afterStateUpdated(fn ($state) => $this->validateOnly('name')),
                     TextInput::make('company_name')
                     ->hint('Why is this needed?')
@@ -294,7 +287,7 @@ class RegisterSeller extends Component implements HasForms
                     ->hint('Why is this needed?')
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: "We'll use this to contact you for verification and activation of your account. We will never share your number with telemarketers.")
                         ->required()
-                        ->label('Your mobile number'),
+                        ->label('Contact person mobile number'),
                     TextInput::make('email')
                         ->email()
                         ->required()
@@ -340,16 +333,15 @@ class RegisterSeller extends Component implements HasForms
                                 return true;
                             }
 
-                        }),
+                        })->label('Specify role'),
 
                             Select::make('seller_interest')
                             ->label('What are you interested in')
                             ->live()
                             ->options([
-                               'Full sale of shares'=>'Full sale of shares',
+                               'Sale of shares'=>'Sale of shares',
                                 'Partial sale of shares'=>'Partial sale of shares',
-                                'Full sale of assets'=>'Full sale of assets',
-                                // 'Partial sale of assets'=>'Partial sale of assets',
+                                'Sale of assets'=>'Sale of assets',
                                 'Financing' => 'Financing',
 
                             ]),
@@ -360,7 +352,7 @@ class RegisterSeller extends Component implements HasForms
                             ->numeric()
                             ->hidden(function (Get $get) {
 
-                                return !($get('seller_interest') === 'Full sale of shares');
+                                return !($get('seller_interest') === 'Sale of shares');
 
                             }),
 
@@ -369,7 +361,7 @@ class RegisterSeller extends Component implements HasForms
                             ->label('What is the reason for the sale of the business?')
                             ->hidden(function (Get $get) {
 
-                                return !($get('seller_interest') === 'Full sale of shares');
+                                return !($get('seller_interest') === 'Sale of shares');
 
                             }),
 
@@ -411,7 +403,7 @@ class RegisterSeller extends Component implements HasForms
                             ->label('What is the value of the physical assets you are selling?')
                             ->hidden(function (Get $get) {
 
-                                return !($get('seller_interest') === 'Full sale of assets');
+                                return !($get('seller_interest') === 'Sale of assets');
 
                             }),
 
@@ -421,7 +413,7 @@ class RegisterSeller extends Component implements HasForms
                             ->label('At what price are you selling/leasing?')
                             ->hidden(function (Get $get) {
 
-                                return !($get('seller_interest') === 'Full sale of assets');
+                                return !($get('seller_interest') === 'Sale of assets');
 
                             }),
 
@@ -430,7 +422,7 @@ class RegisterSeller extends Component implements HasForms
                             ->label('What is the reason for selling the business assets?')
                             ->hidden(function (Get $get) {
 
-                                return !($get('seller_interest') === 'Full sale of assets');
+                                return !($get('seller_interest') === 'Sale of assets');
 
                             }),
 
@@ -485,62 +477,77 @@ class RegisterSeller extends Component implements HasForms
 
                             }),
 
-                        Select::make('business_start_date')
+                            Select::make('business_start_date')
                             ->required()
                             ->label('When was the business established?')
-                            ->options([
-                                'Not operational yet' => 'Not operational yet',
-                                '2024'=>'2024',
-                                '2023'=>'2023',
-                                '2022'=>'2022',
-                                '2021'=>'2021',
-                                '2020'=>'2020',
-                                '2019'=>'2019',
-                                '2018'=>'2018',
-                                '2017'=>'2017',
-                                '2016'=>'2016',
-                                '2015'=>'2015',
-                            ]),
+                            ->options(array_merge(
+                                ['Not operational yet' => 'Not operational yet'],
+                                array_combine(
+                                    range(date('Y'), date('Y') - 50),
+                                    range(date('Y'), date('Y') - 50)
+                                )
+                            )),
+
 
 
                             Select::make('business_industry')
                             ->label('Select business industry')
+                            ->live()
+                            ->options(function () {
+                                // Load and decode the JSON file
+                                $data = json_decode(Storage::disk('local')->get('data/business_industries.json'), true);
 
-                            ->options([
-                                'Technology' => 'Technology',
-                                'Building, construction and maintenance' => 'Building, construction and maintenance',
-                                'Education' => 'Education',
-                                'Healthcare' => 'Healthcare',
-                                'Finance and Insurance' => 'Finance and Insurance',
-                                'Real Estate' => 'Real Estate',
-                                'Manufacturing' => 'Manufacturing',
-                                'Retail' => 'Retail',
-                                'Hospitality and Tourism' => 'Hospitality and Tourism',
-                                'Transportation and Logistics' => 'Transportation and Logistics',
-                                'Agriculture and Farming' => 'Agriculture and Farming',
-                                'Energy and Utilities' => 'Energy and Utilities',
-                                'Telecommunications' => 'Telecommunications',
-                                'Media and Entertainment' => 'Media and Entertainment',
-                                'Legal Services' => 'Legal Services',
-                                'Government and Public Services' => 'Government and Public Services',
-                                'Non-profit Organizations' => 'Non-profit Organizations',
-                                'Consulting and Professional Services' => 'Consulting and Professional Services',
-                                'Food and Beverage' => 'Food and Beverage',
-                                'Automotive' => 'Automotive',
-                                'Other' => 'Other',
-                            ]),
+                                // Return the industries as options
+                                return $data;
+                            }),
+                            TextInput::make('other_business_industry')->hidden(function(Get $get){
+
+                                if($get('business_industry') != "Other"){
+                                    return true;
+                                }
+
+                            })->label('Specify business industry'),
 
                             Fieldset::make('Where is the business located / headquartered?')
                             ->schema([
-                                TextInput::make('country')
+                                Select::make('country')
+                                ->label('Country')
                                 ->required()
-                                ->label('Country'),
-                            TextInput::make('city')
+                                ->options(function () {
+                                    // Load and decode the JSON file
+                                    $data = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true));
+
+                                    // Return country names as options
+                                    return $data->keys()->mapWithKeys(fn ($country) => [$country => $country])->toArray();
+                                })
+                                ->reactive() // Enables dynamic updates
+                                ->afterStateUpdated(function (callable $set, $state) {
+                                    // Reset the city field when the country changes
+                                    $set('city', null);
+                                }),
+
+                            Select::make('city')
+                                ->label('City')
                                 ->required()
-                                ->label('City'),
-                            TextInput::make('county')
+                                ->live()
+                                ->options(function (callable $get) {
+                                    // Get the selected country
+                                    $country = $get('country');
+
+                                    if ($country) {
+                                        // Load and decode the JSON file
+                                        $data = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true));
+
+                                        // Return the cities of the selected country
+                                        return $data->get($country, []);
+                                    }
+
+                                    return []; // Return an empty array if no country is selected
+                                }),
+
+                            TextInput::make('town')
                                 ->required()
-                                ->label('County'),
+                                ->label('Town'),
                             ])->columns(3),
 
                             Grid::make(3)
@@ -552,26 +559,14 @@ class RegisterSeller extends Component implements HasForms
 
                                 Select::make('business_legal_entity')
                                 ->label('Select business legal entity type')
-                                // ->multiple()
-                                // ->maxItems(2)
-                                ->options([
-                                    'Sole proprietorship/sole trader' => 'Sole proprietorship/sole trader',
-                                    'General partnership' => 'General partnership',
-                                    'Limited liability partnership (LLP)' => 'Limited liability partnership (LLP)',
-                                    'Private limited company (Ltd)' => 'Private limited company (Ltd)',
-                                    'Public limited company (PLC)' => 'Public limited company (PLC)',
-                                    'Limited liability company (LLC)' => 'Limited liability company (LLC)',
-                                    'Corporation (Inc)' => 'Corporation (Inc)',
-                                    'Non-profit organization (NPO)' => 'Non-profit organization (NPO)',
-                                    'Cooperative' => 'Cooperative',
-                                    'Joint venture' => 'Joint venture',
-                                    'Franchise' => 'Franchise',
-                                    'Trust' => 'Trust',
-                                    'Association' => 'Association',
-                                    'Company limited by guarantee' => 'Company limited by guarantee',
-                                    'Unlimited company' => 'Unlimited company',
-                                    'Other' => 'Other',
-                                ])->live(),
+                                ->live()
+                                ->options(function () {
+                                    // Load and decode the JSON file
+                                    $data = json_decode(Storage::disk('local')->get('data/business_legal_entities.json'), true);
+
+                                    // Return the entities as options
+                                    return $data;
+                                }),
 
                                 TextInput::make('other_business_legal_entity')->hidden(function(Get $get){
 
@@ -579,7 +574,8 @@ class RegisterSeller extends Component implements HasForms
                                         return true;
                                     }
 
-                                })->live(),
+                                })->live()
+                                ->label('Specify business legal entity'),
                             TextInput::make('website_link')
                             ->url()
                                 ->label('Link to your business website'),
@@ -590,13 +586,9 @@ class RegisterSeller extends Component implements HasForms
                             ->required()
                             ->placeholder('Mention highlights of your business......')
                             ->label('Describe the business (Do not mention business name/information which can identify the business.)'),
-                        // Textarea::make('product_services')
-                        //     ->required()
-                        //     ->label('List products and services of the business'),
-                        // Textarea::make('business_highlights')
-                        //     ->label('Mention highlights of the business including number of clients, growth rate, promoter experience, business relationships, awards, etc'),
                         Textarea::make('facility_description')
-                            ->label('Describe your facility such as built-up area, number of floors, rental/lease details'),
+                        ->label('Describe Facility')
+                            ->label('Describe your facility such as built-up area, number of floors, Indicate whether rental or lease.'),
 
 
                         // ...
@@ -671,6 +663,7 @@ class RegisterSeller extends Component implements HasForms
                         ->required()
                         ->label('Valuation report'),
                     ])->columns(2),
+                    
                     Wizard\Step::make('Select a Plan')
                     ->icon('heroicon-m-cursor-arrow-ripple')
                     ->completedIcon('heroicon-o-hand-thumb-up')
@@ -693,7 +686,11 @@ class RegisterSeller extends Component implements HasForms
                         ->default('Pending'),
                     ]),
 
-            ])->persistStepInQueryString()->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
+            ])
+            ->persistStepInQueryString()
+            ->skippable()
+            // ->startOnStep(2)
+            ->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
         ]);
 }
 
