@@ -47,6 +47,7 @@ class RegisterSeller extends Component implements HasForms
 
     public $user_id;
     public $clientInfo;
+    public $payment_method;
     public $businessInfo;
     public $transactionalinfo;
     public $documentsinfo;
@@ -54,6 +55,7 @@ class RegisterSeller extends Component implements HasForms
     public $selectaplan;
     public $other_business_industry;
     public $name;
+    public $payment_required;
     public $company_name;
     public $mobile_number;
     public $email;
@@ -823,11 +825,36 @@ class RegisterSeller extends Component implements HasForms
                         ->default('Pending'),
                     ]),
 
+                    Wizard\Step::make('Payment')
+                    ->schema([
+                        Shout::make('payment_required')
+                            ->content('Payment is required. Pay using m-pesa, airtel money or credit/debit card.'),
+                        Placeholder::make('amount_due')
+                            ->extraAttributes(['class' => 'text-2xl font-bold'])
+                            ->content('KES 10,000'),
+                        Radio::make('payment_method')
+                            ->required()
+                            ->default('pesapal')
+                            ->options([
+                                'pesapal' => 'Pesapal (Credit/Debit Card, M-Pesa, Airtel Money, etc)',
+                            ])
+                            ->live()
+                            ->columnSpanFull(),
+                        Placeholder::make('pesapal')
+                            ->hidden(fn(Get $get) => $get('payment_method') !== 'pesapal')
+                            ->viewData([
+                                'amount' => 10000,
+                                'description' => 'Business seller',
+                                'callback'=>'/verification-call-page'
+                            ])
+                            ->view('filament.resources.payment.register-pay'),
+                    ]),
+
             ])
             ->persistStepInQueryString()
-            // ->skippable()
+            ->skippable()
             // ->startOnStep(2)
-            ->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
+            // ->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
         ]);
 }
 
