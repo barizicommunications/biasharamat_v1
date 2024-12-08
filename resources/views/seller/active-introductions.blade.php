@@ -35,9 +35,9 @@
                 <div class="w-3/4">
                     <!-- Inbox Section -->
                     <div x-show="activeTab === 'inbox'">
-                        <div class="flex justify-between mb-4">
+                        {{-- <div class="flex justify-between mb-4">
                             <h2 class="font-bold text-primary text-lg md:text-4xl">Inbox</h2>
-                        </div>
+                        </div> --}}
 
                         <div class="bg-white p-6 rounded-lg shadow-md">
                             <h2 class="text-2xl font-bold mb-6">Inbox</h2>
