@@ -24,7 +24,7 @@ class InvestorRegistrationRequest extends FormRequest
         return [
             'buyer_name' => 'required|string|max:255',
             'buyer_email' => 'required|string|email|max:255|unique:users,email',
-            'buyer_password' => 'required|string|min:8',
+            'buyer_password' => 'required|string|min:8|confirmed',
         ];
     }
 }

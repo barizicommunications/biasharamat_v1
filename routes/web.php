@@ -97,9 +97,10 @@ Route::group(['controller' => InvestorProfileController::class], function () {
 
 
 // Message routes
-Route::post('/messages/send/{recipient}', [MessageController::class, 'sendMessage'])->name('messages.send');
-// Route::get('/messages', [MessageController::class, 'inbox'])->name('messages.inbox');
-Route::post('/messages/reply/{conversation}', [MessageController::class, 'replyMessage'])->name('messages.reply');
+Route::post('/messages/send/{recipient}', [MessageController::class, 'sendMessage'])->name('messages.send')->middleware('auth');
+
+
+Route::post('/messages/reply/{conversation}', [MessageController::class, 'replyMessage'])->name('messages.reply')->middleware('auth');
 
 
 

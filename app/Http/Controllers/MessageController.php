@@ -13,6 +13,11 @@ class MessageController extends Controller
     // Function to send a message
     public function sendMessage(Request $request, $recipientId)
     {
+
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to send a message.');
+        }
+        
         $request->validate([
             'message' => 'required|string|max:1000',
         ]);

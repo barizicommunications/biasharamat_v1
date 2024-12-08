@@ -129,7 +129,6 @@
 
                 <!-- Right Sidebar -->
                 <div class="w-2/5 h-fit">
-
                     @if(auth()->id() !== $sellerProfile->user_id)
                         <form action="{{ route('messages.send', ['recipient' => $sellerProfile->user_id]) }}" method="POST">
                             @csrf
@@ -144,8 +143,14 @@
                                 </div>
                             </div>
                         </form>
+                    @else
+                        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
+                            <p class="font-bold">Note:</p>
+                            <p>Investors can contact you directly through this profile.</p>
+                        </div>
                     @endif
                 </div>
+
             </div>
         </article>
     </section>

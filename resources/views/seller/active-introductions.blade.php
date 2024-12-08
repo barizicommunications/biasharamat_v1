@@ -35,19 +35,20 @@
                 <div class="w-3/4">
                     <!-- Inbox Section -->
                     <div x-show="activeTab === 'inbox'">
-                        <div class="flex justify-between">
+                        <div class="flex justify-between mb-4">
                             <h2 class="font-bold text-primary text-lg md:text-4xl">Inbox</h2>
                         </div>
 
                         <div class="bg-white p-6 rounded-lg shadow-md">
                             <h2 class="text-2xl font-bold mb-6">Inbox</h2>
-                            <div x-data="{ openConversation: null }" class="space-y-6">
+
+                            <div x-data="{ openConversation: null }" class="space-y-4">
                                 @foreach ($conversations as $conversation)
-                                    <div class="border border-gray-200 rounded-lg shadow-sm">
-                                        <div class="p-4 flex justify-between items-center cursor-pointer bg-gray-100 rounded-lg"
+                                    <div class="border border-gray-200 rounded-lg shadow-sm transition-all hover:shadow-md">
+                                        <div class="p-4 flex justify-between items-center cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-lg"
                                              @click="openConversation = openConversation === {{ $conversation->id }} ? null : {{ $conversation->id }}">
                                             <div class="flex items-center space-x-4">
-                                                <img src="{{ asset('images/logo.png') }}" alt="Conversation Logo" class="w-10 h-10 rounded-full">
+                                                <img src="{{ asset('images/logo.png') }}" alt="Conversation Logo" class="w-12 h-12 rounded-full">
                                                 <h3 class="font-semibold text-lg text-primary">
                                                     {{ $conversation->userOne->first_name }} & {{ $conversation->userTwo->first_name }}
                                                 </h3>
@@ -57,7 +58,7 @@
                                             </p>
                                         </div>
 
-                                        <div x-show="openConversation === {{ $conversation->id }}" x-transition x-cloak class="p-4 bg-gray-50">
+                                        <div x-show="openConversation === {{ $conversation->id }}" x-transition x-cloak class="p-4 bg-gray-50 border-t">
                                             <livewire:conversation-messages :conversation-id="$conversation->id" />
                                         </div>
                                     </div>
@@ -65,6 +66,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <!-- Notifications Section -->
                     <div x-show="activeTab === 'notifications'">

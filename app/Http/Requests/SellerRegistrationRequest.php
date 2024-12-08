@@ -24,7 +24,7 @@ class SellerRegistrationRequest extends FormRequest
         return [
             'seller_name' => 'required|string|max:255',
             'seller_email' => 'required|string|email|max:255|unique:users,email',
-            'seller_password' => 'required|string|min:8',
+            'seller_password' => 'required|string|min:8|confirmed',
         ];
     }
 }

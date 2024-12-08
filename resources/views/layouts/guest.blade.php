@@ -34,138 +34,80 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans text-gray-900 antialiased">
-    <nav x-data="{ isOpen: false }" class=" bg-white shadow sticky top-0 z-50">
-        <div class="container px-6 py-6 mx-auto">
-            <div class="lg:flex lg:items-center lg:justify-between">
-                <div class="flex items-center justify-between">
-                    <a href="/">
-                        <img class="w-auto" src="{{ asset('images/logos/biasharamart_logo.png') }}" alt="">
-                    </a>
+    <nav x-data="{ isOpen: false }" class="bg-white shadow sticky top-0 z-50">
+        <div class="container px-6 py-4 mx-auto">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="/">
+                    <img class="w-auto" src="{{ asset('images/logos/biasharamart_logo.png') }}" alt="">
+                </a>
 
-                    <div class="hidden relative md:block mt-4 md:mt-0 md:ml-10">
-                        <input type="text"
-                               class="md:w-96 py-2 pl-4 pr-4 text-gray-700 bg-white border rounded-lg focus:border-primary/50 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-primary/50"
-                               placeholder="Search">
-                        <span class="absolute inset-y-0 right-0 flex items-center p-3 rounded-md bg-primary">
-                            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none">
-                                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                                      stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                      stroke-linejoin="round"></path>
-                            </svg>
-                        </span>
-                    </div>
-
-                    <!-- Mobile menu button -->
-                    <div class="flex lg:hidden">
-                        <button x-cloak @click="isOpen = !isOpen" type="button"
-                                class="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
-                                aria-label="toggle menu">
-                            <svg x-show="!isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16"/>
-                            </svg>
-
-                            <svg x-show="isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
+                <!-- Centered Menu Items -->
+                <div class="hidden lg:flex lg:items-center lg:justify-center flex-grow">
+                    <div class="flex space-x-6">
+                        <a href="{{ route('faqs') }}" class="px-3 py-2 transition-colors duration-300 transform rounded-md hover:bg-gray-100 {{ Request::routeIs('faqs') ? 'bg-gray-100 text-primary font-semibold' : 'text-gray-700' }}">
+                            FAQs
+                        </a>
+                        <a href="{{ route('investorsAndBuyers') }}" class="px-3 py-2 transition-colors duration-300 transform rounded-md hover:bg-gray-100 {{ Request::routeIs('investorsAndBuyers') ? 'bg-gray-100 text-primary font-semibold' : 'text-gray-700' }}">
+                            Investment Opportunities
+                        </a>
+                        <a href="{{ route('investors') }}" class="px-3 py-2 transition-colors duration-300 transform rounded-md hover:bg-gray-100 {{ Request::routeIs('investors') ? 'bg-gray-100 text-primary font-semibold' : 'text-gray-700' }}">
+                            Investors
+                        </a>
+                        <a href="{{ route('blog') }}" class="px-3 py-2 transition-colors duration-300 transform rounded-md hover:bg-gray-100 {{ Request::routeIs('blog') ? 'bg-gray-100 text-primary font-semibold' : 'text-gray-700' }}">
+                            Blogs
+                        </a>
                     </div>
                 </div>
 
-                <!-- Mobile Menu -->
-                <div x-cloak :class="[isOpen ? 'translate-x-0 opacity-100 ' : 'opacity-0 -translate-x-full']"
-                     class="absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center">
-                    <div class="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8">
-                        <a href="{{ route('faqs') }}"
-                           class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">FAQs</a>
-                        <a href="{{ route('investorsAndBuyers') }}"
-                           class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">Investment Opportunities</a>
-                        <a href="{{ route('investors') }}"
-                           class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">Investors</a>
-                        <a href="{{ route('blog') }}"
-                           class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">Blogs</a>
-
-                        @if (Auth::check())
-                            <!-- User-specific links -->
-                            @if(auth()->user()->registration_type == "Business Seller" && \App\Models\BusinessProfile::where('user_id',auth()->user()->id)->first())
-                                <a href="{{ route('sellerProfileOverview',auth()->user()->businessProfile->id) }}"
-                                   class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">Business profile</a>
-                            @endif
-
-                            @if(auth()->user()->registration_type == "Business Buyer" && \App\Models\InvestorProfile::where('user_id',auth()->user()->id)->first())
-                                <a href="{{ route('buyer.buyer-profile',auth()->user()->investorProfile->id) }}"
-                                   class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">Buyer profile</a>
-                            @endif
-                        @endif
-
+                <!-- Sign Up Dropdown and Login Button -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    @if (!Auth::check())
+                        <!-- Sign Up Dropdown -->
                         <div x-data="{ open: false }" class="relative inline-block">
-                            <!-- Dropdown trigger using click -->
-                            @if (Auth::guest() || (Auth::check() && (!Auth::user()->businessProfile && !Auth::user()->investorProfile)))
-
-                            <a href="#" @click="open = !open"
-                               class="px-3 py-2 mx-3 mt-2 text-white transition-colors duration-300 transform rounded-md lg:mt-0 dark:text-gray-200 bg-primary  ">
-                              Sign up
+                            <a href="#" @click="open = !open" class="px-4 py-2 text-white bg-primary rounded-md transition duration-300 hover:bg-primary-dark">
+                                Sign Up
                             </a>
-
-                          @endif
-
-                            <!-- Dropdown content -->
-                            <div x-show="open" @click.away="open = false"
-                                 class="origin-top-right absolute right-0 mt-6 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 dark:divide-gray-700 focus:outline-none">
-                                @if(!Auth::check())
-                                    <a href="{{ route('business.create') }}"
-                                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                       As a business owner
-                                    </a>
-                                    <a href="{{ route('investor.create') }}"
-                                       class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        Investor
-                                    </a>
-                                @else
-                                   @if(auth()->user()->registration_type == "Business Seller" && !\App\Models\BusinessProfile::where('user_id',auth()->user()->id)->first())
-                                   <a href="{{ route('business.profile.create') }}"
-                                   class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                   As a business owner
+                            <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
+                                <a href="{{ route('business.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    As a Business Owner
                                 </a>
-
-                                   @endif
-                                    @if(auth()->user()->registration_type == "Business Buyer" && !\App\Models\InvestorProfile::where('user_id',auth()->user()->id)->first())
-
-                                    <a href="{{ route('investor.profile.create') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                     Investor
-                                 </a>
-
-
-                                    @endif
-
-
-
-
-
-                                @endif
+                                <a href="{{ route('investor.create') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    As an Investor
+                                </a>
                             </div>
                         </div>
 
-                        @if(!Auth::check())
-                            <a href="{{ route('login') }}"
-                               class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100 border">Login</a>
-                        @else
-                            <a href="{{ route('activeIntro') }}"
-                               class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">
-                                Profile
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}" class="inline-block ml-4">
-                                @csrf
-                                <button type="submit" class="text-red-500 hover:underline px-3 py-2 mx-3 mt-2 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">Logout</button>
-                            </form>
-                        @endif
-                    </div>
+                        <!-- Login Button -->
+                        <a href="{{ route('login') }}" class="px-4 py-2 text-gray-700 border rounded-md transition duration-300 hover:bg-gray-100">
+                            Login
+                        </a>
+                    @else
+                        <a href="{{ route('activeIntro') }}" class="px-4 py-2 text-gray-700 transition duration-300 hover:bg-gray-100">Profile</a>
+                        <form method="POST" action="{{ route('logout') }}" class="inline-block">
+                            @csrf
+                            <button type="submit" class="px-4 py-2 text-red-500 transition duration-300 hover:bg-gray-100 rounded-md">Logout</button>
+                        </form>
+                    @endif
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex lg:hidden">
+                    <button @click="isOpen = !isOpen" type="button" class="text-gray-500 hover:text-gray-600 focus:outline-none">
+                        <svg x-show="!isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h16M4 16h16"/>
+                        </svg>
+                        <svg x-show="isOpen" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
     </nav>
+
+
+
 
 <main>
     {{ $slot }}
