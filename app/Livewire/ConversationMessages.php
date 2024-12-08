@@ -55,8 +55,11 @@ class ConversationMessages extends Component
         // Add the new message to the messages array
         $this->messages[] = $message->load('sender')->toArray();
 
-        // Clear the input field
-        $this->newMessage = '';
+         // Reset the input
+         $this->reset('newMessage');
+
+         // Dispatch browser event for JavaScript handling
+         $this->dispatch('messageSent');
 
         $this->updateUnreadCount(); // Refresh unread count after sending a message
     }
