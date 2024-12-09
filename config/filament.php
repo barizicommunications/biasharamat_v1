@@ -31,6 +31,14 @@ return [
 
     ],
 
+
+    'icon_sets' => [
+        'heroicons' => [
+            'path' => public_path('vendor/heroicons'),
+            'prefix' => 'o', // If your Heroicons are prefixed with 'o'
+        ],
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk

@@ -134,12 +134,32 @@
                             @csrf
                             <div class="bg-white p-6">
                                 <h3 class="text-[#9D9D9D] mb-2">Introduce yourself and leave the business a message</h3>
-                                <textarea name="message" id="message" class="w-full border border-[#D9D9D9] rounded-sm mb-6" style="height: 140px; resize: none;"></textarea>
+
+                                <!-- Notice to inform users about restrictions -->
+                                <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 rounded-md mb-4">
+                                    <p class="text-sm">
+                                        <strong>Note:</strong> Please avoid including email addresses, phone numbers, or any contact details in your message.
+                                    </p>
+                                </div>
+
+                                <!-- Textarea for the message -->
+                                <textarea
+                                    name="message"
+                                    id="message"
+                                    class="w-full border border-[#D9D9D9] rounded-sm mb-3 p-2"
+                                    style="height: 140px; resize: none;"
+                                    placeholder="Type your message here..."></textarea>
+
+                                <!-- Display error message if validation fails -->
                                 @error('message')
-                                    <p class="text-red-500 text-sm my-6">{{ $message }}</p>
+                                    <p class="text-red-500 text-sm mb-4">{{ $message }}</p>
                                 @enderror
+
+                                <!-- Submit button -->
                                 <div>
-                                    <button type="submit" class="text-white bg-primary py-3 px-8 rounded-md w-full">Contact Business</button>
+                                    <button type="submit" class="text-white bg-primary py-3 px-8 rounded-md w-full">
+                                        Contact Business
+                                    </button>
                                 </div>
                             </div>
                         </form>
@@ -150,6 +170,7 @@
                         </div>
                     @endif
                 </div>
+
 
             </div>
         </article>

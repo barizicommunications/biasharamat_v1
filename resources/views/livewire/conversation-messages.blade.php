@@ -25,6 +25,13 @@
     <!-- Message Input Form -->
     <div class="border-t border-gray-100 p-4 bg-gray-50 rounded-b-lg">
         <form wire:submit.prevent="sendMessage" class="space-y-3">
+            <!-- Notice to inform users about restrictions -->
+            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 rounded-md">
+                <p class="text-sm">
+                    <strong>Note:</strong> Please avoid including email addresses, phone numbers, or any contact details in your message.
+                </p>
+            </div>
+
             <div class="relative">
                 <textarea
                     wire:model.defer="newMessage"
@@ -33,7 +40,13 @@
                     rows="2"
                     id="message-input-{{ $conversationId }}"
                 ></textarea>
+
+                <!-- Display validation error -->
+                @error('newMessage')
+                    <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
+                @enderror
             </div>
+
             <div class="flex justify-end space-x-3">
                 <button
                     type="button"
@@ -54,6 +67,7 @@
             </div>
         </form>
     </div>
+
 </div>
 
 <script>

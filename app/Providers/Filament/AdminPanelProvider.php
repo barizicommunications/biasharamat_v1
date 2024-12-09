@@ -39,6 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
 
             ])
+
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -50,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->databaseNotifications()
             ->authMiddleware([
                 Authenticate::class,
             ]);

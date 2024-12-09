@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Models\Conversation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MessageController extends Controller
 {
@@ -17,10 +18,36 @@ class MessageController extends Controller
         if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to send a message.');
         }
-        
-        $request->validate([
-            'message' => 'required|string|max:1000',
-        ]);
+
+        // $request->validate([
+        //     'message' => 'required|string|max:1000',
+        // ]);
+
+
+          // Custom validation logic
+    $validator = Validator::make($request->all(), [
+        'message' => [
+            'required',
+            'string',
+            'max:1000',
+            function ($attribute, $value, $fail) {
+                // Regular expressions to detect email addresses and phone numbers
+                if (preg_match('/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/', $value)) {
+                    $fail('Providing email addresses in the message is not allowed.');
+                }
+                if (preg_match('/\+?\d{10,15}/', $value) || preg_match('/\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b/', $value)) {
+                    $fail('Providing phone numbers in the message is not allowed.');
+                }
+            },
+        ],
+    ]);
+
+    // Handle validation failure
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
 
         // Create or find an existing conversation between the sender and recipient
         $conversation = Conversation::firstOrCreate(

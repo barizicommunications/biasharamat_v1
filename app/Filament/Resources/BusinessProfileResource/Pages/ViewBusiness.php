@@ -17,6 +17,10 @@ class ViewBusiness extends ViewRecord
     protected static string $resource = BusinessProfileResource::class;
 
 
+
+    
+
+
     protected function getActions(): array
     {
 
