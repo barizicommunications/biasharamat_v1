@@ -176,7 +176,7 @@ class RegisterSeller extends Component implements HasForms
         'valuation_report' => 'nullable|file|mimes:pdf|max:1024', // Validate as PDF with a max size of 1MB
         'other_seller_role' => 'nullable|string|max:255',
         'active_business' => 'nullable|string|max:255',
-        'finders_fee' => 'nullable|string|max:255',
+        'finders_fee' => 'required|string|max:255',
         'reason_for_decline' => 'nullable|string',
         'verification_status' => 'nullable|string|in:Pending,Approved,Declined',
     ];
