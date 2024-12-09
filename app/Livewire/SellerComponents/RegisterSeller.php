@@ -187,7 +187,6 @@ class RegisterSeller extends Component implements HasForms
     {
         $formData = $this->form->getState();
 
-        dd($formData);
 
         // Ensure the user is authenticated
         if (!auth()->check()) {
@@ -251,17 +250,17 @@ class RegisterSeller extends Component implements HasForms
             'finders_fee' => $formData['finders_fee'] ?? false, // Default to false if not set
         ]);
 
-        // Notify the user
-        $user = Auth::user();
-        $user->notify(new ApplicationUnderReview($user));
+        // // Notify the user
+        // $user = Auth::user();
+        // $user->notify(new ApplicationUnderReview($user));
 
-        // Fetch the admin user
-        $admin = User::where('registration_type', 'Admin')->first();
+        // // Fetch the admin user
+        // $admin = User::where('registration_type', 'Admin')->first();
 
-        // Notify the admin if found
-        if ($admin) {
-            $admin->notify(new BusinessSellerSignup($user));
-        }
+        // // Notify the admin if found
+        // if ($admin) {
+        //     $admin->notify(new BusinessSellerSignup($user));
+        // }
 
         // Redirect to the next page
         return redirect()->route('businessVerificationCallPage');

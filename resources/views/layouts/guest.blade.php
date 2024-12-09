@@ -54,6 +54,18 @@
                         <a href="{{ route('investors') }}" class="px-3 py-2 transition-colors duration-300 transform rounded-md hover:bg-gray-100 {{ Request::routeIs('investors') ? 'bg-gray-100 text-primary font-semibold' : 'text-gray-700' }}">
                             Investors
                         </a>
+                        @if (Auth::check())
+                        <!-- User-specific links -->
+                        @if(auth()->user()->registration_type == "Business Seller" && \App\Models\BusinessProfile::where('user_id',auth()->user()->id)->first())
+                            <a href="{{ route('sellerProfileOverview',auth()->user()->businessProfile->id) }}"
+                               class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">Business profile</a>
+                        @endif
+
+                        @if(auth()->user()->registration_type == "Business Buyer" && \App\Models\InvestorProfile::where('user_id',auth()->user()->id)->first())
+                            <a href="{{ route('buyer.buyer-profile',auth()->user()->investorProfile->id) }}"
+                               class="px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md lg:mt-0 hover:bg-gray-100">Buyer profile</a>
+                        @endif
+                    @endif
                         <a href="{{ route('blog') }}" class="px-3 py-2 transition-colors duration-300 transform rounded-md hover:bg-gray-100 {{ Request::routeIs('blog') ? 'bg-gray-100 text-primary font-semibold' : 'text-gray-700' }}">
                             Blogs
                         </a>
