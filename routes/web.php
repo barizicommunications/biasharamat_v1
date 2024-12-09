@@ -75,13 +75,12 @@ Route::group(['controller' => BusinessProfileController::class], function () {
         ->name('business.profile.create');
         Route::get('/seller-profile-overview/{id}', 'show')
         ->name('sellerProfileOverview');
-        Route::get('verification-call-page', function () {
-            return view('seller.verification-call-page');
-        })->name('businessVerificationCallPage');
+        Route::get('verification-call-page', [BusinessProfileController::class, 'processPayment'])->name('businessVerificationCallPage');
+
     Route::post('/business-profile-registration', 'store')
         ->name('business.profile.store');
 
-        
+
         Route::get('/payment', 'showPaymentPage')
         ->name('payment.show');
 
