@@ -183,88 +183,171 @@ class RegisterSeller extends Component implements HasForms
 
 
 
+    // public function submit()
+    // {
+    //     $formData = $this->form->getState();
+
+
+    //     // Ensure the user is authenticated
+    //     if (!auth()->check()) {
+    //         return redirect()->route('login'); // Redirect to login if not authenticated
+    //     }
+
+    //     // Validate the form data
+    //     $this->form->validate();
+
+    //     // Determine the plan type based on active_business value
+    //     $planType = null;
+    //     if ($formData['active_business'] == 12000) {
+    //         $planType = 'monthly';
+    //     } elseif ($formData['active_business'] == 143999) {
+    //         $planType = 'yearly';
+    //     }
+
+    //     // Move file-related fields into the documents array
+    //     $documents = [
+    //         'business_profile' => $formData['business_profile'] ?? null,
+    //         'kra_pin' => $formData['kra_pin'] ?? null,
+    //         'certificate_of_incorporation' => $formData['certificate_of_incorporation'] ?? null,
+    //         'valuation_report' => $formData['valuation_report'] ?? null,
+    //         'business_photos' => $formData['business_photos'] ?? null,
+    //         // Move these file paths from application_data to documents
+    //         'number_shareholders' => $formData['number_shareholders'] ?? null,
+    //         'tangible_assets' => $formData['tangible_assets'] ?? null,
+    //         'liabilities' => $formData['liabilities'] ?? null,
+    //     ];
+
+    //     // Collect non-file fields into application_data, excluding the file-related fields
+    //     $applicationData = collect($formData)->except([
+    //         'business_profile',
+    //         'kra_pin',
+    //         'certificate_of_incorporation',
+    //         'valuation_report',
+    //         'business_photos',
+    //         'number_shareholders', // Moved to documents
+    //         'tangible_assets', // Moved to documents
+    //         'liabilities', // Moved to documents
+    //         'finders_fee',
+    //         'active_business', // We'll handle this separately
+    //     ])->toArray();
+
+    //     // Save the data into the database, including indexed fields like business_industry, etc.
+    //     BusinessProfile::create([
+    //         'user_id' => auth()->user()->id, // Ensure the user is authenticated
+    //         'email' => $formData['email'],
+    //         'status' => 'pending',
+    //         'verification_status' => $formData['verification_status'] ?? 'pending',
+    //         'application_data' => json_encode($applicationData),  // Store non-file data as JSON
+    //         'documents' => json_encode($documents),  // Store all file paths as JSON
+    //         'business_industry' => $formData['business_industry'] ?? null,
+    //         'business_start_date' => $formData['business_start_date'] ?? null,
+    //         'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
+    //         'maximum_stake' => $formData['maximum_stake'] ?? null,
+    //         // Add active_business and plan_type fields
+    //         'active_business' => $formData['active_business'], // Store the selected plan price
+    //         'plan_type' => $planType, // Store the plan type (monthly/yearly)
+    //         // Separate the finders_fee field
+    //         'finders_fee' => $formData['finders_fee'] ?? false, // Default to false if not set
+    //     ]);
+
+
+
+    //     // Redirect to the next page
+    //     // return redirect()->route('businessVerificationCallPage');
+
+    //     return redirect()->route('payment.show', [
+    //         'amount' => $formData['active_business'],
+    //         'description' => 'Business seller',
+    //         'callback' => '/verification-call-page',
+    //     ]);
+    // }
+
+
     public function submit()
-    {
-        $formData = $this->form->getState();
+{
+    $formData = $this->form->getState();
 
-
-        // Ensure the user is authenticated
-        if (!auth()->check()) {
-            return redirect()->route('login'); // Redirect to login if not authenticated
-        }
-
-        // Validate the form data
-        $this->form->validate();
-
-        // Determine the plan type based on active_business value
-        $planType = null;
-        if ($formData['active_business'] == 12000) {
-            $planType = 'monthly';
-        } elseif ($formData['active_business'] == 143999) {
-            $planType = 'yearly';
-        }
-
-        // Move file-related fields into the documents array
-        $documents = [
-            'business_profile' => $formData['business_profile'] ?? null,
-            'kra_pin' => $formData['kra_pin'] ?? null,
-            'certificate_of_incorporation' => $formData['certificate_of_incorporation'] ?? null,
-            'valuation_report' => $formData['valuation_report'] ?? null,
-            'business_photos' => $formData['business_photos'] ?? null,
-            // Move these file paths from application_data to documents
-            'number_shareholders' => $formData['number_shareholders'] ?? null,
-            'tangible_assets' => $formData['tangible_assets'] ?? null,
-            'liabilities' => $formData['liabilities'] ?? null,
-        ];
-
-        // Collect non-file fields into application_data, excluding the file-related fields
-        $applicationData = collect($formData)->except([
-            'business_profile',
-            'kra_pin',
-            'certificate_of_incorporation',
-            'valuation_report',
-            'business_photos',
-            'number_shareholders', // Moved to documents
-            'tangible_assets', // Moved to documents
-            'liabilities', // Moved to documents
-            'finders_fee',
-            'active_business', // We'll handle this separately
-        ])->toArray();
-
-        // Save the data into the database, including indexed fields like business_industry, etc.
-        BusinessProfile::create([
-            'user_id' => auth()->user()->id, // Ensure the user is authenticated
-            'email' => $formData['email'],
-            'status' => 'pending',
-            'verification_status' => $formData['verification_status'] ?? 'pending',
-            'application_data' => json_encode($applicationData),  // Store non-file data as JSON
-            'documents' => json_encode($documents),  // Store all file paths as JSON
-            'business_industry' => $formData['business_industry'] ?? null,
-            'business_start_date' => $formData['business_start_date'] ?? null,
-            'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
-            'maximum_stake' => $formData['maximum_stake'] ?? null,
-            // Add active_business and plan_type fields
-            'active_business' => $formData['active_business'], // Store the selected plan price
-            'plan_type' => $planType, // Store the plan type (monthly/yearly)
-            // Separate the finders_fee field
-            'finders_fee' => $formData['finders_fee'] ?? false, // Default to false if not set
-        ]);
-
-        // // Notify the user
-        // $user = Auth::user();
-        // $user->notify(new ApplicationUnderReview($user));
-
-        // // Fetch the admin user
-        // $admin = User::where('registration_type', 'Admin')->first();
-
-        // // Notify the admin if found
-        // if ($admin) {
-        //     $admin->notify(new BusinessSellerSignup($user));
-        // }
-
-        // Redirect to the next page
-        return redirect()->route('businessVerificationCallPage');
+    // Ensure the user is authenticated
+    if (!auth()->check()) {
+        return redirect()->route('login'); // Redirect to login if not authenticated
     }
+
+    // Validate the form data
+    $this->form->validate();
+
+    // Assign the amount from the form data
+    $amount = $formData['active_business'];
+
+    // Determine the plan type based on active_business value
+    $planType = null;
+    if ($amount == 12000) {
+        $planType = 'monthly';
+    } elseif ($amount == 143999) {
+        $planType = 'yearly';
+    }
+
+    // Move file-related fields into the documents array
+    $documents = [
+        'business_profile' => $formData['business_profile'] ?? null,
+        'kra_pin' => $formData['kra_pin'] ?? null,
+        'certificate_of_incorporation' => $formData['certificate_of_incorporation'] ?? null,
+        'valuation_report' => $formData['valuation_report'] ?? null,
+        'business_photos' => $formData['business_photos'] ?? null,
+        'number_shareholders' => $formData['number_shareholders'] ?? null,
+        'tangible_assets' => $formData['tangible_assets'] ?? null,
+        'liabilities' => $formData['liabilities'] ?? null,
+    ];
+
+    // Collect non-file fields into application_data, excluding the file-related fields
+    $applicationData = collect($formData)->except([
+        'business_profile',
+        'kra_pin',
+        'certificate_of_incorporation',
+        'valuation_report',
+        'business_photos',
+        'number_shareholders',
+        'tangible_assets',
+        'liabilities',
+        'finders_fee',
+        'active_business',
+    ])->toArray();
+
+    // Save the data into the database
+    BusinessProfile::create([
+        'user_id' => auth()->user()->id,
+        'email' => $formData['email'],
+        'status' => 'pending',
+        'verification_status' => $formData['verification_status'] ?? 'pending',
+        'application_data' => json_encode($applicationData),
+        'documents' => json_encode($documents),
+        'business_industry' => $formData['business_industry'] ?? null,
+        'business_start_date' => $formData['business_start_date'] ?? null,
+        'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
+        'maximum_stake' => $formData['maximum_stake'] ?? null,
+        'active_business' => $amount,
+        'plan_type' => $planType,
+        'finders_fee' => $formData['finders_fee'] ?? false,
+    ]);
+
+    // Determine the amount and description
+    $amount = $formData['active_business'];
+    $description = 'Business seller';
+    $callback = route('businessVerificationCallPage');
+
+    // Store payment data in the session
+    $data = [
+        'amount' => $amount,
+        'description' => $description,
+        'callback' => $callback,
+        'user_id' => auth()->user()->id,
+    ];
+
+    session()->put('payment_data', $data);
+
+    // Redirect to the payment page
+    return redirect()->route('payment.show');
+}
+
 
 
     public function form(Form $form): Form
@@ -381,6 +464,7 @@ class RegisterSeller extends Component implements HasForms
 
                             TextInput::make('maximum_stake')
                             ->label('What is the maximum stake that you are willing to sell?')
+                            ->numeric()
                             ->hidden(function (Get $get) {
 
                                 return !($get('seller_interest') === 'Partial sale of shares');
@@ -625,6 +709,7 @@ class RegisterSeller extends Component implements HasForms
                         ->label('Indicate turnover for the preceding year')->hint('Why is this needed?')
                         ->hintIcon('heroicon-m-question-mark-circle', tooltip: "Investors/Buyers evaluate your business proposal based on this information. It is best to communicate this information upfront instead of wasting your time and theirs."),
                     TextInput::make('profit_margin')
+                    ->numeric()
                     ->postfix('%')
                         ->label('What is the EBITDA / Operating Profit Margin Percentage or Last Reported Profit Margin Percentage'),
                     FileUpload::make('tangible_assets')

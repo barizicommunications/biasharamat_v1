@@ -80,6 +80,13 @@ Route::group(['controller' => BusinessProfileController::class], function () {
         })->name('businessVerificationCallPage');
     Route::post('/business-profile-registration', 'store')
         ->name('business.profile.store');
+
+        
+        Route::get('/payment', 'showPaymentPage')
+        ->name('payment.show');
+
+    Route::post('/payment/process', 'processPayment')
+        ->name('payment.process');
 });
 Route::group(['controller' => InvestorProfileController::class], function () {
     Route::get('/investors', 'index')
