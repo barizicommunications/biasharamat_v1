@@ -187,6 +187,8 @@ class RegisterSeller extends Component implements HasForms
     {
         $formData = $this->form->getState();
 
+        dd($formData);
+
         // Ensure the user is authenticated
         if (!auth()->check()) {
             return redirect()->route('login'); // Redirect to login if not authenticated
@@ -282,7 +284,7 @@ class RegisterSeller extends Component implements HasForms
 
                         TextInput::make('name')
                         ->required()
-                        ->afterStateUpdated(fn (Set $set, $state) => $set('name', $state))
+                        // ->afterStateUpdated(fn (Set $set, $state) => $set('name', $state))
                         ->label('Contact person name'),
                         // ->afterStateUpdated(fn ($state) => $this->validateOnly('name')),
                     TextInput::make('company_name')
@@ -300,7 +302,7 @@ class RegisterSeller extends Component implements HasForms
                     TextInput::make('email')
                         ->email()
                         ->required()
-                        ->afterStateUpdated(fn (Set $set, $state) => $set('email', $state))
+                        // ->afterStateUpdated(fn (Set $set, $state) => $set('email', $state))
                         ->hint('Why is this needed?')
                     ->hintIcon('heroicon-m-question-mark-circle', tooltip: "Enter a valid official email address to ensure your profile is prioritized and verified faster. Please note that this email address is used only for verification purposes and all email communications will be sent only to your registered email address.")
                         ->label('Official email for quick verification'),
@@ -648,7 +650,7 @@ class RegisterSeller extends Component implements HasForms
                         ->content("Photos are an important part of your profile and are publicly displayed. Documents help us verify and approve your profile faster. Documents names entered here are publicly visible but are accessible only to introduced members."),
                         FileUpload::make('business_photos')
                         ->required()
-                        ->label('Photos of the business premises(Min: 5, Max: 7, File type .jpeg,.png .webp to be uploaded below 1MB )')->required()
+                        ->label('Photos of the business premises(Min: 5, Max: 7, File type .jpeg,.png .webp to be uploaded below 5MB )')->required()
                         ->image()
                         ->downloadable()
                         ->multiple()
@@ -825,36 +827,36 @@ class RegisterSeller extends Component implements HasForms
                         ->default('Pending'),
                     ]),
 
-                    Wizard\Step::make('Payment')
-                    ->schema([
-                        Shout::make('payment_required')
-                            ->content('Payment is required. Pay using m-pesa, airtel money or credit/debit card.'),
-                        Placeholder::make('amount_due')
-                            ->extraAttributes(['class' => 'text-2xl font-bold'])
-                            ->content('KES 10,000'),
-                        Radio::make('payment_method')
-                            ->required()
-                            ->default('pesapal')
-                            ->options([
-                                'pesapal' => 'Pesapal (Credit/Debit Card, M-Pesa, Airtel Money, etc)',
-                            ])
-                            ->live()
-                            ->columnSpanFull(),
-                        Placeholder::make('pesapal')
-                            ->hidden(fn(Get $get) => $get('payment_method') !== 'pesapal')
-                            ->viewData([
-                                'amount' => 10000,
-                                'description' => 'Business seller',
-                                'callback'=>'/verification-call-page'
-                            ])
-                            ->view('filament.resources.payment.register-pay'),
-                    ]),
+                    // Wizard\Step::make('Payment')
+                    // ->schema([
+                    //     Shout::make('payment_required')
+                    //         ->content('Payment is required. Pay using m-pesa, airtel money or credit/debit card.'),
+                    //     Placeholder::make('amount_due')
+                    //         ->extraAttributes(['class' => 'text-2xl font-bold'])
+                    //         ->content('KES 10,000'),
+                    //     Radio::make('payment_method')
+                    //         ->required()
+                    //         ->default('pesapal')
+                    //         ->options([
+                    //             'pesapal' => 'Pesapal (Credit/Debit Card, M-Pesa, Airtel Money, etc)',
+                    //         ])
+                    //         ->live()
+                    //         ->columnSpanFull(),
+                    //     Placeholder::make('pesapal')
+                    //         ->hidden(fn(Get $get) => $get('payment_method') !== 'pesapal')
+                    //         ->viewData([
+                    //             'amount' => 10000,
+                    //             'description' => 'Business seller',
+                    //             'callback'=>'/verification-call-page'
+                    //         ])
+                    //         ->view('filament.resources.payment.register-pay'),
+                    // ]),
 
             ])
             ->persistStepInQueryString()
             ->skippable()
             // ->startOnStep(2)
-            // ->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
+            ->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
         ]);
 }
 
