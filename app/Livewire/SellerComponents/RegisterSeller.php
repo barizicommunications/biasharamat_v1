@@ -682,16 +682,17 @@ class RegisterSeller extends Component implements HasForms
 
                         Section::make('Client Information')
                             ->schema([
-                                Placeholder::make('name')
+                                // Renamed placeholders with 'review_' prefix
+                                Placeholder::make('review_name')
                                     ->label('Contact Person Name')
                                     ->content(fn (Get $get): string => $get('name') ?? 'Not provided'),
-                                Placeholder::make('company_name')
+                                Placeholder::make('review_company_name')
                                     ->label('Company Name')
                                     ->content(fn (Get $get): string => $get('company_name') ?? 'Not provided'),
-                                Placeholder::make('mobile_number')
+                                Placeholder::make('review_mobile_number')
                                     ->label('Contact Mobile Number')
                                     ->content(fn (Get $get): string => $get('mobile_number') ?? 'Not provided'),
-                                Placeholder::make('email')
+                                Placeholder::make('review_email')
                                     ->label('Official Email')
                                     ->content(fn (Get $get): string => $get('email') ?? 'Not provided'),
                             ])
@@ -699,28 +700,28 @@ class RegisterSeller extends Component implements HasForms
 
                         Section::make('Business Information')
                             ->schema([
-                                Placeholder::make('seller_role')
+                                Placeholder::make('review_seller_role')
                                     ->label('Your Role')
                                     ->content(fn (Get $get): string => $get('seller_role') ?? 'Not provided'),
-                                Placeholder::make('seller_interest')
+                                Placeholder::make('review_seller_interest')
                                     ->label('Interest Type')
                                     ->content(fn (Get $get): string => $get('seller_interest') ?? 'Not provided'),
-                                Placeholder::make('business_industry')
+                                Placeholder::make('review_business_industry')
                                     ->label('Industry')
                                     ->content(fn (Get $get): string => $get('business_industry') ?? 'Not provided'),
-                                Placeholder::make('business_start_date')
+                                Placeholder::make('review_business_start_date')
                                     ->label('Establishment Date')
                                     ->content(fn (Get $get): string => $get('business_start_date') ?? 'Not provided'),
-                                Placeholder::make('country')
+                                Placeholder::make('review_country')
                                     ->label('Country')
                                     ->content(fn (Get $get): string => $get('country') ?? 'Not provided'),
-                                Placeholder::make('city')
+                                Placeholder::make('review_city')
                                     ->label('City')
                                     ->content(fn (Get $get): string => $get('city') ?? 'Not provided'),
-                                Placeholder::make('number_employees')
+                                Placeholder::make('review_number_employees')
                                     ->label('Number of Employees')
                                     ->content(fn (Get $get): string => (string) $get('number_employees') ?? 'Not provided'),
-                                Placeholder::make('business_description')
+                                Placeholder::make('review_business_description')
                                     ->label('Business Description')
                                     ->content(fn (Get $get): string => $get('business_description') ?? 'Not provided'),
                             ])
@@ -728,16 +729,16 @@ class RegisterSeller extends Component implements HasForms
 
                         Section::make('Financial Information')
                             ->schema([
-                                Placeholder::make('monthly_turnover')
+                                Placeholder::make('review_monthly_turnover')
                                     ->label('Monthly Turnover')
                                     ->content(fn (Get $get): string => is_numeric($get('monthly_turnover')) ? 'Ksh ' . number_format((float) $get('monthly_turnover'), 2) : 'Not provided'),
-                                Placeholder::make('yearly_turnover')
+                                Placeholder::make('review_yearly_turnover')
                                     ->label('Yearly Turnover')
                                     ->content(fn (Get $get): string => is_numeric($get('yearly_turnover')) ? 'Ksh ' . number_format((float) $get('yearly_turnover'), 2) : 'Not provided'),
-                                Placeholder::make('profit_margin')
+                                Placeholder::make('review_profit_margin')
                                     ->label('Profit Margin')
                                     ->content(fn (Get $get): string => is_numeric($get('profit_margin')) ? $get('profit_margin') . '%' : 'Not provided'),
-                                Placeholder::make('physical_assets')
+                                Placeholder::make('review_physical_assets')
                                     ->label('Physical Assets Value')
                                     ->content(fn (Get $get): string => is_numeric($get('physical_assets')) ? 'Ksh ' . number_format((float) $get('physical_assets'), 2) : 'Not provided'),
                             ])
@@ -745,31 +746,31 @@ class RegisterSeller extends Component implements HasForms
 
                         Section::make('Sale Information')
                             ->schema([
-                                Placeholder::make('tentative_selling_price')
+                                Placeholder::make('review_tentative_selling_price')
                                     ->label('Selling Price')
                                     ->content(fn (Get $get): string => is_numeric($get('tentative_selling_price')) ? 'Ksh ' . number_format((float) $get('tentative_selling_price'), 2) : 'Not provided')
                                     ->visible(fn (Get $get) => $get('seller_interest') === 'Sale of shares'),
-                                Placeholder::make('maximum_stake')
+                                Placeholder::make('review_maximum_stake')
                                     ->label('Maximum Stake')
                                     ->content(fn (Get $get): string => is_numeric($get('maximum_stake')) ? $get('maximum_stake') . '%' : 'Not provided')
                                     ->visible(fn (Get $get) => $get('seller_interest') === 'Partial sale of shares'),
-                                Placeholder::make('investment_amount')
+                                Placeholder::make('review_investment_amount')
                                     ->label('Investment Amount')
                                     ->content(fn (Get $get): string => is_numeric($get('investment_amount')) ? 'Ksh ' . number_format((float) $get('investment_amount'), 2) : 'Not provided')
                                     ->visible(fn (Get $get) => $get('seller_interest') === 'Partial sale of shares'),
-                                Placeholder::make('value_of_physical_assets')
+                                Placeholder::make('review_value_of_physical_assets')
                                     ->label('Physical Assets Value')
                                     ->content(fn (Get $get): string => is_numeric($get('value_of_physical_assets')) ? 'Ksh ' . number_format((float) $get('value_of_physical_assets'), 2) : 'Not provided')
                                     ->visible(fn (Get $get) => $get('seller_interest') === 'Sale of assets'),
-                                Placeholder::make('asset_selling_price')
+                                Placeholder::make('review_asset_selling_price')
                                     ->label('Asset Selling Price')
                                     ->content(fn (Get $get): string => is_numeric($get('asset_selling_price')) ? 'Ksh ' . number_format((float) $get('asset_selling_price'), 2) : 'Not provided')
                                     ->visible(fn (Get $get) => $get('seller_interest') === 'Sale of assets'),
-                                Placeholder::make('loan_amount')
+                                Placeholder::make('review_loan_amount')
                                     ->label('Loan Amount')
                                     ->content(fn (Get $get): string => is_numeric($get('loan_amount')) ? 'Ksh ' . number_format((float) $get('loan_amount'), 2) : 'Not provided')
                                     ->visible(fn (Get $get) => $get('seller_interest') === 'Financing'),
-                                Placeholder::make('colateral_value')
+                                Placeholder::make('review_colateral_value')
                                     ->label('Collateral Value')
                                     ->content(fn (Get $get): string => is_numeric($get('colateral_value')) ? 'Ksh ' . number_format((float) $get('colateral_value'), 2) : 'Not provided')
                                     ->visible(fn (Get $get) => $get('seller_interest') === 'Financing'),
@@ -779,30 +780,30 @@ class RegisterSeller extends Component implements HasForms
 
                         Section::make('Uploaded Documents')
                             ->schema([
-                                Placeholder::make('business_photos')
+                                Placeholder::make('review_business_photos')
                                     ->label('Business Photos')
                                     ->content(fn (Get $get): string => $get('business_photos') ? 'Uploaded' : 'Not uploaded'),
-                                Placeholder::make('business_profile')
+                                Placeholder::make('review_business_profile')
                                     ->label('Business Profile')
                                     ->content(fn (Get $get): string => $get('business_profile') ? 'Uploaded' : 'Not uploaded'),
-                                Placeholder::make('kra_pin')
+                                Placeholder::make('review_kra_pin')
                                     ->label('KRA Pin')
                                     ->content(fn (Get $get): string => $get('kra_pin') ? 'Uploaded' : 'Not uploaded'),
-                                Placeholder::make('certificate_of_incorporation')
+                                Placeholder::make('review_certificate_of_incorporation')
                                     ->label('Certificate of Incorporation')
                                     ->content(fn (Get $get): string => $get('certificate_of_incorporation') ? 'Uploaded' : 'Not uploaded'),
-                                Placeholder::make('valuation_report')
+                                Placeholder::make('review_valuation_report')
                                     ->label('Valuation Report')
                                     ->content(fn (Get $get): string => $get('valuation_report') ? 'Uploaded' : 'Not uploaded'),
                             ])
                             ->columns(2),
 
-                            Shout::make('confirmation')
+                        Shout::make('confirmation')
                             ->columnSpanFull()
                             ->content('By proceeding to the next step, you confirm that all the information provided is accurate and complete.')
-                            ->type('info') // Options: 'info', 'success', 'warning', 'danger'
-
+                            ->type('info'), // Options: 'info', 'success', 'warning', 'danger'
                     ]),
+
 
 
                     Wizard\Step::make('Select a Plan')
@@ -854,7 +855,7 @@ class RegisterSeller extends Component implements HasForms
 
             ])
             ->persistStepInQueryString()
-            ->skippable()
+            // ->skippable()
             // ->startOnStep(2)
             ->submitAction(new HtmlString('<button type="submit" style="background-color:#c75126; color:white; border-radius:5px; padding-top:5px; padding-bottom:5px; padding-right:10px; padding-left:10px;">Submit</button>'))
         ]);
