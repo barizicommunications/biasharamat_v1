@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Business;
 use App\Models\Conversation;
 use Illuminate\Http\Request;
@@ -51,6 +52,159 @@ public function showPaymentPage()
         'callback' => $paymentData['callback'],
     ]);
 }
+
+
+
+
+ // Process the payment response
+//  public function processPayment(Request $request, PesapalService $pesapalService)
+//  {
+//      $OrderTrackingId = $request->query('pesapal_transaction_tracking_id');
+//      $OrderMerchantReference = $request->query('pesapal_merchant_reference');
+
+//      if (!$OrderTrackingId || !$OrderMerchantReference) {
+//          return redirect()->route('businessVerificationCallPage')->withErrors('Missing required payment parameters.');
+//      }
+
+//      // Fetch the token
+//      $token = $pesapalService->getToken();
+
+//      if (!$token) {
+//          return redirect()->route('businessVerificationCallPage')->withErrors('Failed to retrieve token.');
+//      }
+
+//      // Fetch transaction status from Pesapal
+//      $getTransactionStatusUrl = "https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus?orderTrackingId=$OrderTrackingId";
+
+//      $response = \Http::withHeaders([
+//          'Accept' => 'application/json',
+//          'Content-Type' => 'application/json',
+//          'Authorization' => "Bearer $token",
+//      ])->get($getTransactionStatusUrl);
+
+//      if ($response->failed()) {
+//          return redirect()->route('businessVerificationCallPage')->withErrors('Failed to fetch transaction status.');
+//      }
+
+//      $data = $response->json();
+
+//      // Save the order
+//      try {
+//          $order = Order::create([
+//              'paid_by' => Auth::user()->id,
+//              'payment_method' => 'MpesaKE',
+//              'amount' => $data['amount'] ?? 0,
+//              'confirmation_code' => $data['confirmation_code'] ?? null,
+//              'order_tracking_id' => $OrderTrackingId,
+//              'payment_status_description' => $data['payment_status_description'] ?? 'N/A',
+//              'description' => $data['description'] ?? null,
+//              'message' => $data['message'] ?? 'Transaction processed',
+//              'payment_account' => $data['payment_account'] ?? 'Mpesa',
+//              'call_back_url' => $data['call_back_url'] ?? null,
+//              'status_code' => $data['status_code'] ?? 200,
+//              'merchant_reference' => $OrderMerchantReference,
+//              'payment_status_code' => $data['payment_status_code'] ?? null,
+//              'currency' => $data['currency'] ?? 'KES',
+//              'status' => $data['status'] ?? '200',
+//          ]);
+
+//          // Update the business profile status based on payment success
+//          $businessProfile = BusinessProfile::where('user_id', Auth::user()->id)->latest()->first();
+
+//          if ($businessProfile) {
+//              if ($data['payment_status_description'] === 'Completed') {
+//                  $businessProfile->verification_status = 'approved';
+//              } else {
+//                  $businessProfile->verification_status = 'rejected';
+//              }
+//              $businessProfile->save();
+//          }
+
+//      } catch (\Exception $e) {
+//          \Log::error('Failed to save order: ' . $e->getMessage());
+//          return redirect()->route('businessVerificationCallPage')->withErrors('Failed to save order. Please try again.');
+//      }
+
+//      return redirect()->route('businessVerificationCallPage')->with('success', 'Payment processed successfully.');
+//  }
+
+
+
+public function processPayment(Request $request, PesapalService $pesapalService)
+{
+    $OrderTrackingId = $request->query('pesapal_transaction_tracking_id');
+    $OrderMerchantReference = $request->query('pesapal_merchant_reference');
+
+    if (!$OrderTrackingId || !$OrderMerchantReference) {
+        return redirect()->route('businessVerificationCallPage')->withErrors('Missing required payment parameters.');
+    }
+
+    // Fetch the token
+    $token = $pesapalService->getToken();
+
+    if (!$token) {
+        return redirect()->route('businessVerificationCallPage')->withErrors('Failed to retrieve token.');
+    }
+
+    // Fetch transaction status from Pesapal
+    $getTransactionStatusUrl = "https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus?orderTrackingId=$OrderTrackingId";
+
+    $response = \Http::withHeaders([
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'Authorization' => "Bearer $token",
+    ])->get($getTransactionStatusUrl);
+
+    if ($response->failed()) {
+        return redirect()->route('businessVerificationCallPage')->withErrors('Failed to fetch transaction status.');
+    }
+
+    $data = $response->json();
+
+    try {
+        // Save the order
+        $order = Order::create([
+            'paid_by' => Auth::user()->id,
+            'payment_method' => 'MpesaKE',
+            'amount' => $data['amount'] ?? 0,
+            'confirmation_code' => $data['confirmation_code'] ?? null,
+            'order_tracking_id' => $OrderTrackingId,
+            'payment_status_description' => $data['payment_status_description'] ?? 'N/A',
+            'description' => $data['description'] ?? null,
+            'message' => $data['message'] ?? 'Transaction processed',
+            'payment_account' => $data['payment_account'] ?? 'Mpesa',
+            'call_back_url' => $data['call_back_url'] ?? null,
+            'status_code' => $data['status_code'] ?? 200,
+            'merchant_reference' => $OrderMerchantReference,
+            'payment_status_code' => $data['payment_status_code'] ?? null,
+            'currency' => $data['currency'] ?? 'KES',
+            'status' => $data['status'] ?? '200',
+        ]);
+
+        // Update the business profile status
+        $businessProfile = BusinessProfile::where('user_id', Auth::user()->id)->latest()->first();
+
+        if ($businessProfile) {
+            if ($data['payment_status_description'] === 'Completed') {
+                $businessProfile->verification_status = 'approved';
+                $businessProfile->save();
+
+                return redirect()->route('businessVerificationCallPage')->with('success', 'Payment was successful and your profile has been approved.');
+            } else {
+                $businessProfile->verification_status = 'rejected';
+                $businessProfile->save();
+
+                return redirect()->route('businessVerificationCallPage')->withErrors('Payment failed. Please try again.');
+            }
+        }
+
+    } catch (\Exception $e) {
+        \Log::error('Failed to save order: ' . $e->getMessage());
+        return redirect()->route('businessVerificationCallPage')->withErrors('An error occurred while processing your payment. Please try again.');
+    }
+}
+
+
 
 
 

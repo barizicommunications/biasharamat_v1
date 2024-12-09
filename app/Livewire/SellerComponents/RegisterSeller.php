@@ -336,7 +336,8 @@ class RegisterSeller extends Component implements HasForms
 
     // Store payment data in the session
     $data = [
-        'amount' => $amount,
+        // 'amount' => $amount,
+        'amount' => 1,
         'description' => $description,
         'callback' => $callback,
         'user_id' => auth()->user()->id,
