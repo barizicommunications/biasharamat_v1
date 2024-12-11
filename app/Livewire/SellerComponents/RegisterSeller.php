@@ -356,7 +356,7 @@ class RegisterSeller extends Component implements HasForms
     return $form
         ->schema([
             Wizard::make([
-                Wizard\Step::make('Client Information')
+                Wizard\Step::make('Contact Person Information')
                 ->icon('heroicon-m-user')
                 ->completedIcon('heroicon-o-hand-thumb-up')
                     ->schema([
@@ -641,7 +641,7 @@ class RegisterSeller extends Component implements HasForms
 
                             TextInput::make('town')
                                 ->required()
-                                ->label('Town'),
+                                ->label('Town/Location'),
                             ])->columns(3),
 
                             Grid::make(3)
@@ -678,8 +678,8 @@ class RegisterSeller extends Component implements HasForms
 
                             Textarea::make('business_description')
                             ->required()
-                            ->placeholder('Mention highlights of your business......')
-                            ->label('Describe the business (Do not mention business name/information which can identify the business.)'),
+                            ->placeholder('Share what your business does, its industry, and key activities.')
+                            ->label('Tell us about your business'),
                         Textarea::make('facility_description')
                         ->label('Describe Facility')
                             ->label('Describe your facility such as built-up area, number of floors, Indicate whether rental or lease.'),
