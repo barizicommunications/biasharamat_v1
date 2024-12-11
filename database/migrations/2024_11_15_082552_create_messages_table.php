@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('conversation_id')->constrained('conversations');
+            $table->string('status')->default('pending');
             $table->foreignId('sender_id')->constrained('users'); // The user sending the message
+            $table->foreignId('recipient_id')->constrained('users');
             $table->text('body'); // Message content
             $table->boolean('is_read')->default(false);
             $table->timestamps();

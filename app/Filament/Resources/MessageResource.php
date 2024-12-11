@@ -42,11 +42,17 @@ class MessageResource extends Resource
             TextColumn::make('body')
                 ->label('Message Body')
                 ->limit(50),
+
+            TextColumn::make('status')
+            ->label('Status')
+            ->badge()
+            ->color(fn ($state) => $state === 'approved' ? 'success' : 'warning'),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -69,6 +75,7 @@ class MessageResource extends Resource
             'index' => Pages\ListMessages::route('/'),
             'create' => Pages\CreateMessage::route('/create'),
             'edit' => Pages\EditMessage::route('/{record}/edit'),
+            'view' => Pages\ViewMessage::route('/{record}'),
         ];
     }
 }

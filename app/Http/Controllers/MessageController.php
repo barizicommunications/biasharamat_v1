@@ -57,12 +57,13 @@ class MessageController extends Controller
             ]
         );
 
-        // Save the message with 'approved' set to false initially (pending approval)
+        // Save message with 'pending' status
         Message::create([
             'conversation_id' => $conversation->id,
             'sender_id' => auth()->id(),
+            'recipient_id' => $recipientId, 
             'body' => $request->message,
-            'approved' => false,  // Message is pending approval
+            'status' => 'pending',
         ]);
 
         // Redirect without notification since approval will be managed by the admin
