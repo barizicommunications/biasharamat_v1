@@ -12,12 +12,19 @@
                             {{ $message['body'] }}
                         </p>
                     </div>
+
+                    <!-- Show "Pending Approval" only for messages sent by the current user that are pending -->
+                    @if ($message['sender_id'] == auth()->id() && $message['status'] === 'pending')
+                        <span class="text-xs text-yellow-400 mt-1">Pending Approval</span>
+                    @endif
+
                     <span class="text-xs text-gray-500 mt-1">
                         {{ \Carbon\Carbon::parse($message['created_at'])->format('g:i A') }}
                     </span>
                 </div>
             </div>
         @endforeach
+
         <!-- Scroll anchor div -->
         <div id="scroll-anchor-{{ $conversationId }}"></div>
     </div>
@@ -67,7 +74,6 @@
             </div>
         </form>
     </div>
-
 </div>
 
 <script>

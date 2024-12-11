@@ -43,28 +43,42 @@
                             <h2 class="text-2xl font-bold mb-6">Inbox</h2>
 
                             <div x-data="{ openConversation: null }" class="space-y-4">
-                                @foreach ($conversations as $conversation)
-                                    <div class="border border-gray-200 rounded-lg shadow-sm transition-all hover:shadow-md">
-                                        <div class="p-4 flex justify-between items-center cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-lg"
-                                             @click="openConversation = openConversation === {{ $conversation->id }} ? null : {{ $conversation->id }}">
-                                            <div class="flex items-center space-x-4">
-                                                <img src="{{ asset('images/logo.png') }}" alt="Conversation Logo" class="w-12 h-12 rounded-full">
-                                                <h3 class="font-semibold text-lg text-primary">
-                                                    {{ $conversation->userOne->first_name }} & {{ $conversation->userTwo->first_name }}
-                                                </h3>
-                                            </div>
-                                            <p class="text-sm text-gray-500">
-                                                {{ $conversation->messages->last()->created_at->diffForHumans() }}
-                                            </p>
-                                        </div>
+                                @php
+                                    // Filter conversations with at least one approved message
+                                    $approvedConversations = $conversations->filter(function ($conversation) {
+                                        return $conversation->messages->where('status', 'approved')->count() > 0;
+                                    });
+                                @endphp
 
-                                        <div x-show="openConversation === {{ $conversation->id }}" x-transition x-cloak class="p-4 bg-gray-50 border-t">
-                                            <livewire:conversation-messages :conversation-id="$conversation->id" />
+                                @if ($approvedConversations->isNotEmpty())
+                                    @foreach ($approvedConversations as $conversation)
+                                        <div class="border border-gray-200 rounded-lg shadow-sm transition-all hover:shadow-md">
+                                            <div class="p-4 flex justify-between items-center cursor-pointer bg-gray-100 hover:bg-gray-200 rounded-lg"
+                                                 @click="openConversation = openConversation === {{ $conversation->id }} ? null : {{ $conversation->id }}">
+                                                <div class="flex items-center space-x-4">
+                                                    <img src="{{ asset('images/logo.png') }}" alt="Conversation Logo" class="w-12 h-12 rounded-full">
+                                                    <h3 class="font-semibold text-lg text-primary">
+                                                        {{ $conversation->userOne->first_name }} & {{ $conversation->userTwo->first_name }}
+                                                    </h3>
+                                                </div>
+                                                <p class="text-sm text-gray-500">
+                                                    {{ $conversation->messages->last()->created_at->diffForHumans() }}
+                                                </p>
+                                            </div>
+
+                                            <div x-show="openConversation === {{ $conversation->id }}" x-transition x-cloak class="p-4 bg-gray-50 border-t">
+                                                <livewire:conversation-messages :conversation-id="$conversation->id" />
+                                            </div>
                                         </div>
+                                    @endforeach
+                                @else
+                                    <div class="text-center py-12">
+                                        <p class="text-gray-500 text-lg">No messages found.</p>
                                     </div>
-                                @endforeach
+                                @endif
                             </div>
                         </div>
+
                     </div>
 
 
