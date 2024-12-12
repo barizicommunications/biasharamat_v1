@@ -1,31 +1,26 @@
 <div class="flex flex-col h-[500px] w-full bg-white rounded-lg">
     <!-- Messages Container -->
-    <div class="flex-1 overflow-y-auto px-4 py-3 space-y-4" id="messages-container-{{ $conversationId }}">
+    <div class="flex-1 overflow-y-auto px-2 py-2 space-y-2" id="messages-container-{{ $conversationId }}">
         @foreach ($messages as $message)
             <div class="flex {{ $message['sender_id'] == auth()->id() ? 'justify-end' : 'justify-start' }}">
-                <div class="flex flex-col max-w-[70%] {{ $message['sender_id'] == auth()->id() ? 'items-end' : 'items-start' }}">
-                    <div class="flex flex-col p-2 rounded-2xl {{ $message['sender_id'] == auth()->id()
+                <div class="flex flex-col max-w-[85%] {{ $message['sender_id'] == auth()->id() ? 'items-end' : 'items-start' }}">
+                    <div class="flex flex-col px-2 py-1 rounded-lg {{ $message['sender_id'] == auth()->id()
                         ? 'bg-[#bf3907] text-white rounded-br-none'
                         : 'bg-[#030e4f] text-white rounded-bl-none'
                     }}">
-                        <p class="text-sm whitespace-pre-wrap break-words text-white">
+                        <p class="text-xs whitespace-pre-wrap break-words text-white leading-tight">
                             {{ $message['body'] }}
                         </p>
                     </div>
-
-                    <!-- Show "Pending Approval" only for messages sent by the current user that are pending -->
                     @if ($message['sender_id'] == auth()->id() && $message['status'] === 'pending')
-                        <span class="text-xs text-yellow-400 mt-1">Pending Approval</span>
+                        <span class="text-[10px] text-yellow-400">Pending</span>
                     @endif
-
-                    <span class="text-xs text-gray-500 mt-1">
+                    <span class="text-[10px] text-gray-500">
                         {{ \Carbon\Carbon::parse($message['created_at'])->format('g:i A') }}
                     </span>
                 </div>
             </div>
         @endforeach
-
-        <!-- Scroll anchor div -->
         <div id="scroll-anchor-{{ $conversationId }}"></div>
     </div>
 
