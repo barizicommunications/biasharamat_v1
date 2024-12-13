@@ -118,36 +118,38 @@ protected function mutateFormDataBeforeSave(array $data): array
     ];
 
     // Collect all fields that should be part of application_data
-    $applicationFields = [
-        'name',
-        'company_name',
-        'mobile_number',
-        'email',
-        'display_contact_details',
-        'display_company_details',
-        'seller_role',
-        'seller_interest',
-        'tentative_selling_price',
-        'reason_for_sale',
-        'business_funds',
+    $applicationData = [
+        'name' => $data['name'] ?? null,
+        'company_name' => $data['company_name'] ?? null,
+        'mobile_number' => $data['mobile_number'] ?? null,
+        'email' => $data['email'] ?? null,
+        'display_contact_details' => $data['display_contact_details'] ?? false,
+        'display_company_details' => $data['display_company_details'] ?? false,
+        'seller_role' => $data['seller_role'] ?? null,
+        'seller_interest' => $data['seller_interest'] ?? null,
+        'tentative_selling_price' => $data['tentative_selling_price'] ?? null,
+        'reason_for_sale' => $data['reason_for_sale'] ?? null,
+        'business_funds' => $data['business_funds'] ?? null,
     ];
-
-    $applicationData = collect($data)->only($applicationFields)->toArray();
 
     // Ensure verification status is set if not provided
     $data['verification_status'] = $data['verification_status'] ?? 'pending';
 
-    // Merge the transformed data back into the original $data
-    $data['application_data'] = json_encode($applicationData, JSON_UNESCAPED_SLASHES);
-    $data['documents'] = json_encode($documents, JSON_UNESCAPED_SLASHES);
+    // Set application_data and documents as arrays
+    $data['application_data'] = $applicationData;
+    $data['documents'] = $documents;
 
     // Exclude fields that don't belong in the main table
-    $data = collect($data)->except(array_merge($applicationFields, array_keys($documents)))->toArray();
+    $data = collect($data)->except(array_merge(array_keys($applicationData), array_keys($documents)))->toArray();
 
     \Log::info('mutateFormDataBeforeSave - Final data to be saved:', $data);
 
     return $data;
 }
+
+
+
+
 
 
 
