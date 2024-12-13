@@ -58,192 +58,317 @@ class EditBusinessProfile extends EditRecord
     }
 
 
-    public function form(Forms\Form $form): Forms\Form
-    {
-        return $form->schema([
-            Section::make('Contact Person Information')
-                ->schema([
-                    Shout::make('clientInfo')
-                        ->columnSpanFull()
-                        ->content("Please enter your personal details here. The information provided will remain confidential and will not be publicly displayed."),
 
-                    Grid::make(2)
-                        ->schema([
-                            TextInput::make('name')
-                                ->required()
-                                ->label('Contact person name'),
 
-                            TextInput::make('company_name')
-                                ->required()
-                                ->label('Company name'),
+//     protected function mutateFormDataBeforeSave(array $data): array
+// {
+//     \Log::info('mutateFormDataBeforeSave - Initial data:', $data);
 
-                            TextInput::make('mobile_number')
-                                ->required()
-                                ->label('Contact person mobile number'),
+//     // Separate document fields
+//     $documents = [
+//         'business_profile' => $data['business_profile'] ?? null,
+//         'kra_pin' => $data['kra_pin'] ?? null,
+//         'certificate_of_incorporation' => $data['certificate_of_incorporation'] ?? null,
+//         'valuation_report' => $data['valuation_report'] ?? null,
+//         'business_photos' => $data['business_photos'] ?? [],
+//         'number_shareholders' => $data['number_shareholders'] ?? null,
+//         'tangible_assets' => $data['tangible_assets'] ?? null,
+//         'liabilities' => $data['liabilities'] ?? null,
+//     ];
 
-                            TextInput::make('email')
-                                ->email()
-                                ->required()
-                                ->label('Official email for quick verification'),
+//     // Collect non-document fields into application_data
+//     $applicationData = collect($data)->except([
+//         'business_profile',
+//         'kra_pin',
+//         'certificate_of_incorporation',
+//         'valuation_report',
+//         'business_photos',
+//         'number_shareholders',
+//         'tangible_assets',
+//         'liabilities',
+//     ])->toArray();
 
-                            Checkbox::make('display_contact_details')
-                                ->label('Display contact details to investors'),
+//     // Ensure verification status is set if not provided
+//     $data['verification_status'] = $data['verification_status'] ?? 'pending';
 
-                            Checkbox::make('display_company_details')
-                                ->label('Display company details to investors'),
-                        ]),
-                ]),
+//     // Merge the transformed data back into the original $data
+//     $data['application_data'] = json_encode($applicationData);
+//     $data['documents'] = json_encode($documents);
 
-            Section::make('Business Information')
-                ->schema([
-                    Shout::make('businessinfo')
-                        ->columnSpanFull()
-                        ->content("Information entered here is displayed publicly to match you with the right set of investors and buyers."),
+//     \Log::info('mutateFormDataBeforeSave - Final data to be saved:', $data);
 
-                    Grid::make(2)
-                        ->schema([
-                            Select::make('seller_role')
-                                ->options([
-                                    'Director' => 'Director',
-                                    'Adviser' => 'Adviser',
-                                    'Shareholder' => 'Shareholder',
-                                    'Other' => 'Other',
-                                ])
-                                ->required()
-                                ->label('You are a(n)'),
+//     return $data;
+// }
 
-                            TextInput::make('other_seller_role')
-                                ->hidden(fn ($get) => $get('seller_role') !== 'Other')
-                                ->label('Specify role'),
 
-                            Select::make('seller_interest')
-                                ->label('What are you interested in')
-                                ->options([
-                                    'Sale of shares' => 'Sale of shares',
-                                    'Partial sale of shares' => 'Partial sale of shares',
-                                    'Sale of assets' => 'Sale of assets',
-                                    'Financing' => 'Financing',
-                                ])
-                                ->live(),
+protected function mutateFormDataBeforeSave(array $data): array
+{
+    \Log::info('mutateFormDataBeforeSave - Initial data:', $data);
 
-                            TextInput::make('tentative_selling_price')
-                                ->label('What is the tentative selling price for the business?')
-                                ->numeric()
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of shares'),
+    // Normalize file uploads to null if empty
+    $documents = [
+        'business_profile' => $data['business_profile'] ?? null,
+        'kra_pin' => $data['kra_pin'] ?? null,
+        'certificate_of_incorporation' => $data['certificate_of_incorporation'] ?? null,
+        'valuation_report' => $data['valuation_report'] ?? null,
+        'business_photos' => !empty($data['business_photos']) ? (is_array($data['business_photos']) ? $data['business_photos'] : [$data['business_photos']]) : [],
+        'number_shareholders' => $data['number_shareholders'] ?? null,
+        'tangible_assets' => $data['tangible_assets'] ?? null,
+        'liabilities' => $data['liabilities'] ?? null,
+    ];
 
-                            Textarea::make('reason_for_sale')
-                                ->label('What is the reason for the sale of the business?')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of shares'),
+    // Collect all fields that should be part of application_data
+    $applicationFields = [
+        'name',
+        'company_name',
+        'mobile_number',
+        'email',
+        'display_contact_details',
+        'display_company_details',
+        'seller_role',
+        'seller_interest',
+        'tentative_selling_price',
+        'reason_for_sale',
+        'business_funds',
+    ];
 
-                            TextInput::make('maximum_stake')
-                                ->label('What is the maximum stake that you are willing to sell?')
-                                ->numeric()
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Partial sale of shares'),
+    $applicationData = collect($data)->only($applicationFields)->toArray();
 
-                            TextInput::make('investment_amount')
-                                ->prefix('Ksh')
-                                ->numeric()
-                                ->label('What investment amount are you seeking for this stake')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Partial sale of shares'),
+    // Ensure verification status is set if not provided
+    $data['verification_status'] = $data['verification_status'] ?? 'pending';
 
-                            Textarea::make('reason_for_investment')
-                                ->label('Provide reason for investment')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Partial sale of shares'),
+    // Merge the transformed data back into the original $data
+    $data['application_data'] = json_encode($applicationData, JSON_UNESCAPED_SLASHES);
+    $data['documents'] = json_encode($documents, JSON_UNESCAPED_SLASHES);
 
-                            TextInput::make('value_of_physical_assets')
-                                ->prefix('Ksh')
-                                ->numeric()
-                                ->label('What is the value of the physical assets you are selling?')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of assets'),
+    // Exclude fields that don't belong in the main table
+    $data = collect($data)->except(array_merge($applicationFields, array_keys($documents)))->toArray();
 
-                            TextInput::make('asset_selling_price')
-                                ->prefix('Ksh')
-                                ->numeric()
-                                ->label('At what price are you selling/leasing?')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of assets'),
+    \Log::info('mutateFormDataBeforeSave - Final data to be saved:', $data);
 
-                            Textarea::make('reason_for_selling_assets')
-                                ->label('What is the reason for selling the business assets?')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of assets'),
+    return $data;
+}
 
-                            TextInput::make('colateral_value')
-                                ->prefix('Ksh')
-                                ->numeric()
-                                ->label('What is the value of the collateral you can provide?')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
 
-                            TextInput::make('loan_amount')
-                                ->prefix('Ksh')
-                                ->numeric()
-                                ->label('What loan amount are you seeking?')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
 
-                            TextInput::make('yearly_interest_pay')
-                                ->prefix('Ksh')
-                                ->numeric()
-                                ->label('What is the maximum yearly investment you can pay?')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
 
-                            TextInput::make('years_repay_loan')
-                                ->numeric()
-                                ->label('In how many years will you repay the loan?')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
 
-                            Textarea::make('reason_for_seeking_loan')
-                                ->label('Reason for seeking a loan')
-                                ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
-                        ]),
-                ]),
 
-            Section::make('Transactional Information')
-                ->schema([
-                    Shout::make('transactionalinfo')
-                        ->columnSpanFull()
-                        ->content("Please enter your own details here. Information entered here is not publicly displayed."),
 
-                    Grid::make(2)
-                        ->schema([
-                            Textarea::make('business_funds')
-                                ->label('How is the business funded presently?'),
 
-                            FileUpload::make('number_shareholders')
-                                ->label('Upload the current list of shareholders')
-                                ->acceptedFileTypes(['application/pdf']),
-                        ]),
-                ]),
 
-            Section::make('Documents')
-                ->schema([
-                    Grid::make(2)
-                        ->schema([
-                            FileUpload::make('business_photos')
-                                ->label('Photos of the business premises')
-                                ->required()
-                                ->image()
-                                ->multiple(),
 
-                            FileUpload::make('business_profile')
-                                ->acceptedFileTypes(['application/pdf'])
-                                ->required()
-                                ->label('Business profile'),
-                        ]),
-                ]),
 
-            Section::make('Select a Plan')
-                ->schema([
-                    Grid::make(2)
-                        ->schema([
-                            Radio::make('active_business')
-                                ->label('Select a plan')
-                                ->options([
-                                    '12000' => 'Monthly 12,000',
-                                    '143999' => 'Yearly (recommended 143,999)',
-                                ]),
 
-                            Checkbox::make('finders_fee')
-                                ->label("I undertake to pay 1% finder’s fee to Biasharamart"),
-                        ]),
-                ]),
-        ]);
-    }
+
+
+
+
+public function form(Forms\Form $form): Forms\Form
+{
+    return $form->schema([
+        Section::make('Contact Person Information')
+            ->schema([
+                Shout::make('clientInfo')
+                    ->columnSpanFull()
+                    ->content("Please enter your personal details here. The information provided will remain confidential and will not be publicly displayed."),
+
+                Grid::make(2)
+                    ->schema([
+                        TextInput::make('name')
+                            ->required()
+                            ->label('Contact person name'),
+
+                        TextInput::make('company_name')
+                            ->required()
+                            ->label('Company name'),
+
+                        TextInput::make('mobile_number')
+                            ->required()
+                            ->label('Contact person mobile number'),
+
+                        TextInput::make('email')
+                            ->email()
+                            ->required()
+                            ->label('Official email for quick verification'),
+
+                        Checkbox::make('display_contact_details')
+                            ->label('Display contact details to investors'),
+
+                        Checkbox::make('display_company_details')
+                            ->label('Display company details to investors'),
+                    ]),
+            ]),
+
+        Section::make('Business Information')
+            ->schema([
+                Shout::make('businessinfo')
+                    ->columnSpanFull()
+                    ->content("Information entered here is displayed publicly to match you with the right set of investors and buyers."),
+
+                Grid::make(2)
+                    ->schema([
+                        Select::make('seller_role')
+                            ->options([
+                                'Director' => 'Director',
+                                'Adviser' => 'Adviser',
+                                'Shareholder' => 'Shareholder',
+                                'Other' => 'Other',
+                            ])
+                            ->required()
+                            ->label('You are a(n)'),
+
+                        TextInput::make('other_seller_role')
+                            ->hidden(fn ($get) => $get('seller_role') !== 'Other')
+                            ->label('Specify role'),
+
+                        Select::make('seller_interest')
+                            ->label('What are you interested in')
+                            ->options([
+                                'Sale of shares' => 'Sale of shares',
+                                'Partial sale of shares' => 'Partial sale of shares',
+                                'Sale of assets' => 'Sale of assets',
+                                'Financing' => 'Financing',
+                            ])
+                            ->live(),
+
+                        TextInput::make('tentative_selling_price')
+                            ->label('Tentative Selling Price')
+                            ->numeric()
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of shares'),
+
+                        Textarea::make('reason_for_sale')
+                            ->label('Reason for Sale')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of shares'),
+
+                        TextInput::make('maximum_stake')
+                            ->label('Maximum Stake')
+                            ->numeric()
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Partial sale of shares'),
+
+                        TextInput::make('investment_amount')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('Investment Amount')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Partial sale of shares'),
+
+                        Textarea::make('reason_for_investment')
+                            ->label('Reason for Investment')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Partial sale of shares'),
+
+                        TextInput::make('value_of_physical_assets')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('Value of Physical Assets')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of assets'),
+
+                        TextInput::make('asset_selling_price')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('Asset Selling Price')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of assets'),
+
+                        Textarea::make('reason_for_selling_assets')
+                            ->label('Reason for Selling Assets')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Sale of assets'),
+
+                        TextInput::make('colateral_value')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('Collateral Value')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
+
+                        TextInput::make('loan_amount')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('Loan Amount')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
+
+                        TextInput::make('yearly_interest_pay')
+                            ->prefix('Ksh')
+                            ->numeric()
+                            ->label('Yearly Interest Payment')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
+
+                        TextInput::make('years_repay_loan')
+                            ->numeric()
+                            ->label('Years to Repay Loan')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
+
+                        Textarea::make('reason_for_seeking_loan')
+                            ->label('Reason for Seeking Loan')
+                            ->hidden(fn ($get) => $get('seller_interest') !== 'Financing'),
+                    ]),
+            ]),
+
+        Section::make('Transactional Information')
+            ->schema([
+                Shout::make('transactionalinfo')
+                    ->columnSpanFull()
+                    ->content("Please enter your own details here. Information entered here is not publicly displayed."),
+
+                Grid::make(2)
+                    ->schema([
+                        Textarea::make('business_funds')
+                            ->label('How is the business funded presently?'),
+
+                        FileUpload::make('number_shareholders')
+                            ->label('Upload the current list of shareholders')
+                            ->acceptedFileTypes(['application/pdf']),
+
+                        FileUpload::make('tangible_assets')
+                            ->label('Upload the list of tangible assets')
+                            ->acceptedFileTypes(['application/pdf']),
+
+                        FileUpload::make('liabilities')
+                            ->label('Upload the list of liabilities')
+                            ->acceptedFileTypes(['application/pdf']),
+                    ]),
+            ]),
+
+        Section::make('Documents')
+            ->schema([
+                Grid::make(2)
+                    ->schema([
+                        FileUpload::make('business_photos')
+                            ->label('Photos of the Business Premises')
+                            ->image()
+                            ->multiple(),
+
+                        FileUpload::make('business_profile')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->label('Business Profile'),
+
+                        FileUpload::make('kra_pin')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->label('KRA PIN'),
+
+                        FileUpload::make('certificate_of_incorporation')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->label('Certificate of Incorporation'),
+
+                        FileUpload::make('valuation_report')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->label('Valuation Report'),
+                    ]),
+            ]),
+
+        Section::make('Select a Plan')
+            ->schema([
+                Grid::make(2)
+                    ->schema([
+                        Radio::make('active_business')
+                            ->label('Select a Plan')
+                            ->options([
+                                '12000' => 'Monthly 12,000',
+                                '143999' => 'Yearly (recommended 143,999)',
+                            ]),
+
+                        Checkbox::make('finders_fee')
+                            ->label('I undertake to pay 1% finder’s fee to Biasharamart'),
+                    ]),
+            ]),
+    ]);
+}
+
 }

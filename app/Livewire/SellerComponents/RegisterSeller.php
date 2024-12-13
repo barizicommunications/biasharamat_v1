@@ -305,6 +305,7 @@ class RegisterSeller extends Component implements HasForms
         'certificate_of_incorporation',
         'valuation_report',
         'business_photos',
+        'display_contact_details',
         'number_shareholders',
         'tangible_assets',
         'liabilities',
