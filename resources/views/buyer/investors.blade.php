@@ -83,7 +83,7 @@
                                     <div class="flex items-start justify-between mb-4">
                                         <div>
                                             <div class="flex items-center">
-                                                <img src="{{ asset('images/Logo.png') }}" alt="Investor Logo" class="w-12 h-12 rounded-full object-cover">
+                                                <img src="{{ asset('images/investor-pic.png') }}" alt="Investor Logo" class="w-12 h-12 rounded-full object-cover">
                                                 <div class="ml-4">
                                                     <h3 class="text-sm font-semibold text-gray-800">
                                                         {{ $profile->name }}
