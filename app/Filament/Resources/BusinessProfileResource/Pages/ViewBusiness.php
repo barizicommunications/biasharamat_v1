@@ -15,6 +15,7 @@ use App\Notifications\ApplicationAccepted;
 use App\Notifications\ApplicationDeclined;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use App\Filament\Resources\BusinessProfileResource;
 use Filament\Infolists\Components\{TextEntry, BooleanEntry, DateEntry, ImageEntry, FileEntry, Section, Grid};
@@ -134,76 +135,157 @@ class ViewBusiness extends ViewRecord
                         ]),
 
 
+                        // Tab::make('Documents')
+                        // ->icon('heroicon-o-paper-clip')
+                        // ->schema([
+                        //     Grid::make(2)
+                        //         ->schema([
+                        //             // Business Profile
+                        //             TextEntry::make('business_profile')
+                        //                 ->label('Business Profile')
+                        //                 ->getStateUsing(fn() => !empty($documents['business_profile']) ? 'Download Business Profile' : 'Not Uploaded')
+                        //                 ->url(fn() => !empty($documents['business_profile']) ? asset('storage/' . $documents['business_profile']) : null)
+                        //                 ->icon(fn() => !empty($documents['business_profile']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
+                        //                 ->color(fn() => !empty($documents['business_profile']) ? 'primary' : 'danger'),
+
+                        //             // KRA PIN
+                        //             TextEntry::make('kra_pin')
+                        //                 ->label('KRA PIN')
+                        //                 ->getStateUsing(fn() => !empty($documents['kra_pin']) ? 'Download KRA PIN' : 'Not Uploaded')
+                        //                 ->url(fn() => !empty($documents['kra_pin']) ? asset('storage/' . $documents['kra_pin']) : null)
+                        //                 ->icon(fn() => !empty($documents['kra_pin']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
+                        //                 ->color(fn() => !empty($documents['kra_pin']) ? 'primary' : 'danger'),
+
+                        //             // Certificate of Incorporation
+                        //             TextEntry::make('certificate_of_incorporation')
+                        //                 ->label('Certificate of Incorporation')
+                        //                 ->getStateUsing(fn() => !empty($documents['certificate_of_incorporation']) ? 'Download Certificate of Incorporation' : 'Not Uploaded')
+                        //                 ->url(fn() => !empty($documents['certificate_of_incorporation']) ? asset('storage/' . $documents['certificate_of_incorporation']) : null)
+                        //                 ->icon(fn() => !empty($documents['certificate_of_incorporation']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
+                        //                 ->color(fn() => !empty($documents['certificate_of_incorporation']) ? 'primary' : 'danger'),
+
+                        //             // Valuation Report
+                        //             TextEntry::make('valuation_report')
+                        //                 ->label('Valuation Report')
+                        //                 ->getStateUsing(fn() => !empty($documents['valuation_report']) ? 'Download Valuation Report' : 'Not Uploaded')
+                        //                 ->url(fn() => !empty($documents['valuation_report']) ? asset('storage/' . $documents['valuation_report']) : null)
+                        //                 ->icon(fn() => !empty($documents['valuation_report']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
+                        //                 ->color(fn() => !empty($documents['valuation_report']) ? 'primary' : 'danger'),
+
+                        //             // Number of Shareholders
+                        //             TextEntry::make('number_shareholders')
+                        //                 ->label('Number of Shareholders')
+                        //                 ->getStateUsing(fn() => !empty($documents['number_shareholders']) ? 'Download Number of Shareholders' : 'Not Uploaded')
+                        //                 ->url(fn() => !empty($documents['number_shareholders']) ? asset('storage/' . $documents['number_shareholders']) : null)
+                        //                 ->icon(fn() => !empty($documents['number_shareholders']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
+                        //                 ->color(fn() => !empty($documents['number_shareholders']) ? 'primary' : 'danger'),
+
+                        //             // Tangible Assets
+                        //             TextEntry::make('tangible_assets')
+                        //                 ->label('Tangible Assets')
+                        //                 ->getStateUsing(fn() => !empty($documents['tangible_assets']) ? 'Download Tangible Assets' : 'Not Uploaded')
+                        //                 ->url(fn() => !empty($documents['tangible_assets']) ? asset('storage/' . $documents['tangible_assets']) : null)
+                        //                 ->icon(fn() => !empty($documents['tangible_assets']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
+                        //                 ->color(fn() => !empty($documents['tangible_assets']) ? 'primary' : 'danger'),
+
+                        //             // Liabilities
+                        //             TextEntry::make('liabilities')
+                        //                 ->label('Liabilities')
+                        //                 ->getStateUsing(fn() => !empty($documents['liabilities']) ? 'Download Liabilities' : 'Not Uploaded')
+                        //                 ->url(fn() => !empty($documents['liabilities']) ? asset('storage/' . $documents['liabilities']) : null)
+                        //                 ->icon(fn() => !empty($documents['liabilities']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
+                        //                 ->color(fn() => !empty($documents['liabilities']) ? 'primary' : 'danger'),
+
+                        //             // Business Photos
+                        //             TextEntry::make('business_photos')
+                        //                 ->label('Business Photos')
+                        //                 ->getStateUsing(fn() => !empty($documents['business_photos']) ? 'Download Business Photos' : 'Not Uploaded')
+                        //                 ->url(fn() => !empty($documents['business_photos']) ? asset('storage/' . $documents['business_photos'][0]) : null)
+                        //                 ->icon(fn() => !empty($documents['business_photos']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
+                        //                 ->color(fn() => !empty($documents['business_photos']) ? 'primary' : 'danger'),
+                        //         ]),
+                        // ]),
+
+
                         Tab::make('Documents')
-                        ->icon('heroicon-o-paper-clip')
-                        ->schema([
-                            Grid::make(2)
-                                ->schema([
-                                    // Business Profile
-                                    TextEntry::make('business_profile')
-                                        ->label('Business Profile')
-                                        ->getStateUsing(fn() => !empty($documents['business_profile']) ? 'Download Business Profile' : 'Not Uploaded')
-                                        ->url(fn() => !empty($documents['business_profile']) ? asset('storage/' . $documents['business_profile']) : null)
-                                        ->icon(fn() => !empty($documents['business_profile']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
-                                        ->color(fn() => !empty($documents['business_profile']) ? 'primary' : 'danger'),
+    ->icon('heroicon-o-paper-clip')
+    ->schema([
+        Grid::make(1)
+            ->schema([
+                // Business Profile
+                ViewEntry::make('business_profile')
+                    ->hidden(fn() => empty($documents['business_profile']))
+                    ->view('filament.infolist.entries.document-viewer')
+                    ->viewData([
+                        'url' => asset('storage/' . $documents['business_profile']),
+                        'label' => 'Business Profile',
+                    ]),
 
-                                    // KRA PIN
-                                    TextEntry::make('kra_pin')
-                                        ->label('KRA PIN')
-                                        ->getStateUsing(fn() => !empty($documents['kra_pin']) ? 'Download KRA PIN' : 'Not Uploaded')
-                                        ->url(fn() => !empty($documents['kra_pin']) ? asset('storage/' . $documents['kra_pin']) : null)
-                                        ->icon(fn() => !empty($documents['kra_pin']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
-                                        ->color(fn() => !empty($documents['kra_pin']) ? 'primary' : 'danger'),
+                // KRA PIN
+                ViewEntry::make('kra_pin')
+                    ->hidden(fn() => empty($documents['kra_pin']))
+                    ->view('filament.infolist.entries.document-viewer')
+                    ->viewData([
+                        'url' => asset('storage/' . $documents['kra_pin']),
+                        'label' => 'KRA PIN',
+                    ]),
 
-                                    // Certificate of Incorporation
-                                    TextEntry::make('certificate_of_incorporation')
-                                        ->label('Certificate of Incorporation')
-                                        ->getStateUsing(fn() => !empty($documents['certificate_of_incorporation']) ? 'Download Certificate of Incorporation' : 'Not Uploaded')
-                                        ->url(fn() => !empty($documents['certificate_of_incorporation']) ? asset('storage/' . $documents['certificate_of_incorporation']) : null)
-                                        ->icon(fn() => !empty($documents['certificate_of_incorporation']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
-                                        ->color(fn() => !empty($documents['certificate_of_incorporation']) ? 'primary' : 'danger'),
+                // Certificate of Incorporation
+                ViewEntry::make('certificate_of_incorporation')
+                    ->hidden(fn() => empty($documents['certificate_of_incorporation']))
+                    ->view('filament.infolist.entries.document-viewer')
+                    ->viewData([
+                        'url' => asset('storage/' . $documents['certificate_of_incorporation']),
+                        'label' => 'Certificate of Incorporation',
+                    ]),
 
-                                    // Valuation Report
-                                    TextEntry::make('valuation_report')
-                                        ->label('Valuation Report')
-                                        ->getStateUsing(fn() => !empty($documents['valuation_report']) ? 'Download Valuation Report' : 'Not Uploaded')
-                                        ->url(fn() => !empty($documents['valuation_report']) ? asset('storage/' . $documents['valuation_report']) : null)
-                                        ->icon(fn() => !empty($documents['valuation_report']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
-                                        ->color(fn() => !empty($documents['valuation_report']) ? 'primary' : 'danger'),
+                // Valuation Report
+                ViewEntry::make('valuation_report')
+                    ->hidden(fn() => empty($documents['valuation_report']))
+                    ->view('filament.infolist.entries.document-viewer')
+                    ->viewData([
+                        'url' => asset('storage/' . $documents['valuation_report']),
+                        'label' => 'Valuation Report',
+                    ]),
 
-                                    // Number of Shareholders
-                                    TextEntry::make('number_shareholders')
-                                        ->label('Number of Shareholders')
-                                        ->getStateUsing(fn() => !empty($documents['number_shareholders']) ? 'Download Number of Shareholders' : 'Not Uploaded')
-                                        ->url(fn() => !empty($documents['number_shareholders']) ? asset('storage/' . $documents['number_shareholders']) : null)
-                                        ->icon(fn() => !empty($documents['number_shareholders']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
-                                        ->color(fn() => !empty($documents['number_shareholders']) ? 'primary' : 'danger'),
+                // Number of Shareholders
+                ViewEntry::make('number_shareholders')
+                    ->hidden(fn() => empty($documents['number_shareholders']))
+                    ->view('filament.infolist.entries.document-viewer')
+                    ->viewData([
+                        'url' => asset('storage/' . $documents['number_shareholders']),
+                        'label' => 'Number of Shareholders',
+                    ]),
 
-                                    // Tangible Assets
-                                    TextEntry::make('tangible_assets')
-                                        ->label('Tangible Assets')
-                                        ->getStateUsing(fn() => !empty($documents['tangible_assets']) ? 'Download Tangible Assets' : 'Not Uploaded')
-                                        ->url(fn() => !empty($documents['tangible_assets']) ? asset('storage/' . $documents['tangible_assets']) : null)
-                                        ->icon(fn() => !empty($documents['tangible_assets']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
-                                        ->color(fn() => !empty($documents['tangible_assets']) ? 'primary' : 'danger'),
+                // Tangible Assets
+                ViewEntry::make('tangible_assets')
+                    ->hidden(fn() => empty($documents['tangible_assets']))
+                    ->view('filament.infolist.entries.document-viewer')
+                    ->viewData([
+                        'url' => asset('storage/' . $documents['tangible_assets']),
+                        'label' => 'Tangible Assets',
+                    ]),
 
-                                    // Liabilities
-                                    TextEntry::make('liabilities')
-                                        ->label('Liabilities')
-                                        ->getStateUsing(fn() => !empty($documents['liabilities']) ? 'Download Liabilities' : 'Not Uploaded')
-                                        ->url(fn() => !empty($documents['liabilities']) ? asset('storage/' . $documents['liabilities']) : null)
-                                        ->icon(fn() => !empty($documents['liabilities']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
-                                        ->color(fn() => !empty($documents['liabilities']) ? 'primary' : 'danger'),
+                // Liabilities
+                ViewEntry::make('liabilities')
+                    ->hidden(fn() => empty($documents['liabilities']))
+                    ->view('filament.infolist.entries.document-viewer')
+                    ->viewData([
+                        'url' => asset('storage/' . $documents['liabilities']),
+                        'label' => 'Liabilities',
+                    ]),
 
-                                    // Business Photos
-                                    TextEntry::make('business_photos')
-                                        ->label('Business Photos')
-                                        ->getStateUsing(fn() => !empty($documents['business_photos']) ? 'Download Business Photos' : 'Not Uploaded')
-                                        ->url(fn() => !empty($documents['business_photos']) ? asset('storage/' . $documents['business_photos'][0]) : null)
-                                        ->icon(fn() => !empty($documents['business_photos']) ? 'heroicon-o-document-text' : 'heroicon-o-x-circle')
-                                        ->color(fn() => !empty($documents['business_photos']) ? 'primary' : 'danger'),
-                                ]),
-                        ]),
+                // Business Photos
+                ViewEntry::make('business_photos')
+                    ->hidden(fn() => empty($documents['business_photos']))
+                    ->view('filament.infolist.entries.document-viewer')
+                    ->viewData([
+                        'url' => asset('storage/' . $documents['business_photos'][0]),
+                        'label' => 'Business Photos',
+                    ]),
+            ]),
+    ]),
+
 
 
 
