@@ -43,7 +43,13 @@ class InvestorProfileResource extends Resource
 
                 Tables\Columns\TextColumn::make('company_name'),
                 Tables\Columns\TextColumn::make('verification_status')
-                    ->searchable(),
+                    ->label('Verification Status')
+                    ->badge()
+                    ->color(fn ($state) => match ($state) {
+                        'Pending' => 'warning',
+                        'Approved' => 'success',
+                        'Declined' => 'danger',
+                    }),
 
 
 

@@ -2,15 +2,21 @@
 
 namespace App\Filament\Resources\InvestorProfileResource\Pages;
 
+use App\Models\User;
+use App\Models\InvestorProfile;
 use Filament\Infolists\Infolist;
+use Filament\Pages\Actions\Action;
+use Filament\Forms\Components\Textarea;
 use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Tabs;
 use Filament\Resources\Pages\ViewRecord;
+// use Filament\Infolists\Components\ViewEntry;
+use App\Notifications\ApplicationAccepted;
+use App\Notifications\ApplicationDeclined;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
-// use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Components\ImageEntry;
 use App\Filament\Resources\InvestorProfileResource;
@@ -262,8 +268,7 @@ public function infolist(Infolist $infolist): Infolist
                                     TextEntry::make('active_business')
                                         ->label('Subscription Amount'),
 
-                                    TextEntry::make('plan_type')
-                                        ->label('Plan Type'),
+
 
                                     IconEntry::make('terms_of_engagement')
                                         ->label('Terms of Engagement')
@@ -273,5 +278,59 @@ public function infolist(Infolist $infolist): Infolist
                 ]),
         ]);
 }
+
+protected function getActions(): array
+{
+    return [
+        // Verify Application Action
+        Action::make('Verify application')
+            ->label('Verify application')
+            ->color('success')
+            ->icon('heroicon-o-book-open')
+            ->action(function () {
+                if (auth()->user()->registration_type === "Admin") {
+                    $application = InvestorProfile::find($this->record->id);
+
+                    // Set verification_status to 'Approved'
+                    $application->verification_status = 'Approved';
+                    $application->save();
+
+                    $user = User::find($this->record->user_id);
+                    $user->notify(new ApplicationAccepted($user));
+
+                    return redirect()->route('filament.admin.resources.investor-profiles.index');
+                }
+            })
+            ->hidden(fn () => in_array($this->record->verification_status, ['Approved', 'Declined'])),
+
+        // Decline Application Action
+        Action::make('Decline application')
+            ->label('Decline application')
+            ->color('danger')
+            ->icon('heroicon-o-book-open')
+            ->form([
+                Textarea::make('reason_for_decline')
+                    ->required()
+                    ->label('Reason for Decline'),
+            ])
+            ->action(function (array $data) {
+                if (auth()->user()->registration_type === "Admin") {
+                    $application = InvestorProfile::find($this->record->id);
+
+                    // Set verification_status to 'Declined'
+                    $application->verification_status = 'Declined';
+                    $application->reason_for_decline = $data['reason_for_decline'];
+                    $application->save();
+
+                    $user = User::find($this->record->user_id);
+                    $user->notify(new ApplicationDeclined($user, $data['reason_for_decline']));
+
+                    return redirect()->route('filament.admin.resources.investor-profiles.index');
+                }
+            })
+            ->hidden(fn () => in_array($this->record->verification_status, ['Approved', 'Declined'])),
+    ];
+}
+
 
 }
