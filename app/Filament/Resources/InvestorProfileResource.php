@@ -25,64 +25,8 @@ class InvestorProfileResource extends Resource
     {
         return $form
             ->schema([
-                // Forms\Components\TextInput::make('user_id')
-                //     ->required()
-                //     ->numeric(),
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('mobile_number')
-                    ->required()
-                    ->maxLength(15),
-                Forms\Components\TextInput::make('interested_in')
-                    ->required(),
-                Forms\Components\TextInput::make('buyer_role')
-                    ->required(),
-                Forms\Components\TextInput::make('buyer_interest')
-                    ->required(),
-                Forms\Components\TextInput::make('buyer_location_interest')
-                    ->required(),
-                Forms\Components\TextInput::make('investment_range')
-                    ->required()
-                    ->numeric()
-                    ->default(0.00),
-                Forms\Components\TextInput::make('current_location')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('company_name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('linkedin_profile')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('website_link')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('business_factors')
-                    ->required()
-                    ->maxLength(1000),
-                Forms\Components\TextInput::make('about_company')
-                    ->required()
-                    ->maxLength(1000),
-                Forms\Components\TextInput::make('corporate_profile')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('company_logo')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('proof_of_business')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('terms_of_engagement')
-                    ->required()
-                    ->maxLength(255)
-                    ->default('off'),
-                Forms\Components\TextInput::make('active_business')
-                    ->required(),
+
+
             ]);
     }
 
@@ -140,7 +84,7 @@ class InvestorProfileResource extends Resource
         return [
             'index' => Pages\ListInvestorProfiles::route('/'),
             'create' => Pages\CreateInvestorProfile::route('/create'),
-            'view' => Pages\ViewInvestor::route('/{record}'),
+            'view' => Pages\ViewInvestorProfile::route('/{record}'),
             'edit' => Pages\EditInvestorProfile::route('/{record}/edit'),
         ];
     }
