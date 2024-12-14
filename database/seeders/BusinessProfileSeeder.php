@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\BusinessProfile;
 use Illuminate\Database\Seeder;
 
@@ -24,13 +25,23 @@ class BusinessProfileSeeder extends Seeder
             'documents/images/image3.jpg',
         ];
 
-        for ($i = 1; $i <= 5; $i++) {
+        $companyNames = [
+            'NovaTech Solutions',
+            'Pioneer Traders',
+            'Visionary Enterprises',
+            'Spark Industries',
+            'Momentum Retail',
+        ];
+
+        $users = User::where('registration_type', 'Business Seller')->get();
+
+        foreach ($users as $index => $user) {
             BusinessProfile::create([
-                'user_id' => $i, // Assuming user IDs 1 to 5 are for sellers
-                'email' => "business$i@example.com",
-                'name' => "Seller FirstName $i Seller LastName $i",
-                'company_name' => "Business Company $i",
-                'mobile_number' => "0700" . rand(100000, 999999),
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'name' => "{$user->first_name} {$user->last_name}",
+                'company_name' => $companyNames[$index % count($companyNames)],
+                'mobile_number' => $user->phone,
                 'status' => 'pending',
                 'verification_status' => 'Pending',
                 'finders_fee' => (bool)rand(0, 1),

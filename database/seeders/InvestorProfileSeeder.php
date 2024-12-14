@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use App\Models\InvestorProfile;
 use Illuminate\Database\Seeder;
 
@@ -18,26 +19,22 @@ class InvestorProfileSeeder extends Seeder
             'documents/pdfs/sample3.pdf',
         ];
 
-        $images = [
-            'documents/images/image1.jpg',
-            'documents/images/image2.jpg',
-            'documents/images/image3.jpg',
-        ];
+        $users = User::where('registration_type', 'Business Investor')->get();
 
-        for ($i = 1; $i <= 5; $i++) {
+        foreach ($users as $user) {
             InvestorProfile::create([
-                'user_id' => $i + 5, // Assuming user IDs 6 to 10 are for investors
-                'name' => "Investor FirstName $i Investor LastName $i",
-                'email' => "investor$i@example.com",
-                'mobile_number' => "0701" . rand(100000, 999999),
+                'user_id' => $user->id,
+                'name' => "{$user->first_name} {$user->last_name}",
+                'email' => $user->email,
+                'mobile_number' => $user->phone,
                 'display_contact_details' => (bool)rand(0, 1),
-                'company_name' => "Investor Company $i",
+                'company_name' => "{$user->last_name} Capital",
                 'current_location' => 'Nairobi, Kenya',
                 'your_designation' => 'Investor',
                 'company_industry' => 'Technology',
-                'linkedin_profile' => "https://linkedin.com/in/investor$i",
-                'website_link' => "https://investor$i.com",
-                'about_company' => "Investor Company $i specializes in early-stage tech investments.",
+                'linkedin_profile' => "https://linkedin.com/in/{$user->first_name}{$user->last_name}",
+                'website_link' => "https://{$user->last_name}capital.com",
+                'about_company' => "{$user->last_name} Capital focuses on early-stage tech investments.",
                 'business_factors' => 'Innovation, Scalability, Market Potential',
                 'interested_in' => 'investing_in_a_business',
                 'other_interest' => null,
