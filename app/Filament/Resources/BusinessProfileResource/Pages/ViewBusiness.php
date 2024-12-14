@@ -301,36 +301,29 @@ class ViewBusiness extends ViewRecord
 
 
 
-
-
-
-
-
-
-
-
-
     protected function getActions(): array
     {
         return [
             Action::make('Verify application')
-                ->label('Verify application')
-                ->color('success')
-                ->icon('heroicon-o-book-open')
-                ->action(function () {
-                    if (auth()->user()->registration_type === "Admin") {
-                        $application = BusinessProfile::find($this->record->id);
+            ->label('Verify application')
+            ->color('success')
+            ->icon('heroicon-o-book-open')
+            ->action(function () {
+                if (auth()->user()->registration_type === "Admin") {
+                    $application = BusinessProfile::find($this->record->id);
 
-                        $application->verification_status = "Accepted";
-                        $application->save();
+                    // Set verification_status to 'Approved'
+                    $application->verification_status = 'Approved';
+                    $application->save();
 
-                        $user = User::find($this->record->user_id);
-                        $user->notify(new ApplicationAccepted($user));
+                    $user = User::find($this->record->user_id);
+                    $user->notify(new ApplicationAccepted($user));
 
-                        return redirect()->route('filament.admin.resources.business-profiles.index');
-                    }
-                })
-                ->hidden(fn () => in_array($this->record->verification_status, ['Accepted', 'Declined'])),
+                    return redirect()->route('filament.admin.resources.business-profiles.index');
+                }
+            })
+            ->hidden(fn () => in_array($this->record->verification_status, ['Approved', 'Declined'])),
+
 
             Action::make('Decline application')
                 ->label('Decline application')
@@ -355,7 +348,7 @@ class ViewBusiness extends ViewRecord
                         return redirect()->route('filament.admin.resources.business-profiles.index');
                     }
                 })
-                ->hidden(fn () => in_array($this->record->verification_status, ['Accepted', 'Declined'])),
+                ->hidden(fn () => in_array($this->record->verification_status, ['Approved', 'Declined'])),
         ];
     }
 }
