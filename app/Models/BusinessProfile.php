@@ -18,7 +18,8 @@ class BusinessProfile extends Model
         'business_photos' => 'array',
         'business_legal_entity' => 'array',
         'business_industry' => 'array',
-        'application_data'=>'array'
+        'application_data'=>'array',
+        'documents'=>'array'
     ];
 
     public function user()

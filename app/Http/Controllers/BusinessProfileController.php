@@ -256,8 +256,8 @@ public function show(string $id)
     $sellerProfile = BusinessProfile::where('id', $id)->firstOrFail();
 
     // Decode JSON fields with fallbacks
-    $applicationData = json_decode($sellerProfile->application_data, true) ?? [];
-    $documents = json_decode($sellerProfile->documents, true) ?? [];
+    $applicationData = $sellerProfile->application_data ?? [];
+    $documents = $sellerProfile->documents ?? [];
 
     // Add default fallbacks for missing keys
     $applicationData['business_industry'] = $applicationData['business_industry'] ?? 'Industry not specified';

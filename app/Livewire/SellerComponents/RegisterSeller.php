@@ -275,6 +275,9 @@ class RegisterSeller extends Component implements HasForms
     // Validate the form data
     $this->form->validate();
 
+
+
+
     // Assign the amount from the form data
     $amount = $formData['active_business'];
 
@@ -314,13 +317,29 @@ class RegisterSeller extends Component implements HasForms
     ])->toArray();
 
     // Save the data into the database
+    // BusinessProfile::create([
+    //     'user_id' => auth()->user()->id,
+    //     'email' => $formData['email'],
+    //     'status' => 'pending',
+    //     'verification_status' => $formData['verification_status'] ?? 'pending',
+    //     'application_data' => json_encode($applicationData),
+    //     'documents' => json_encode($documents),
+    //     'business_industry' => $formData['business_industry'] ?? null,
+    //     'business_start_date' => $formData['business_start_date'] ?? null,
+    //     'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
+    //     'maximum_stake' => $formData['maximum_stake'] ?? null,
+    //     'active_business' => $amount,
+    //     'plan_type' => $planType,
+    //     'finders_fee' => $formData['finders_fee'] ?? false,
+    // ]);
+
     BusinessProfile::create([
         'user_id' => auth()->user()->id,
         'email' => $formData['email'],
         'status' => 'pending',
         'verification_status' => $formData['verification_status'] ?? 'pending',
-        'application_data' => json_encode($applicationData),
-        'documents' => json_encode($documents),
+        'application_data' => $applicationData, // No need for json_encode
+        'documents' => $documents,             // No need for json_encode
         'business_industry' => $formData['business_industry'] ?? null,
         'business_start_date' => $formData['business_start_date'] ?? null,
         'tentative_selling_price' => $formData['tentative_selling_price'] ?? null,
@@ -329,6 +348,7 @@ class RegisterSeller extends Component implements HasForms
         'plan_type' => $planType,
         'finders_fee' => $formData['finders_fee'] ?? false,
     ]);
+
 
     // Determine the amount and description
     $amount = $formData['active_business'];
@@ -445,6 +465,7 @@ class RegisterSeller extends Component implements HasForms
 
                             TextInput::make('tentative_selling_price')
                             ->label('What is the tentative selling price for the business?')
+
                             ->numeric()
                             ->hidden(function (Get $get) {
 
@@ -605,45 +626,88 @@ class RegisterSeller extends Component implements HasForms
 
                             })->label('Specify business industry'),
 
-                            Fieldset::make('Where is the business located / headquartered?')
-                            ->schema([
-                                Select::make('country')
-                                ->label('Country')
-                                ->required()
-                                ->live()
-                                ->options(function () {
-                                    $data = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true));
-                                    return $data->keys()->mapWithKeys(fn ($country) => [$country => $country])->toArray();
-                                })
-                                ->afterStateUpdated(function (Set $set, $state) {
-                                    if ($state !== $this->country) {
-                                        $set('city', null); // Reset city only if the country changes
-                                    }
-                                }),
+                            // Fieldset::make('Where is the business located / headquartered?')
+                            // ->schema([
+                            //     Select::make('country')
+                            //     ->label('Country')
+                            //     ->required()
+                            //     ->live()
+                            //     ->options(function () {
+                            //         $data = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true));
+                            //         return $data->keys()->mapWithKeys(fn ($country) => [$country => $country])->toArray();
+                            //     })
+                            //     ->afterStateUpdated(function (Set $set, $state) {
+                            //         if ($state !== $this->country) {
+                            //             $set('city', null); // Reset city only if the country changes
+                            //         }
+                            //     }),
 
-                                Select::make('city')
-                                ->label('City')
-                                ->required()
-                                ->live()
-                                ->options(function (callable $get) {
-                                    $country = $get('country');
+                            //     Select::make('city')
+                            //     ->label('City')
+                            //     ->required()
+                            //     ->live()
+                            //     ->options(function (callable $get) {
+                            //         $country = $get('country');
 
-                                    if ($country) {
-                                        // Load cities for the selected country
-                                        $data = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true));
-                                        return $data->get($country, []);
-                                    }
+                            //         if ($country) {
+                            //             // Load cities for the selected country
+                            //             $data = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true));
+                            //             return $data->get($country, []);
+                            //         }
 
-                                    return []; // Return empty if no country is selected
-                                })
-                                ->afterStateUpdated(function (Set $set, $state) {
-                                    $set('city', $state); // Ensure city state is updated
-                                }),
+                            //         return []; // Return empty if no country is selected
+                            //     })
+                            //     ->afterStateUpdated(function (Set $set, $state) {
+                            //         $set('city', $state); // Ensure city state is updated
+                            //     }),
 
-                            TextInput::make('town')
-                                ->required()
-                                ->label('Town/Location'),
-                            ])->columns(3),
+                            // TextInput::make('town')
+                            //     ->required()
+                            //     ->label('Town/Location'),
+                            // ])->columns(3),
+
+                    Fieldset::make('Where is the business located / headquartered?')
+                    ->schema([
+                        // Country Select
+                        Select::make('country')
+                            ->label('Country')
+                            ->required()
+                            ->live()
+                            ->options(function () {
+                                $data = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true));
+                                return $data->keys()->mapWithKeys(fn ($country) => [$country => $country])->toArray();
+                            })
+                            ->afterStateUpdated(function (Set $set, $state) {
+                                $set('city', null); // Reset city if the country changes
+                            }),
+
+                        // City Select
+                        Select::make('city')
+                            ->label('City')
+                            ->required()
+                            ->live()
+                            ->options(function (callable $get) {
+                                $country = $get('country');
+
+                                if ($country) {
+                                    $data = json_decode(Storage::disk('local')->get('data/countries.json'), true);
+                                    $cities = $data[$country] ?? [];
+                                    return array_combine($cities, $cities); // Map city names to city names
+                                }
+
+                                return []; // Return empty if no country is selected
+                            })
+                            ->afterStateUpdated(function (Set $set, $state) {
+                                $set('city', $state); // Ensure the selected city is stored correctly
+                            }),
+
+                        // Town/Location Input
+                        TextInput::make('town')
+                            ->required()
+                            ->label('Town/Location'),
+                    ])
+                    ->columns(3),
+
 
                             Grid::make(3)
                             ->schema([
