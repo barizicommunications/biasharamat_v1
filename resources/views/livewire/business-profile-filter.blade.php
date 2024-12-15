@@ -49,7 +49,7 @@
     </aside> --}}
 
  <!-- Sidebar Filters -->
-<aside class="w-full lg:w-1/4 mb-6 lg:mb-0">
+{{-- <aside class="w-full lg:w-1/4 mb-6 lg:mb-0">
     <div class="space-y-6">
 
         <!-- Country Filter -->
@@ -110,6 +110,70 @@
             </select>
         </div>
 
+    </div>
+</aside> --}}
+
+<aside class="w-full lg:w-1/4 mb-6 lg:mb-0">
+    <div class="space-y-6">
+        <!-- Country Filter -->
+        <div>
+            <h3 class="text-gray-400 mb-4 font-bold">Country</h3>
+            <select wire:model.live="country" class="w-full border-gray-300 text-gray-500 py-3 rounded-md">
+                <option value="">All Countries</option>
+                @foreach($countries as $countryOption)
+                    <option value="{{ $countryOption }}">{{ $countryOption }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- City Filter -->
+        @if (!empty($cities))
+            <div>
+                <h3 class="text-gray-400 mb-4 font-bold">City</h3>
+                <select wire:model.live="city" class="w-full border-gray-300 text-gray-500 py-3 rounded-md">
+                    <option value="">All Cities</option>
+                    @foreach($cities as $cityOption)
+                        <option value="{{ $cityOption }}">{{ $cityOption }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
+
+        <!-- Seller Interest Filter -->
+        <div>
+            <h3 class="text-gray-400 mb-4 font-bold">Seller Interest</h3>
+            @foreach($sellerInterests as $interest)
+                <label class="flex items-center mb-2">
+                    <input type="checkbox"
+                           wire:model.live="sellerInterest"
+                           value="{{ $interest }}"
+                           class="rounded-full text-gray-500">
+                    <span class="ml-4 text-sm text-gray-600">{{ $interest }}</span>
+                </label>
+            @endforeach
+        </div>
+
+        <!-- Business Legal Entity Filter -->
+        <div>
+            <h3 class="text-gray-400 mb-4 font-bold">Business Legal Entity</h3>
+            <select wire:model.live="businessLegalEntity" class="w-full border-gray-300 text-gray-500 py-3 rounded-md">
+                <option value="">All Entities</option>
+                @foreach($legalEntities as $entity)
+                    <option value="{{ $entity }}">{{ $entity }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Industry Filter -->
+        <div>
+            <h3 class="text-gray-400 mb-4 font-bold">Industries</h3>
+            <select wire:model.live="industry" class="w-full border-gray-300 text-gray-500 py-3 rounded-md mb-4">
+                <option value="">All Industries</option>
+                @foreach($industries as $industryOption)
+                    <option value="{{ $industryOption }}">{{ $industryOption }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 </aside>
 
