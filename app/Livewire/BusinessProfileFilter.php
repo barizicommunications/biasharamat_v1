@@ -19,6 +19,7 @@ class BusinessProfileFilter extends Component
     public $businessLegalEntity = '';
     public $industry = '';
     public $sort = 'rating';
+    public $search = '';
 
     // Data Arrays
     public $countries = [];
@@ -130,45 +131,81 @@ class BusinessProfileFilter extends Component
         ]);
     }
 
-    private function applyFilters($query)
-    {
-        // Country filter
-        if ($this->country) {
-            $query->where('application_data->country', $this->country);
-        }
 
-        // City filter
-        if ($this->city) {
-            $query->where('application_data->city', $this->city);
-        }
 
-        // Seller Interest filter (multiple selection)
-        if (!empty($this->sellerInterest)) {
-            $query->where(function ($q) {
-                foreach ($this->sellerInterest as $interest) {
-                    $q->orWhere('application_data->seller_interest', $interest);
-                }
-            });
-        }
-
-        // Business Legal Entity filter
-        if ($this->businessLegalEntity) {
-            $query->where('application_data->business_legal_entity', $this->businessLegalEntity);
-        }
-
-        // Industry filter
-        if ($this->industry) {
-            $query->where('application_data->business_industry', $this->industry);
-        }
-
-        // Sorting
-        switch ($this->sort) {
-            case 'rating':
-                $query->orderBy('created_at', 'desc');
-                break;
-            // Add more sorting options as needed
-        }
-
-        return $query;
+private function applyFilters($query)
+{
+    // Country filter
+    if ($this->country) {
+        $query->whereRaw("JSON_EXTRACT(application_data, '$.country') = ?", [$this->country]);
     }
+
+    // City filter
+    if ($this->city) {
+        $query->whereRaw("JSON_EXTRACT(application_data, '$.city') = ?", [$this->city]);
+    }
+
+    // Seller Interest filter (multiple selection)
+    if (!empty($this->sellerInterest)) {
+        $query->where(function ($q) {
+            foreach ($this->sellerInterest as $interest) {
+                $q->orWhereRaw("JSON_EXTRACT(application_data, '$.seller_interest') = ?", [$interest]);
+            }
+        });
+    }
+
+    // Business Legal Entity filter
+    if ($this->businessLegalEntity) {
+        $query->whereRaw("JSON_EXTRACT(application_data, '$.business_legal_entity') = ?", [$this->businessLegalEntity]);
+    }
+
+    // Industry filter
+    if ($this->industry) {
+        $query->whereRaw("JSON_EXTRACT(application_data, '$.business_industry') = ?", [$this->industry]);
+    }
+
+    // Search filter
+    if ($this->search) {
+        $query->where(function ($q) {
+            $q->whereRaw("JSON_EXTRACT(application_data, '$.company_name') LIKE ?", ['%' . $this->search . '%'])
+              ->orWhereRaw("JSON_EXTRACT(application_data, '$.business_industry') LIKE ?", ['%' . $this->search . '%'])
+              ->orWhereRaw("JSON_EXTRACT(application_data, '$.business_legal_entity') LIKE ?", ['%' . $this->search . '%']);
+        });
+    }
+
+    // Sorting
+    switch ($this->sort) {
+        case 'pricing_asc':
+            $query->orderByRaw("
+                LEAST(
+                    IFNULL(CAST(JSON_UNQUOTE(JSON_EXTRACT(application_data, '$.loan_amount')) AS UNSIGNED), 999999999),
+                    IFNULL(CAST(JSON_UNQUOTE(JSON_EXTRACT(application_data, '$.investment_amount')) AS UNSIGNED), 999999999),
+                    IFNULL(CAST(JSON_UNQUOTE(JSON_EXTRACT(application_data, '$.tentative_selling_price')) AS UNSIGNED), 999999999)
+                ) ASC
+            ");
+            break;
+
+        case 'pricing_desc':
+            $query->orderByRaw("
+                GREATEST(
+                    IFNULL(CAST(JSON_UNQUOTE(JSON_EXTRACT(application_data, '$.loan_amount')) AS UNSIGNED), 0),
+                    IFNULL(CAST(JSON_UNQUOTE(JSON_EXTRACT(application_data, '$.investment_amount')) AS UNSIGNED), 0),
+                    IFNULL(CAST(JSON_UNQUOTE(JSON_EXTRACT(application_data, '$.tentative_selling_price')) AS UNSIGNED), 0)
+                ) DESC
+            ");
+            break;
+
+        case 'rating':
+            $query->orderBy('created_at', 'desc');
+            break;
+    }
+
+    return $query;
+}
+
+
+
+
+
+
 }

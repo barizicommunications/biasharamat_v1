@@ -1,6 +1,6 @@
 <div class="lg:flex lg:space-x-10">
     <!-- Sidebar Filters -->
-  
+
 <aside class="w-full lg:w-1/4 mb-6 lg:mb-0">
     <div class="space-y-6">
         <!-- Country Filter -->
@@ -71,11 +71,18 @@
     <section class="w-full lg:w-3/4">
         <!-- Sort and Results Header -->
         <div class="flex justify-between mb-6">
-            <h3 class="text-gray-400">Showing {{ $businessProfiles->total() }} results</h3>
-            <select wire:model="sort" class="border-gray-300 text-gray-500 py-3 rounded-md">
-                <option value="rating">Sort by pricing</option>
-            </select>
+            <input type="text"
+                   wire:model.live="search"
+                   placeholder="Search by company name, industry, or legal entity"
+                   class="border-gray-300 text-gray-500 py-3 rounded-md w-3/4 mr-4">
+
+                   <select wire:model="sort" class="border-gray-300 text-gray-500 py-3 rounded-md">
+                    <option value="rating">Sort by rating</option>
+                    <option value="pricing_asc">Price: Low to High</option>
+                    <option value="pricing_desc">Price: High to Low</option>
+                </select>
         </div>
+
 
         <!-- Business Listings Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
