@@ -5,16 +5,49 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\BusinessProfile;
+use Illuminate\Support\Facades\Storage;
 
 class BusinessProfileFilter extends Component
 {
     use WithPagination;
 
-    public $investorType = [];
-    public $interests = [];
-    public $locations = [];
+    public $country;
+    public $city;
+    public $sellerInterest = [];
+    public $businessLegalEntity;
     public $industry;
     public $sort = 'rating';
+
+    public $countries = [];
+    public $cities = [];
+
+    public function mount()
+    {
+
+
+        // Load the countries from the JSON file during component initialization
+        $this->countries = collect(json_decode(Storage::disk('local')->get('data/countries.json'), true))->keys()->toArray();
+        
+    }
+
+    public function updatedCountry($value)
+{
+    // Reset city when the country changes
+    $this->reset('city');
+    $this->cities = [];
+
+    // Load cities based on the selected country
+    if ($value) {
+        $data = json_decode(Storage::disk('local')->get('data/countries.json'), true);
+        $this->cities = $data[$value] ?? [];
+
+        // Debug log to check cities loaded
+        \Log::info('Loaded Cities:', ['country' => $value, 'cities' => $this->cities]);
+    }
+
+    $this->resetPage();
+}
+
 
     public function updated($propertyName)
     {
@@ -25,27 +58,32 @@ class BusinessProfileFilter extends Component
     {
         $query = BusinessProfile::query();
 
-        // Filter by Investor Type
-        if (!empty($this->investorType)) {
-            $query->whereIn('seller_role', $this->investorType);
+        // Filter by Country
+        if ($this->country) {
+            $query->where('application_data->country', $this->country);
         }
 
-        // Filter by Interests
-        if (!empty($this->interests)) {
-            $query->whereIn('seller_interest', $this->interests);
+        // Filter by City
+        if ($this->city) {
+            $query->where('application_data->city', $this->city);
         }
 
-        // Filter by Locations
-        if (!empty($this->locations)) {
-            $query->whereIn('city', $this->locations);
+        // Filter by Seller Interest
+        if (!empty($this->sellerInterest)) {
+            $query->whereIn('application_data->seller_interest', $this->sellerInterest);
+        }
+
+        // Filter by Business Legal Entity
+        if ($this->businessLegalEntity) {
+            $query->where('application_data->business_legal_entity', $this->businessLegalEntity);
         }
 
         // Filter by Industry
         if ($this->industry) {
-            $query->where('business_industry', $this->industry);
+            $query->where('application_data->business_industry', $this->industry);
         }
 
-        // Sorting Logic (by created_at for now, replace with actual rating if available)
+        // Sorting Logic
         if ($this->sort === 'rating') {
             $query->orderBy('created_at', 'desc');
         }
