@@ -1,118 +1,6 @@
 <div class="lg:flex lg:space-x-10">
     <!-- Sidebar Filters -->
-    {{-- <aside class="w-full lg:w-1/4 mb-6 lg:mb-0">
-        <div class="space-y-6">
-            <!-- Investor Type Filter -->
-            <div>
-                <h3 class="text-gray-400 mb-4 font-bold">Investor Type</h3>
-                @foreach(['Individuals', 'Companies', 'Lenders', 'Financial advisors', 'Funds'] as $type)
-                    <label class="flex items-center mb-2">
-                        <input type="checkbox" wire:model="investorType" value="{{ $type }}" class="rounded-full text-gray-500">
-                        <span class="ml-4 text-sm text-gray-600">{{ $type }}</span>
-                    </label>
-                @endforeach
-            </div>
-
-            <!-- Interested In Filter -->
-            <div>
-                <h3 class="text-gray-400 mb-4 font-bold">Interested In</h3>
-                @foreach(['Buying a business', 'Investing in a business', 'Lending to a business', 'Buying business assets'] as $interest)
-                    <label class="flex items-center mb-2">
-                        <input type="checkbox" wire:model="interests" value="{{ $interest }}" class="rounded-full text-gray-500">
-                        <span class="ml-4 text-sm text-gray-600">{{ $interest }}</span>
-                    </label>
-                @endforeach
-            </div>
-
-            <!-- Location Filter -->
-            <div>
-                <h3 class="text-gray-400 mb-4 font-bold">Locations</h3>
-                @foreach(['Nairobi', 'Mombasa', 'Kisumu', 'Eldoret', 'Nakuru'] as $location)
-                    <label class="flex items-center mb-2">
-                        <input type="checkbox" wire:model="locations" value="{{ $location }}" class="rounded-full text-gray-500">
-                        <span class="ml-4 text-sm text-gray-600">{{ $location }}</span>
-                    </label>
-                @endforeach
-            </div>
-
-            <!-- Industry Filter -->
-            <div>
-                <h3 class="text-gray-400 mb-4 font-bold">Industries</h3>
-                <select wire:model="industry" class="w-full border-gray-300 text-gray-500 py-3 rounded-md mb-4">
-                    <option value="">All Industries</option>
-                    @foreach(['Technology', 'Retail', 'Healthcare', 'Finance', 'Construction'] as $industryOption)
-                        <option value="{{ $industryOption }}">{{ $industryOption }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-    </aside> --}}
-
- <!-- Sidebar Filters -->
-{{-- <aside class="w-full lg:w-1/4 mb-6 lg:mb-0">
-    <div class="space-y-6">
-
-        <!-- Country Filter -->
-        <div>
-            <h3 class="text-gray-400 mb-4 font-bold">Country</h3>
-            <select wire:model="country" class="w-full border-gray-300 text-gray-500 py-3 rounded-md">
-                <option value="">All Countries</option>
-                @foreach($countries as $countryOption)
-                    <option value="{{ $countryOption }}">{{ $countryOption }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <!-- City Filter -->
-        @if (!empty($cities))
-        <div>
-            <h3 class="text-gray-400 mb-4 font-bold">City</h3>
-            <select wire:model="city" class="w-full border-gray-300 text-gray-500 py-3 rounded-md">
-                <option value="">All Cities</option>
-                @foreach($cities as $cityOption)
-                    <option value="{{ $cityOption }}">{{ $cityOption }}</option>
-                @endforeach
-            </select>
-        </div>
-    @endif
-
-
-        <!-- Seller Interest Filter -->
-        <div>
-            <h3 class="text-gray-400 mb-4 font-bold">Seller Interest</h3>
-            @foreach(['Sale of shares', 'Partial sale of shares', 'Sale of assets', 'Financing'] as $interest)
-                <label class="flex items-center mb-2">
-                    <input type="checkbox" wire:model="sellerInterest" value="{{ $interest }}" class="rounded-full text-gray-500">
-                    <span class="ml-4 text-sm text-gray-600">{{ $interest }}</span>
-                </label>
-            @endforeach
-        </div>
-
-        <!-- Business Legal Entity Filter -->
-        <div>
-            <h3 class="text-gray-400 mb-4 font-bold">Business Legal Entity</h3>
-            <select wire:model="businessLegalEntity" class="w-full border-gray-300 text-gray-500 py-3 rounded-md">
-                <option value="">All Entities</option>
-                @foreach(['Sole Proprietorship', 'Partnership', 'Limited Liability Company', 'Public Limited Company (PLC)'] as $entity)
-                    <option value="{{ $entity }}">{{ $entity }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <!-- Industry Filter -->
-        <div>
-            <h3 class="text-gray-400 mb-4 font-bold">Industries</h3>
-            <select wire:model="industry" class="w-full border-gray-300 text-gray-500 py-3 rounded-md mb-4">
-                <option value="">All Industries</option>
-                @foreach(['Technology', 'Retail', 'Healthcare', 'Finance', 'Construction'] as $industryOption)
-                    <option value="{{ $industryOption }}">{{ $industryOption }}</option>
-                @endforeach
-            </select>
-        </div>
-
-    </div>
-</aside> --}}
-
+  
 <aside class="w-full lg:w-1/4 mb-6 lg:mb-0">
     <div class="space-y-6">
         <!-- Country Filter -->
@@ -185,7 +73,7 @@
         <div class="flex justify-between mb-6">
             <h3 class="text-gray-400">Showing {{ $businessProfiles->total() }} results</h3>
             <select wire:model="sort" class="border-gray-300 text-gray-500 py-3 rounded-md">
-                <option value="rating">Sort by ratings</option>
+                <option value="rating">Sort by pricing</option>
             </select>
         </div>
 

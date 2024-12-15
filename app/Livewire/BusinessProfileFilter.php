@@ -33,18 +33,47 @@ class BusinessProfileFilter extends Component
     ];
 
     const LEGAL_ENTITIES = [
-        'Sole Proprietorship',
-        'Partnership',
-        'Limited Liability Company',
-        'Public Limited Company (PLC)'
+        "Sole proprietorship/sole trader",
+        "General partnership",
+        "Limited liability partnership (LLP)",
+        "Private limited company (Ltd)",
+        "Public limited company (PLC)",
+        "Limited liability company (LLC)",
+        "Corporation (Inc)",
+        "Non-profit organization (NPO)",
+        "Cooperative",
+        "Joint venture",
+        "Franchise",
+        "Trust",
+        "Association",
+        "Company limited by guarantee",
+        "Unlimited company",
+        "Other"
     ];
 
+
     const INDUSTRIES = [
-        'Technology',
-        'Retail',
-        'Healthcare',
-        'Finance',
-        'Construction'
+        "Technology",
+        "Building, construction and maintenance",
+        "Education",
+        "Healthcare",
+        "Finance and Insurance",
+        "Real Estate",
+        "Manufacturing",
+        "Retail",
+        "Hospitality and Tourism",
+        "Transportation and Logistics",
+        "Agriculture and Farming",
+        "Energy and Utilities",
+        "Telecommunications",
+        "Media and Entertainment",
+        "Legal Services",
+        "Government and Public Services",
+        "Non-profit Organizations",
+        "Consulting and Professional Services",
+        "Food and Beverage",
+        "Automotive",
+        "Other"
     ];
 
     // Lifecycle Hooks
