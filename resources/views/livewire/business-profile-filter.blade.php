@@ -76,7 +76,7 @@
                    placeholder="Search by company name, industry, or legal entity"
                    class="border-gray-300 text-gray-500 py-3 rounded-md w-3/4 mr-4">
 
-                   <select wire:model="sort" class="border-gray-300 text-gray-500 py-3 rounded-md">
+                   <select wire:model="sort" wire:key="sort-select" class="border-gray-300 text-gray-500 py-3 rounded-md">
                     <option value="rating">Sort by rating</option>
                     <option value="pricing_asc">Price: Low to High</option>
                     <option value="pricing_desc">Price: High to Low</option>
