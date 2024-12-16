@@ -14,19 +14,19 @@ class BusinessProfileObserver
      */
     public function created(BusinessProfile $businessProfile): void
     {
-           // Get the authenticated user
-           $user = Auth::user();
+        //    // Get the authenticated user
+        //    $user = Auth::user();
 
-           // Notify the user
-           $user->notify(new ApplicationUnderReview($user));
+        //    // Notify the user
+        //    $user->notify(new ApplicationUnderReview($user));
 
-           // Fetch the admin user
-           $admin = User::where('registration_type', 'Admin')->first();
+        //    // Fetch the admin user
+        //    $admin = User::where('registration_type', 'Admin')->first();
 
-           // Notify the admin if found
-           if ($admin) {
-               $admin->notify(new BusinessSellerSignup($user));
-           }
+        //    // Notify the admin if found
+        //    if ($admin) {
+        //        $admin->notify(new BusinessSellerSignup($user));
+        //    }
     }
 
     /**
