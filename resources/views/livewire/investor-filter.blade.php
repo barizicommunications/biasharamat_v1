@@ -5,21 +5,15 @@
             <!-- Buyer Roles Filter -->
             <div>
                 <h3 class="text-gray-400 mb-4 font-bold">Buyer Role</h3>
-                @foreach(['Individual investor/buyer', 'Corporate investor/buyer'] as $role)
+                @foreach ($buyerRolesOptions as $role)
                     <label class="flex items-center mb-2">
-                        <input type="checkbox" wire:model="buyerRoles" value="{{ $role }}" class="rounded-full text-gray-500">
+                        <input
+                            type="checkbox"
+                            wire:model.live="buyerRoles"
+                            value="{{ $role }}"
+                            class="rounded-full text-gray-500"
+                        >
                         <span class="ml-4 text-sm text-gray-600">{{ $role }}</span>
-                    </label>
-                @endforeach
-            </div>
-
-            <!-- Interested In Filter -->
-            <div>
-                <h3 class="text-gray-400 mb-4 font-bold">Interested In</h3>
-                @foreach(['Acquiring / Buying a Business', 'Investing in a Business', 'Buying assets'] as $interest)
-                    <label class="flex items-center mb-2">
-                        <input type="checkbox" wire:model="interests" value="{{ $interest }}" class="rounded-full text-gray-500">
-                        <span class="ml-4 text-sm text-gray-600">{{ $interest }}</span>
                     </label>
                 @endforeach
             </div>
@@ -27,9 +21,12 @@
             <!-- Company Industry Filter -->
             <div>
                 <h3 class="text-gray-400 mb-4 font-bold">Company Industry</h3>
-                <select wire:model="companyIndustry" class="w-full border-gray-300 text-gray-500 py-3 rounded-md">
+                <select
+                    wire:model.live="companyIndustry"
+                    class="w-full border-gray-300 text-gray-500 py-3 rounded-md"
+                >
                     <option value="">All Industries</option>
-                    @foreach(['Education', 'Technology', 'Healthcare', 'Finance', 'Retail'] as $industry)
+                    @foreach ($industries as $industry)
                         <option value="{{ $industry }}">{{ $industry }}</option>
                     @endforeach
                 </select>
@@ -38,11 +35,15 @@
             <!-- Buyer Interest Filter -->
             <div>
                 <h3 class="text-gray-400 mb-4 font-bold">Buyer Interest</h3>
-                <select wire:model="buyerInterest" class="w-full border-gray-300 text-gray-500 py-3 rounded-md">
+                <select
+                    wire:model.live="buyerInterest"
+                    class="w-full border-gray-300 text-gray-500 py-3 rounded-md"
+                >
                     <option value="">All Buyer Interests</option>
-                    @foreach(['Technology', 'Healthcare', 'Finance', 'Retail'] as $interest)
-                        <option value="{{ $interest }}">{{ $interest }}</option>
-                    @endforeach
+                    <option value="Technology">Technology</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Retail">Retail</option>
                 </select>
             </div>
         </div>
@@ -52,17 +53,15 @@
     <section class="w-full lg:w-3/4">
         <!-- Search Input -->
         <div class="relative mb-6">
-            <input type="text"
-                   wire:model="search"
-                   placeholder="Search by company name, buyer interest, or location"
-                   class="border-gray-300 text-gray-500 py-3 pr-10 pl-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input
+                type="text"
+                wire:model.live.debounce.300ms="search"
+                placeholder="Search by company name"
+                class="border-gray-300 text-gray-500 py-3 pr-10 pl-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
             <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M21 21l-4.35-4.35m2.85-6.15a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m2.85-6.15a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </div>
         </div>
@@ -91,8 +90,7 @@
                         </div>
 
                         <p class="text-sm text-gray-600 mb-2">
-                            <span class="font-semibold">Interested In:</span>
-                            {{ is_array($profile->interested_in) ? implode(', ', $profile->interested_in) : $profile->interested_in }}
+                            <span class="font-semibold">Interested In:</span> {{ $profile->interested_in }}
                         </p>
 
                         <p class="text-sm text-gray-600 mb-2">
@@ -119,7 +117,7 @@
 
         <!-- Pagination -->
         @if ($investorProfiles->hasPages())
-            <div class="mt-8 flex justify-center">
+            <div class="mt-8">
                 {{ $investorProfiles->links() }}
             </div>
         @endif

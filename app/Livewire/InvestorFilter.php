@@ -13,27 +13,56 @@ class InvestorFilter extends Component
 
     // Filter properties
     public $buyerRoles = [];
-    public $interests = [];
     public $companyIndustry = '';
     public $buyerInterest = '';
     public $search = '';
-    public $sort = 'investment_range';
+    public $sort = 'company_name';
+
+    // Data arrays (for dropdown options)
+    public $industries;
+    public $buyerRolesOptions;
 
     protected $queryString = [
         'buyerRoles' => ['except' => []],
-        'interests' => ['except' => []],
         'companyIndustry' => ['except' => ''],
         'buyerInterest' => ['except' => ''],
         'search' => ['except' => ''],
-        'sort' => ['except' => 'investment_range'],
+        'sort' => ['except' => 'company_name'],
     ];
 
-    public function updated($propertyName)
+    public function mount()
     {
-        // For debugging purposes:
-        Log::info('Property updated: ' . $propertyName);
+        $this->industries = [
+            'Education',
+            'Technology',
+            'Healthcare',
+            'Finance',
+            'Retail'
+        ];
 
-        // Reset pagination whenever any filter updates
+        $this->buyerRolesOptions = [
+            'Individual investor/buyer',
+            'Corporate investor/buyer'
+        ];
+    }
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedBuyerRoles()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedCompanyIndustry()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedBuyerInterest()
+    {
         $this->resetPage();
     }
 
@@ -46,23 +75,6 @@ class InvestorFilter extends Component
             $query->whereIn('buyer_role', $this->buyerRoles);
         }
 
-        if (!empty($this->interests)) {
-            // If `interested_in` is a JSON column and you're using Laravel >=5.8 & MySQL 5.7+:
-            $query->where(function ($q) {
-                foreach ($this->interests as $interest) {
-                    $q->orWhereJsonContains('interested_in', $interest);
-                }
-            });
-
-            // If `interested_in` is just a string field containing comma-separated values,
-            // use something like:
-            // $query->where(function ($q) {
-            //     foreach ($this->interests as $interest) {
-            //         $q->orWhere('interested_in', 'like', '%' . $interest . '%');
-            //     }
-            // });
-        }
-
         if ($this->companyIndustry) {
             $query->where('company_industry', $this->companyIndustry);
         }
@@ -71,18 +83,11 @@ class InvestorFilter extends Component
             $query->where('buyer_interest', $this->buyerInterest);
         }
 
-        // Apply search
         if ($this->search) {
-            $searchTerm = '%' . $this->search . '%';
-            $query->where(function ($q) use ($searchTerm) {
-                $q->where('company_name', 'like', $searchTerm)
-                  ->orWhere('buyer_interest', 'like', $searchTerm)
-                  ->orWhere('current_location', 'like', $searchTerm)
-                  ->orWhere('buyer_role', 'like', $searchTerm);
-            });
+            $query->where('company_name', 'like', '%' . trim($this->search) . '%');
         }
 
-        // Apply sorting (make sure 'investment_range' is a valid column in your table)
+        // Apply sorting
         $query->orderBy($this->sort);
 
         // Get paginated results
@@ -91,23 +96,5 @@ class InvestorFilter extends Component
         return view('livewire.investor-filter', [
             'investorProfiles' => $investorProfiles,
         ]);
-    }
-
-    // Helper method to get available industries
-    public function getIndustries()
-    {
-        return ['Education', 'Technology', 'Healthcare', 'Finance', 'Retail'];
-    }
-
-    // Helper method to get buyer roles
-    public function getBuyerRoles()
-    {
-        return ['Individual investor/buyer', 'Corporate investor/buyer'];
-    }
-
-    // Helper method to get interest options
-    public function getInterestOptions()
-    {
-        return ['Acquiring / Buying a Business', 'Investing in a Business', 'Buying assets'];
     }
 }
