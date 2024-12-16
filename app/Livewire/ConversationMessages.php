@@ -25,16 +25,31 @@ class ConversationMessages extends Component
     }
 
 
+// public function loadMessages()
+// {
+//     $conversation = Conversation::with(['messages' => function ($query) {
+//         $query->where('status', 'approved') // Only approved messages
+//               ->orWhere('sender_id', auth()->id()) // Allow the sender to see their own messages
+//               ->orderBy('created_at', 'asc');
+//     }, 'messages.sender'])->findOrFail($this->conversationId);
+
+//     $this->messages = $conversation->messages->toArray();
+// }
+
 public function loadMessages()
 {
     $conversation = Conversation::with(['messages' => function ($query) {
-        $query->where('status', 'approved') // Only approved messages
-              ->orWhere('sender_id', auth()->id()) // Allow the sender to see their own messages
-              ->orderBy('created_at', 'asc');
+        $query->where(function ($q) {
+            $q->where('status', 'approved')
+              ->orWhere('sender_id', auth()->id()); // Show sender's messages regardless of status
+        })
+        ->orderBy('created_at', 'asc');
     }, 'messages.sender'])->findOrFail($this->conversationId);
 
     $this->messages = $conversation->messages->toArray();
 }
+
+
 
 
     public function markMessagesAsRead()
@@ -48,7 +63,7 @@ public function loadMessages()
         $this->updateUnreadCount(); // Update unread count after marking as read
     }
 
-  
+
 
 
 public function sendMessage()
@@ -85,13 +100,16 @@ public function sendMessage()
         'status' => $message->status,
     ]);
 
-    // Reset the input
-    $this->reset('newMessage');
+   // Clear the input
+   $this->newMessage = '';
 
-    // Dispatch browser event for JavaScript handling
-    $this->dispatch('messageSent');
+   // Reload the messages to display the new message immediately
+   $this->loadMessages();
 
-    $this->updateUnreadCount();
+   // Dispatch browser event to handle scrolling and input clearing
+   $this->dispatch('messageSent');
+
+   $this->updateUnreadCount();
 }
 
 

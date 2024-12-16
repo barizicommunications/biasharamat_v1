@@ -27,7 +27,6 @@
     <!-- Message Input Form -->
     <div class="border-t border-gray-100 p-4 bg-gray-50 rounded-b-lg">
         <form wire:submit.prevent="sendMessage" class="space-y-3">
-            <!-- Notice to inform users about restrictions -->
             <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 rounded-md">
                 <p class="text-sm">
                     <strong>Note:</strong> Please avoid including email addresses, phone numbers, or any contact details in your message.
@@ -43,7 +42,6 @@
                     id="message-input-{{ $conversationId }}"
                 ></textarea>
 
-                <!-- Display validation error -->
                 @error('newMessage')
                     <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                 @enderror
@@ -71,52 +69,34 @@
     </div>
 </div>
 
+<!-- JavaScript for Clearing Input and Scrolling -->
 <script>
-document.addEventListener('livewire:load', function () {
-    const conversationId = @this.conversationId;
-    const messagesContainer = document.getElementById(`messages-container-${conversationId}`);
-    const scrollAnchor = document.getElementById(`scroll-anchor-${conversationId}`);
-    const messageInput = document.getElementById(`message-input-${conversationId}`);
+    document.addEventListener('livewire:load', function () {
+        const conversationId = @json($conversationId);
+        const messagesContainer = document.getElementById(`messages-container-${conversationId}`);
+        const scrollAnchor = document.getElementById(`scroll-anchor-${conversationId}`);
+        const messageInput = document.getElementById(`message-input-${conversationId}`);
 
-    // Function to scroll to bottom
-    function scrollToBottom(behavior = 'smooth') {
-        if (scrollAnchor) {
-            scrollAnchor.scrollIntoView({ behavior: behavior, block: 'end' });
-        }
-    }
-
-    // Initial scroll to bottom (instant)
-    scrollToBottom('instant');
-
-    // Handle new messages
-    Livewire.on('messageSent', function () {
-        // Clear the input
-        if (messageInput) {
-            messageInput.value = '';
+        function scrollToBottom(behavior = 'smooth') {
+            if (scrollAnchor) {
+                scrollAnchor.scrollIntoView({ behavior: behavior, block: 'end' });
+            }
         }
 
-        // Scroll to bottom after a brief delay to ensure content is rendered
-        setTimeout(() => {
-            scrollToBottom();
-        }, 100);
-    });
+        // Initial scroll to bottom (instant)
+        scrollToBottom('instant');
 
-    // Watch for changes in the messages container
-    const observer = new MutationObserver(function(mutations) {
-        scrollToBottom();
-    });
+        Livewire.on('messageSent', function () {
+            // Clear the input field
+            if (messageInput) {
+                messageInput.value = '';
+            }
 
-    // Start observing the messages container for changes
-    if (messagesContainer) {
-        observer.observe(messagesContainer, {
-            childList: true,
-            subtree: true
+            // Scroll to bottom after a brief delay
+            setTimeout(() => {
+                scrollToBottom();
+            }, 100);
         });
-    }
+    });
+    </script>
 
-    // Add smooth scrolling behavior
-    if (messagesContainer) {
-        messagesContainer.style.scrollBehavior = 'smooth';
-    }
-});
-</script>
