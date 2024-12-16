@@ -1,4 +1,16 @@
+# Ignore everything
 *
-!public/
-!storage/app/data/
+
+# But not these files...
 !.gitignore
+
+# And not these directories...
+!public/
+!storage/
+!storage/app/
+!storage/app/data/
+!storage/app/data/*
+
+# If there are specific file types in data you want to ignore, add them below
+storage/app/data/*.log
+storage/app/data/*.tmp
