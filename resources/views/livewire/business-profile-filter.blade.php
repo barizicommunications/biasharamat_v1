@@ -70,18 +70,20 @@
     <!-- Results Section -->
     <section class="w-full lg:w-3/4">
         <!-- Sort and Results Header -->
-        <div class="flex justify-between mb-6">
+        <div class="relative mb-6">
             <input type="text"
                    wire:model.live="search"
                    placeholder="Search by company name, industry, or legal entity"
-                   class="border-gray-300 text-gray-500 py-3 rounded-md w-3/4 mr-4">
-
-                   <select wire:model="sort" wire:key="sort-select" class="border-gray-300 text-gray-500 py-3 rounded-md">
-                    <option value="rating">Sort by rating</option>
-                    <option value="pricing_asc">Price: Low to High</option>
-                    <option value="pricing_desc">Price: High to Low</option>
-                </select>
+                   class="border-gray-300 text-gray-500 py-3 pr-10 pl-4 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <!-- Heroicon: Magnifying Glass -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m2.85-6.15a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
         </div>
+
+
 
 
         <!-- Business Listings Grid -->

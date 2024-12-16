@@ -800,7 +800,7 @@ class RegisterSeller extends Component implements HasForms
                         ->content("Photos are an important part of your profile and are publicly displayed. Documents help us verify and approve your profile faster. Documents names entered here are publicly visible but are accessible only to introduced members."),
                         FileUpload::make('business_photos')
                         ->required()
-                        ->label('Photos of the business premises(Min: 5, Max: 7, File type .jpeg,.png .webp to be uploaded below 5MB )')->required()
+                        ->label('Photos of the business premises(Min: 5, Max: 7, File type .jpeg,.png .webp)')->required()
                         ->image()
                         ->downloadable()
                         ->multiple()

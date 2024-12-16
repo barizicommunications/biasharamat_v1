@@ -16,7 +16,7 @@
             <h2 class="font-bold text-primary text-xl md:text-3xl mb-8">Investors</h2>
 
             <!-- Layout Container -->
-            <div class="lg:flex lg:space-x-10">
+            {{-- <div class="lg:flex lg:space-x-10">
                 <!-- Sidebar Filters -->
                 <aside class="w-full lg:w-1/4 mb-6 lg:mb-0">
                     <!-- Filters Section -->
@@ -139,7 +139,9 @@
                         </div>
                     @endif
                 </section>
-            </div>
+            </div> --}}
+
+            @livewire('investor-filter')
         </article>
     </section>
 </x-guest-layout>
