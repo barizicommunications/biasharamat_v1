@@ -11,7 +11,7 @@
 
                         <!-- Name Input -->
                         <div class="mb-4">
-                            <label for="seller_name" class="block mb-3">Your name <span class="text-red-600">*</span></label>
+                            <label for="seller_name" class="block mb-3">Buiness name <span class="text-red-600">*</span></label>
                             <input
                                 type="text"
                                 id="seller_name"
@@ -27,7 +27,7 @@
 
                         <!-- Email Input -->
                         <div class="mb-4">
-                            <label for="seller_email" class="block mb-3">Your email <span class="text-red-600">*</span></label>
+                            <label for="seller_email" class="block mb-3">Business email <span class="text-red-600">*</span></label>
                             <input
                                 type="email"
                                 id="seller_email"
