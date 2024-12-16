@@ -2,6 +2,8 @@
 
 use App\Livewire\TestComponent;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
@@ -11,7 +13,6 @@ use App\Http\Controllers\InvestorProfileController;
 use App\Http\Controllers\InvestorsAndBuyersController;
 use App\Http\Controllers\SellerRegistrationController;
 use App\Http\Controllers\InvestorRegistrationController;
-use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,9 +143,11 @@ Route::get('seller-notifications', function () {
 Route::get('blogs', function () {
     return view('blog');
 })->name('blog');
-Route::get('blog/{id}', function () {
-    return view('single-blog');
-})->name('singleBlog');
+// Route::get('blog/{id}', function () {
+//     return view('single-blog');
+// })->name('singleBlog');
+
+Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
 
 
 // Route::get('business-buyer-profile-overview', function () {

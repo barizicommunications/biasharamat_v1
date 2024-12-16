@@ -23,7 +23,7 @@
            </div>
            <div>
 
-        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mb-10">
+        {{-- <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 mb-10">
             <ul class="flex flex-wrap -mb-px">
                 <li class="mr-2">
                     <a href="#" class="inline-block p-4 text-primary border-b-2 border-primary rounded-t-lg active font-bold" aria-current="page">View all</a>
@@ -137,7 +137,9 @@
                  <span class="ml-2">Load more</span>
               </a>
             </div>
-        </div>
+        </div> --}}
+
+        @livewire('blog-list')
 
 
 

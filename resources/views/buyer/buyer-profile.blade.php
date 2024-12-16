@@ -194,7 +194,7 @@
 
         </article>
 
-        <div  class=" ml-28 max-w-screen-2xl px-4 py-16 sm:px-10 lg:py-8">
+        {{-- <div  class=" ml-28 max-w-screen-2xl px-4 py-16 sm:px-10 lg:py-8">
             <div class="flex flex-wrap md:flex-nowrap space-x-20">
 
                 <div class="w-3/4">
@@ -406,7 +406,7 @@
                 </div>
 
             </div>
-        </div>
+        </div> --}}
 
     </section>
 </x-guest-layout>
