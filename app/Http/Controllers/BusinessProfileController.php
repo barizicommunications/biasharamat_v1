@@ -48,7 +48,8 @@ public function showPaymentPage()
     }
 
     return view('filament.resources.payment.register-pay', [
-        'amount' => $paymentData['amount'],
+        // 'amount' => $paymentData['amount'],
+        'amount' => 1,
         'description' => $paymentData['description'],
         'callback' => $paymentData['callback'],
     ]);

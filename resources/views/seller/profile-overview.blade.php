@@ -26,6 +26,7 @@
                                 <div class="swiper">
                                     <div class="swiper-wrapper">
                                         @foreach ($documents['business_photos'] as $photo)
+
                                             <div class="swiper-slide">
                                                 <img src="{{ Storage::url($photo) }}" alt="Business Photo" class="w-full h-auto rounded-md">
                                             </div>
@@ -63,7 +64,10 @@
 
                                 <!-- Assets Overview -->
                                 <h2 class="text-lg font-semibold text-primary mb-3">Assets Overview</h2>
-                                <p class="mb-6 text-sm text-gray-600">{{ $documents['tangible_assets'] ?? 'No tangible assets specified.' }}</p>
+                                <a href="{{ Storage::Url($documents['tangible_assets']) }}" target="_blank">
+                                    <p class="mb-6 text-sm text-gray-600">View the assets</p>
+                                </a>
+
 
                                 <!-- Capitalization Overview -->
                                 <h2 class="text-lg font-semibold text-primary mb-3">Capitalization Overview</h2>
@@ -84,7 +88,7 @@
                                         <h3><span class="text-xl font-bold text-gray-700">4.5</span> / 5</h3>
                                     </div>
                                 </div>
-                                <a href="#" class="text-blue-400 text-sm underline">Compare with industry</a>
+                                {{-- <a href="#" class="text-blue-400 text-sm underline">Compare with industry</a> --}}
 
                                 <!-- Contact Information -->
                                 <div class="mt-6">

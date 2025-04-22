@@ -128,7 +128,7 @@
     </div>
 </div>
    </section>
-   <section class="bg-[#f4f4f4] w-full py-16">
+   {{-- <section class="bg-[#f4f4f4] w-full py-16">
     <div class="grid gap-10 grid-cols-1 md:grid-cols-2 md:p-0 p-10">
         <div class="bg-[#FBE9E6] md:px-20 rounded-r-3xl flex py-10">
             <div class=" md:ml-36 ">
@@ -144,8 +144,8 @@
 
         </div>
     </div>
-   </section>
-   <section class="bg-[#f4f4f4] w-full pb-10">
+   </section> --}}
+   {{-- <section class="bg-[#f4f4f4] w-full pb-10">
     <div class="grid gap-10 grid-cols-1 md:grid-cols-2 md:p-0 p-10 ">
     <div class="self-center md:pl-48 ">
         <h2 class="text-primary font-bold text-xl md:text-5xl mb-6">Financial advisors on BiasharaMart</h2>
@@ -160,14 +160,14 @@
         <img src="{{ asset('images/card-section3.png') }}" class=" md:pl-32 " alt="">
     </div>
 </div>
-   </section>
+   </section> --}}
    <section class="bg-[#e3e5ed]">
     <article class="mx-auto max-w-screen-xl px-8 py-16 sm:px-12 lg:py-8">
         <h2 class=" text-xl md:text-3xl text-primary font-bold mb-4">Included services</h2>
         <p class="text-primary max-w-lg mb-20">Compare and benchmark your business with 100s of private companies in your location from the same industry</p>
 
         <div class="grid gap-8 grid-cols-1 md:grid-cols-3">
-            <div class=" border-[3px] border-primary/20 p-8 rounded-md hover:bg-white transition-all duration-300 ">
+            <div class=" border-[3px] border-primary/20 p-8  bg-white rounded-md hover:bg-white transition-all duration-300 ">
                 <div>
                    <img src="{{ asset('images/icon-1.png') }}" class="mb-6" alt="">
                 </div>
@@ -178,10 +178,10 @@
                     <p class="text-primary py-4 max-w-xs text-base ">Compare and benchmark your business with 100s of private companies in your location from the same industry</p>
                 </div>
                 <div>
-                  <a href="#" class="underline text-primary">Read more</a>
+                  {{-- <a href="#" class="underline text-primary">Read more</a> --}}
                 </div>
             </div>
-            <div class=" border-[3px] border-primary/20 p-8 rounded-md hover:bg-white transition-all duration-300 ">
+            <div class=" border-[3px] border-primary/20 p-8 rounded-md bg-white hover:bg-white transition-all duration-300 ">
                 <div>
                    <img src="{{ asset('images/icon-2.png') }}" class="mb-6" alt="">
                 </div>
@@ -192,10 +192,10 @@
                     <p class="text-primary pt-4 pb-10 max-w-xs text-base ">Raise a fund efficiently with data-informed peer groups, benchmarks and investors</p>
                 </div>
                 <div>
-                  <a href="#" class="underline text-primary">Read more</a>
+                  {{-- <a href="#" class="underline text-primary">Read more</a> --}}
                 </div>
             </div>
-            <div class=" border-[3px] border-primary/20 p-8 rounded-md hover:bg-white transition-all duration-300 ">
+            <div class=" border-[3px] border-primary/20 p-8 rounded-md bg-white hover:bg-white transition-all duration-300 ">
                 <div>
                    <img src="{{ asset('images/icon-3.png') }}" class="mb-6" alt="">
                 </div>
@@ -206,10 +206,10 @@
                     <p class="text-primary pt-4 pb-12 max-w-xs text-base ">Discover companies that are a strategic fit, seeking funding or primed for acquisition</p>
                 </div>
                 <div>
-                  <a href="#" class="underline text-primary">Read more</a>
+                  {{-- <a href="#" class="underline text-primary">Read more</a> --}}
                 </div>
             </div>
-            <div class=" border-[3px] border-primary/20 p-8 rounded-md hover:bg-white transition-all duration-300 ">
+            <div class=" border-[3px] border-primary/20 p-8 rounded-md bg-white hover:bg-white transition-all duration-300 ">
                 <div>
                    <img src="{{ asset('images/icon-4.png') }}" class="mb-6" alt="">
                 </div>
@@ -220,10 +220,10 @@
                     <p class="text-primary pt-4 pb-10 max-w-xs text-base ">Create the perfect pitch using valuable intel on companies, funds and financial sponsors</p>
                 </div>
                 <div>
-                  <a href="#" class="underline text-primary">Read more</a>
+                  {{-- <a href="#" class="underline text-primary">Read more</a> --}}
                 </div>
             </div>
-            <div class=" border-[3px] border-primary/20 p-8 rounded-md hover:bg-white transition-all duration-300 ">
+            <div class=" border-[3px] border-primary/20 p-8 rounded-md bg-white hover:bg-white transition-all duration-300 ">
                 <div>
                    <img src="{{ asset('images/icon-5.png') }}" class="mb-6" alt="">
                 </div>
@@ -235,10 +235,10 @@
                     </p>
                 </div>
                 <div>
-                  <a href="#" class="underline text-primary">Read more</a>
+                  {{-- <a href="#" class="underline text-primary">Read more</a> --}}
                 </div>
             </div>
-            <div class=" border-[3px] border-primary/20 p-8 rounded-md hover:bg-white transition-all duration-300 ">
+            <div class=" border-[3px] border-primary/20 p-8 rounded-md bg-white hover:bg-white transition-all duration-300 ">
                 <div>
                    <img src="{{ asset('images/icon-6.png') }}" class="mb-6" alt="">
                 </div>
@@ -250,10 +250,10 @@
                     </p>
                 </div>
                 <div>
-                  <a href="#" class="underline text-primary">Read more</a>
+                  {{-- <a href="#" class="underline text-primary">Read more</a> --}}
                 </div>
             </div>
-            <div class=" border-[3px] border-primary/20 p-8 rounded-md hover:bg-white transition-all duration-300 ">
+            <div class=" border-[3px] border-primary/20 p-8 rounded-md bg-white hover:bg-white transition-all duration-300 ">
                 <div>
                    <img src="{{ asset('images/icon-7.png') }}" class="mb-6" alt="">
                 </div>
@@ -265,10 +265,10 @@
                     </p>
                 </div>
                 <div>
-                  <a href="#" class="underline text-primary">Read more</a>
+                  {{-- <a href="#" class="underline text-primary">Read more</a> --}}
                 </div>
             </div>
-            <div class=" border-[3px] border-primary/20 p-8 rounded-md hover:bg-white transition-all duration-300 ">
+            <div class=" border-[3px] border-primary/20 p-8 rounded-md bg-white hover:bg-white transition-all duration-300 ">
                 <div>
                    <img src="{{ asset('images/icon-8.png') }}" class="mb-6" alt="">
                 </div>
@@ -280,7 +280,7 @@
                     </p>
                 </div>
                 <div>
-                  <a href="#" class="underline text-primary">Read more</a>
+                  {{-- <a href="#" class="underline text-primary">Read more</a> --}}
                 </div>
             </div>
         </div>
@@ -297,124 +297,71 @@
     <div class="bg-white py-6 px-10">
         <div>
            <p class="flex mb-6">
-            <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-        </p>
+              <span class="text-[#f49f1c]">★★★★★</span>
+           </p>
         </div>
         <div>
-            <p class="mb-4 max-w-[20rem]">I am the owner of a Delhi-based movie production house. We were looking to raise investment for our business to start a new film project. </p>
+            <p class="mb-4 max-w-[20rem]">
+                This platform made it incredibly easy to connect with serious investors.
+                Within weeks, I secured the funding I needed to expand my business.
+                The seamless communication tools and approval process gave me confidence throughout the journey.
+            </p>
         </div>
-        <div class="flex">
-            <div><img src="{{ asset('images/client-1.png') }}" alt=""></div>
-            <div class="flex flex-col ml-4">
-                <div>
-                    <h5 class="font-bold">Warren Bernad</h5>
-                </div>
-                <div>
-                    <p>CEO Safaricom</p>
-                </div>
+        <div class="flex items-center">
+            <div>
+                <img src="{{ asset('images/user-icon.png') }}" alt="User Icon" class="w-10 h-10">
+            </div>
+            <div class="ml-4">
+                <h5 class="font-bold">James Otieno</h5>
             </div>
         </div>
     </div>
+
     <div class="bg-white py-6 px-10">
         <div>
            <p class="flex mb-6">
-            <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-        </p>
+              <span class="text-[#f49f1c]">★★★★★</span>
+           </p>
         </div>
         <div>
-            <p class="mb-4 max-w-[20rem]">I am the owner of a Delhi-based movie production house. We were looking to raise investment for our business to start a new film project. </p>
+            <p class="mb-4 max-w-[20rem]">
+                As an investor, finding high-potential businesses to invest in used to be time-consuming.
+                This platform has simplified everything—I can easily browse vetted business opportunities and communicate directly with entrepreneurs.
+            </p>
         </div>
-        <div class="flex">
-            <div><img src="{{ asset('images/client-2.png') }}" alt=""></div>
-            <div class="flex flex-col ml-4">
-                <div>
-                    <h5 class="font-bold">Warren Bernad</h5>
-                </div>
-                <div>
-                    <p>CEO Safaricom</p>
-                </div>
+        <div class="flex items-center">
+            <div>
+                <img src="{{ asset('images/user-icon.png') }}" alt="User Icon" class="w-10 h-10">
+            </div>
+            <div class="ml-4">
+                <h5 class="font-bold">Sarah Njoroge</h5>
             </div>
         </div>
     </div>
+
     <div class="bg-white py-6 px-10">
         <div>
            <p class="flex mb-6">
-            <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-          <span class="text-[#f49f1c]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
-            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-          </svg>
-          </span>
-        </p>
+              <span class="text-[#f49f1c]">★★★★★</span>
+           </p>
         </div>
         <div>
-            <p class="mb-4 max-w-[20rem]">I am the owner of a Delhi-based movie production house. We were looking to raise investment for our business to start a new film project. </p>
+            <p class="mb-4 max-w-[20rem]">
+                The approval system ensures that only credible businesses are listed, which gave me peace of mind when looking for investment opportunities.
+                I’ve successfully invested in two startups through this platform and look forward to many more!
+            </p>
         </div>
-        <div class="flex">
-            <div><img src="{{ asset('images/client-3.png') }}" alt=""></div>
-            <div class="flex flex-col ml-4">
-                <div>
-                    <h5 class="font-bold">Warren Bernad</h5>
-                </div>
-                <div>
-                    <p>CEO Safaricom</p>
-                </div>
+        <div class="flex items-center">
+            <div>
+                <img src="{{ asset('images/user-icon.png') }}" alt="User Icon" class="w-10 h-10">
+            </div>
+            <div class="ml-4">
+                <h5 class="font-bold">Michael Wanjiru</h5>
             </div>
         </div>
     </div>
 </div>
+
     </article>
    </section>
 

@@ -76,56 +76,6 @@ class RegisterBuyer extends Component implements HasForms
     }
 
 
-    // public function submit(){
-
-    //     $formData = $this->form->getState();
-
-    //     $validatedData = $this->form->validate();
-
-
-    //     $InvestorProfile = InvestorProfile::create([
-    //         'user_id'=> auth()->user()->id,
-    //         'name' => $validatedData['name'],
-    //         'email' => $validatedData['email'],
-    //         'mobile_number' => $validatedData['mobile_number'],
-    //         'display_contact_details' => $validatedData['display_contact_details'],
-    //         'company_name' => $validatedData['company_name'],
-    //         'current_location' => $validatedData['current_location'],
-    //         'your_designation' => $validatedData['your_designation'],
-    //         'company_industry' => $validatedData['company_industry'],
-    //         'linkedin_profile' => $validatedData['linkedin_profile'],
-    //         'website_link' => $validatedData['website_link'],
-    //         'about_company' => $validatedData['about_company'],
-    //         'business_factors' => $validatedData['business_factors'],
-    //         'interested_in' => $validatedData['interested_in'],
-    //         'other_interest' => $validatedData['other_interest']?? null,
-    //         'buyer_role' => $validatedData['buyer_role'],
-    //         'other_buyer_role' => $validatedData['other_buyer_role'] ?? null,
-    //         'buyer_interest' => $validatedData['buyer_interest'],
-    //         'buyer_location_interest' => $validatedData['buyer_location_interest'],
-    //         'investment_range' => $validatedData['investment_range'],
-    //         'business_profile' => $validatedData['business_profile'],
-    //         'certificate_of_incorporation' => $validatedData['certificate_of_incorporation'],
-    //         'active_business' => $validatedData['active_business'],
-    //         'terms_of_engagement' => $validatedData['terms_of_engagement'],
-    //     ]);
-
-
-
-    //     if ($InvestorProfile) {
-    //         // Redirect to the desired normal route with data
-    //         return redirect()->route('investor.pay')->with('data', $InvestorProfile);
-    //     } else {
-    //         // Handle errors and return to the form with error messages
-    //         return back()->withErrors(['error' => 'Failed to create investor profile. Please try again.'])->withInput();
-    //     }
-
-
-
-
-    // }
-
-
 
     public function submit()
 {
@@ -346,15 +296,14 @@ class RegisterBuyer extends Component implements HasForms
                                 'biotechnology' => 'Biotechnology'
                             ]),
 
-                        Select::make('buyer_location_interest')
+                            Select::make('buyer_location_interest')
                             ->label('Select locations you are interested in')
-
                             ->options([
-                                'Nairobi',
-                                'Mombasa',
-                                'Kisumu',
-                                'Eldoret',
-                                'Nakuru',
+                                'Nairobi' => 'Nairobi',
+                                'Mombasa' => 'Mombasa',
+                                'Kisumu' => 'Kisumu',
+                                'Eldoret' => 'Eldoret',
+                                'Nakuru' => 'Nakuru',
                             ]),
 
                         TextInput::make('investment_range')

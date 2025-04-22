@@ -33,6 +33,7 @@ class ProfileController extends Controller
 
     public function inbox()
     {
+        
         $conversations = Conversation::where('user_one_id', auth()->id())
             ->orWhere('user_two_id', auth()->id())
             ->with(['messages', 'userOne', 'userTwo'])
