@@ -3,7 +3,7 @@
 
     <p>Content Here</p>
 
-    {!! (new \App\Services\PesapalService())->customerTransaction($data['amount'], 'desc', auth()->user()->name, '', '', '', 'reference',
+    {!! (new \App\Services\PesapalService())->customerTransaction(1, 'desc', auth()->user()->name, '', '', '', 'reference',
  $data['callback'], $data) !!}
 
 </x-guest-layout>

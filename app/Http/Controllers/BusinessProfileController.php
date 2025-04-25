@@ -38,6 +38,23 @@ class BusinessProfileController extends Controller
 
 
 
+// public function showPaymentPage()
+// {
+//     $paymentData = session('payment_data');
+
+//     if (!$paymentData) {
+//         // Handle the case where there's no payment data in the session
+//         return redirect()->route('business.profile.create')->withErrors('No payment data found.');
+//     }
+
+//     return view('filament.resources.payment.register-pay', [
+//         // 'amount' => $paymentData['amount'],
+//         'amount' => 1,
+//         'description' => $paymentData['description'],
+//         'callback' => $paymentData['callback'],
+//     ]);
+// }
+
 public function showPaymentPage()
 {
     $paymentData = session('payment_data');
@@ -48,8 +65,7 @@ public function showPaymentPage()
     }
 
     return view('filament.resources.payment.register-pay', [
-        // 'amount' => $paymentData['amount'],
-        'amount' => 1,
+        'amount' => $paymentData['amount'],
         'description' => $paymentData['description'],
         'callback' => $paymentData['callback'],
     ]);

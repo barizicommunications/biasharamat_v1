@@ -183,7 +183,7 @@ class RegisterSeller extends Component implements HasForms
 
 
 
-   
+
 
 
     public function submit()
@@ -287,7 +287,8 @@ class RegisterSeller extends Component implements HasForms
         'user_id' => auth()->user()->id,
     ];
 
-    session()->put('payment_data', $data);
+    // session()->put('payment_data', $data);
+    session()->flash('payment_data', $data);
 
     // Redirect to the payment page
     return redirect()->route('payment.show');

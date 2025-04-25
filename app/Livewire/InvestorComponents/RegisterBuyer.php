@@ -123,7 +123,9 @@ class RegisterBuyer extends Component implements HasForms
         ];
 
         // Store the payment data in the session
-        session()->put('payment_data', $paymentData);
+        // session()->put('payment_data', $paymentData);
+
+        session()->flash('payment_data', $paymentData);
 
         // Redirect to the payment page
         return redirect()->route('payment.show');
