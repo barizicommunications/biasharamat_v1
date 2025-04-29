@@ -125,7 +125,7 @@
     {{ $slot }}
 </main>
 
-<footer class="bg-[#262626] ">
+{{-- <footer class="bg-[#262626] ">
     <article class="mx-auto max-w-screen-xl px-8 py-16 sm:px-12 lg:pt-24">
         <div class="grid gap-4 grid-cols-1 md:grid-cols-6 text-white">
             <div>
@@ -209,6 +209,20 @@
         </div>
     </div>
 
+</footer> --}}
+<footer class="bg-[#262626] text-white">
+    <div class="mx-auto max-w-screen-xl px-8 py-6">
+        <div class="flex flex-row items-center justify-between">
+            <div class="flex items-center">
+                <img src="{{ asset('images/logos/white-logo.png') }}" class=" h-4 " alt="BiasharaMart Logo">
+            </div>
+            <div class="flex items-center space-x-6">
+                <p class="text-sm">Phone: +254 714704440</p>
+                <p class="text-sm">Email: info@biasharamart.com</p>
+                <p class="text-sm">&copy; <?php echo date("Y"); ?> BiasharaMart. All rights reserved</p>
+            </div>
+        </div>
+    </div>
 </footer>
 
 @filamentScripts
