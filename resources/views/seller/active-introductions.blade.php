@@ -1,20 +1,34 @@
 <x-guest-layout>
-    <section class="bg-[#f4f4f4]">
+    <section class="bg-[#f4f4f4]" style="padding-bottom: 300px;">
         <article class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:py-8">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center py-4 overflow-x-auto whitespace-nowrap mb-8">
-                    <a href="#" class="text-gray-600 hover:underline">Home</a>
-                    <span class="mx-3 text-gray-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a 1 1 0 010 1.414l-4 4a 1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                        </svg>
-                    </span>
-                    <a href="#" class="text-primary">Register business profile</a>
-                </div>
-                <div>
-                    <a href="{{ route('business.profile.create') }}" class="bg-primary text-white px-8 py-3 rounded-sm">Register Business Profile Now</a>
-                </div>
-            </div>
+           <div class="flex items-center justify-between">
+  <div class="flex items-center py-4 overflow-x-auto whitespace-nowrap mb-8">
+      <a href="#" class="text-gray-600 hover:underline">Home</a>
+      <span class="mx-3 text-gray-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a 1 1 0 010 1.414l-4 4a 1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+      </span>
+      <a href="#" class="text-primary">
+          @if(Auth::user()->registration_type === 'Business Seller')
+              Register business profile
+          @else
+              Register investor profile
+          @endif
+      </a>
+  </div>
+  <div>
+      @if(Auth::user()->registration_type === 'Business Seller')
+          @if(!Auth::user()->businessProfile)
+              <a href="{{ route('business.profile.create') }}" class="bg-primary text-white px-8 py-3 rounded-sm">Register Business Profile Now</a>
+          @endif
+      @else
+          @if(!Auth::user()->investorProfile)
+              <a href="{{ route('investor.profile.create') }}" class="bg-primary text-white px-8 py-3 rounded-sm">Register Investor Profile Now</a>
+          @endif
+      @endif
+  </div>
+</div>
 
 
 

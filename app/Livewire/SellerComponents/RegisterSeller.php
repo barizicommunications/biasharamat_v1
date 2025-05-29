@@ -188,6 +188,12 @@ class RegisterSeller extends Component implements HasForms
 
     public function submit()
     {
+
+        // Check if user already has an investor profile
+    if (BusinessProfile::where('user_id', auth()->user()->id)->exists()) {
+        session()->flash('error', 'You already have a business profile registered.');
+        return redirect()->route('businessVerificationCallPage');
+    }
         $formData = $this->form->getState();
 
         // Ensure the user is authenticated

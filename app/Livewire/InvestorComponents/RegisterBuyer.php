@@ -79,6 +79,12 @@ class RegisterBuyer extends Component implements HasForms
 
     public function submit()
 {
+
+    // Check if user already has an investor profile
+    if (InvestorProfile::where('user_id', auth()->user()->id)->exists()) {
+        session()->flash('error', 'You already have an investor profile registered.');
+        return redirect()->route('investorVerificationCallPage');
+    }
     // Get the form data
     $formData = $this->form->getState();
 
@@ -113,26 +119,9 @@ class RegisterBuyer extends Component implements HasForms
         'terms_of_engagement' => $validatedData['terms_of_engagement'],
     ]);
 
-    if ($InvestorProfile) {
-        // Prepare payment data
-        $paymentData = [
-            'amount' => 1, // Set the appropriate amount based on the selected plan
-            'description' => 'Investor Profile Registration',
-            'callback' => route('investorVerificationCallPage'),
-            'user_id' => auth()->user()->id,
-        ];
 
-        // Store the payment data in the session
-        // session()->put('payment_data', $paymentData);
 
-        session()->flash('payment_data', $paymentData);
-
-        // Redirect to the payment page
-        return redirect()->route('payment.show');
-    } else {
-        // Handle errors and return to the form with error messages
-        return back()->withErrors(['error' => 'Failed to create investor profile. Please try again.'])->withInput();
-    }
+    return redirect()->route('verification.call.page')->with('success', 'Investor profile created successfully. Please proceed to payment.');
 }
 
 
@@ -156,6 +145,7 @@ class RegisterBuyer extends Component implements HasForms
                         ->required(),
 
                         TextInput::make('email')
+                        ->unique(ignoreRecord:true)
                         ->label('Official email for quick verification')
                         ->required(),
 
