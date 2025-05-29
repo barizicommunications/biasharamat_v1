@@ -115,6 +115,12 @@ class RegisterSeller extends Component implements HasForms
     public $verification_status;
     public $reason_for_decline;
     public $finders_fee;
+    public $active_business;
+
+
+    // Terms
+    public $terms_of_engagement;
+
 
     public function mount()
     {
