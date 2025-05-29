@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dfe9d63a8e84170041c3e5ebfa8526e7",
+    "content-hash": "51a68965d8a2a631ad80b19724ea45ea",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -1241,69 +1241,6 @@
                 }
             ],
             "time": "2023-10-06T06:47:41+00:00"
-        },
-        {
-            "name": "fabianmuema/pesapal",
-            "version": "1.0.11",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fabianmuema/pesapal.git",
-                "reference": "2a7fd3efe75b906070ee878e0379b184d25f0a9b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fabianmuema/pesapal/zipball/2a7fd3efe75b906070ee878e0379b184d25f0a9b",
-                "reference": "2a7fd3efe75b906070ee878e0379b184d25f0a9b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Fabian\\Pesapal\\PesapalServiceProvider"
-                    ],
-                    "aliases": {
-                        "Pesapal": "Fabian\\Pesapal\\Facades\\Pesapal"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Fabian\\Pesapal\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabian Muema",
-                    "email": "muemafabian@gmail.com",
-                    "role": "Senior Software Engineer"
-                }
-            ],
-            "description": "A laravel package that integrates into the pesapal api",
-            "homepage": "https://github.com/fabianmuema/pesapal",
-            "keywords": [
-                "Fabian Muema",
-                "billing gateway",
-                "laravel 10 mpesa pesa pal",
-                "mastercard",
-                "mpesa",
-                "payments",
-                "pesa pal payment integration",
-                "pesapal",
-                "visa"
-            ],
-            "support": {
-                "issues": "https://github.com/fabianmuema/pesapal/issues",
-                "source": "https://github.com/fabianmuema/pesapal/tree/1.0.11"
-            },
-            "time": "2023-03-27T05:23:13+00:00"
         },
         {
             "name": "filament/actions",
@@ -10665,12 +10602,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }

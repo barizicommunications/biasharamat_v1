@@ -4,7 +4,6 @@ use App\Livewire\TestComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
@@ -33,13 +32,7 @@ Route::get('frequently-asked-questions', function () {
     return view('faqs');
 })->name('faqs');
 
-
-
 Route::get('test',TestComponent::class)->name('test');
-
-
-
-
 
 Route::get('/about', function () {
     return view('about');
@@ -59,115 +52,63 @@ Route::group(['controller' => SellerRegistrationController::class], function () 
 });
 
 Route::group(['controller' => InvestorRegistrationController::class], function () {
-    Route::get('/make-payments', 'makePayment')
-        ->name('investor.pay');
     Route::get('/register-business-investor', 'create')
         ->name('investor.create');
     Route::post('/register-business-investor', 'store')
         ->name('investor.store');
 });
 
-// Route::get('register-business-investor', function () {
-//     return view('guests.register-business-investor');
-// })->name('registerInvestor');
-
 Route::group(['controller' => BusinessProfileController::class], function () {
     Route::get('/business-profile-registration', 'create')
         ->name('business.profile.create');
-        Route::get('/seller-profile-overview/{id}', 'show')
+    Route::get('/seller-profile-overview/{id}', 'show')
         ->name('sellerProfileOverview');
-        Route::get('verification-call-page', [BusinessProfileController::class, 'processPayment'])->name('businessVerificationCallPage');
-
+    Route::get('verification-call-page', function () {
+        return view('seller.verification-call-page');
+    })->name('businessVerificationCallPage');
     Route::post('/business-profile-registration', 'store')
         ->name('business.profile.store');
-
-
-        Route::get('/payment', 'showPaymentPage')
-        ->name('payment.show');
-
-    Route::post('/payment/process', 'processPayment')
-        ->name('payment.process');
 });
+
 Route::group(['controller' => InvestorProfileController::class], function () {
     Route::get('/investors', 'index')
         ->name('investors');
     Route::get('/investor-profile-registration', 'create')
         ->name('investor.profile.create');
-        Route::get('investor-verification-call-page', function () {
-            return view('buyer.buyer-verification-call');
-        })->name('investorVerificationCallPage');
-        Route::get('/business-buyer-profile-overview/{id}', 'show')
+    Route::get('investor-verification-call-page', function () {
+        return view('buyer.buyer-verification-call');
+    })->name('investorVerificationCallPage');
+    Route::get('/business-buyer-profile-overview/{id}', 'show')
         ->name('buyer.buyer-profile');
     Route::post('/investor-profile-registration', 'store')
         ->name('investor.profile.store');
 });
 
-
 // Message routes
 Route::post('/messages/send/{recipient}', [MessageController::class, 'sendMessage'])->name('messages.send')->middleware('auth');
-
-
 Route::post('/messages/reply/{conversation}', [MessageController::class, 'replyMessage'])->name('messages.reply')->middleware('auth');
-
-
-
-
-
-
-
-
-
-
-// Route::get('profile-overview', function () {
-//     return view('seller.profile-overview');
-// })->name('sellerProfileOverview');
-
-// Route::get('investors-and-buyers', function () {
-//     return view('seller.investors-and-buyers');
-// })->name('investorsAndBuyers');
 
 Route::get('investment-opportunities', [InvestorsAndBuyersController::class, 'index'])->name('investorsAndBuyers');
 
 Route::get('active-introductions', [ProfileController::class, 'index'])
     ->name('activeIntro');
 
-Route::get('/active-introductions', [ProfileController::class, 'inbox'])  // Same method as above
+Route::get('/active-introductions', [ProfileController::class, 'inbox'])
     ->name('activeIntro');
 
 Route::get('seller-inbox', function () {
     return view('seller.inbox');
 })->name('inbox');
+
 Route::get('seller-notifications', function () {
     return view('seller.notifications');
 })->name('notifications');
+
 Route::get('blogs', function () {
     return view('blog');
 })->name('blog');
-// Route::get('blog/{id}', function () {
-//     return view('single-blog');
-// })->name('singleBlog');
 
 Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
-
-
-// Route::get('business-buyer-profile-overview', function () {
-//     return view('buyer.buyer-profile');
-// })->name('buyerProfile');
-
-
-
-// Route to generate access token (optional, for testing)
-Route::get('/payment/token', [PaymentController::class, 'generateAccessToken']);
-
-// Route to register IPN
-Route::get('/payment/register-ipn', [PaymentController::class, 'registerIPN']);
-
-// Route to submit an order
-Route::post('/payment/submit-order', [PaymentController::class, 'submitOrder']);
-
-// Route to check transaction status
-Route::get('/payment/status', [PaymentController::class, 'getTransactionStatus']);
-
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -178,15 +119,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
-
-
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-});
-
 
 require __DIR__ . '/auth.php';

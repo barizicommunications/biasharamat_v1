@@ -81,7 +81,7 @@
                                 <div class="flex items-center mb-4">
                                     <div class="flex shrink-0 self-center space-x-1">
                                         @for ($i = 0; $i < 5; $i++)
-                                            <img src="{{ asset('images/star.png') }}" alt="Star Rating" class="h-6 w-6">
+                                            <img src="{{ asset('images/Star.png') }}" alt="Rating" class="h-6 w-6">
                                         @endfor
                                     </div>
                                     <div class="self-center ml-4">
@@ -99,7 +99,7 @@
                                 </div>
 
                                 <!-- Documents -->
-                                <div class="mt-6">
+                                {{-- <div class="mt-6">
                                     <h3 class="font-semibold text-primary mb-2">Documents</h3>
                                     <div class="space-y-3">
                                         @if (isset($documents) && count($documents) > 0)
@@ -122,7 +122,7 @@
                                             <p class="text-gray-500 text-sm">No documents available.</p>
                                         @endif
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

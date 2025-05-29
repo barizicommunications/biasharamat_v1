@@ -52,49 +52,35 @@ class InvestorProfileController extends Controller
             // Validate the request data
             $validatedData = $request->validated();
 
-
             $proofOfBusiness = $request->file('proof_of_business');
-
 
             if ($proofOfBusiness) {
                 // Generate a unique name for the file before saving it
                 $fileName = time() . '-' . $proofOfBusiness->getClientOriginalName();
-
-                // Store the file in the specified directory (e.g., storage/app/public/information_memorandums)
+                // Store the file in the specified directory
                 $proofbusinessfilePath = $proofOfBusiness->storeAs('public/proof_of_business', $fileName);
             }
 
-
-
-
             $companyLogo = $request->file('company_logo');
-
 
             if ($companyLogo) {
                 // Generate a unique name for the file before saving it
                 $fileName = time() . '-' . $companyLogo->getClientOriginalName();
-
-                // Store the file in the specified directory (e.g., storage/app/public/information_memorandums)
+                // Store the file in the specified directory
                 $companylogofilePath = $companyLogo->storeAs('public/investor_company_logos', $fileName);
             }
 
-
             $corporateProfile = $request->file('corporate_profile');
-
 
             if ($corporateProfile) {
                 // Generate a unique name for the file before saving it
                 $fileName = time() . '-' . $corporateProfile->getClientOriginalName();
-
-                // Store the file in the specified directory (e.g., storage/app/public/information_memorandums)
+                // Store the file in the specified directory
                 $corporateprofilefilePath = $corporateProfile->storeAs('public/investor_corporate_profiles', $fileName);
             }
 
-
-
             // Get the authenticated user
             $user = Auth::user();
-
 
             // Create the business profile
             $investorProfile = new InvestorProfile($validatedData);
@@ -104,18 +90,17 @@ class InvestorProfileController extends Controller
             $investorProfile->corporate_profile = $corporateprofilefilePath;
             $investorProfile->save();
 
-
             // Notify the user that their application is under review
             $user->notify(new ApplicationUnderReview($user));
 
-
             // Notify the admin about the new signup
             $admin = User::where('registration_type', 'Admin')->first();
-            $admin->notify(new BusinessSellerSignup($user));
+            if ($admin) {
+                $admin->notify(new BusinessSellerSignup($user));
+            }
 
-
-
-            return redirect()->route('investorVerificationCallPage');
+            // Redirect to success page instead of payment
+            return view('buyer.verification-call-page');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Redirect back with input and error messages
