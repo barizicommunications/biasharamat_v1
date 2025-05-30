@@ -89,8 +89,13 @@
                         <div class="text-sm text-gray-600">Location Interest</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-2xl font-bold text-primary">KES {{ number_format($buyerProfile->investment_range) }}</div>
-                        <div class="text-sm text-gray-600">Investment Range</div>
+                        @auth
+                            <div class="text-2xl font-bold text-primary">KES {{ number_format($buyerProfile->investment_range) }}</div>
+                            <div class="text-sm text-gray-600">Investment Range</div>
+                        @else
+                            <div class="text-2xl font-bold text-gray-400">•••</div>
+                            <div class="text-sm text-gray-500">Register to View</div>
+                        @endauth
                     </div>
                 </div>
             </div>
@@ -101,14 +106,31 @@
                     <!-- About Investor -->
                     <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
                         <h2 class="text-xl font-semibold text-primary mb-4">About This Investor</h2>
-                        <p class="text-gray-700 leading-relaxed mb-6">
-                            {{ $buyerProfile->about_company }}
-                        </p>
 
-                        <div class="mb-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-3">Investment Criteria</h3>
-                            <p class="text-gray-700">{{ $buyerProfile->business_factors }}</p>
-                        </div>
+                        @auth
+                            <p class="text-gray-700 leading-relaxed mb-6">
+                                {{ $buyerProfile->about_company }}
+                            </p>
+
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-3">Investment Criteria</h3>
+                                <p class="text-gray-700">{{ $buyerProfile->business_factors }}</p>
+                            </div>
+                        @else
+                            <!-- Limited description for guests -->
+                            <p class="text-gray-700 leading-relaxed mb-6">
+                                {{ Str::limit($buyerProfile->about_company ?? 'No description available.', 200) }}
+                                @if(strlen($buyerProfile->about_company ?? '') > 200)
+                                    <span class="text-gray-500">...</span>
+                                @endif
+                            </p>
+
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-sm text-gray-600">
+                                    <span class="font-medium">Additional details available:</span> Investment criteria, detailed preferences, and more information for registered users.
+                                </p>
+                            </div>
+                        @endauth
                     </div>
 
                     <!-- Investment Profile -->
@@ -126,8 +148,22 @@
                                 </div>
                                 <div class="flex justify-between items-center py-2 border-b border-gray-100">
                                     <span class="text-gray-600">Contact Details:</span>
-                                    <span class="text-gray-500">Available upon introduction</span>
+                                    @auth
+                                        <span class="text-gray-500">Available upon introduction</span>
+                                    @else
+                                        <span class="text-gray-500">Register to view</span>
+                                    @endauth
                                 </div>
+                                @auth
+                                    <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                        <span class="text-gray-600">Website:</span>
+                                        @if($buyerProfile->website_link)
+                                            <a href="{{ $buyerProfile->website_link }}" target="_blank" class="text-blue-600 hover:underline text-sm">Visit Website</a>
+                                        @else
+                                            <span class="text-gray-500 text-sm">Not provided</span>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
 
                             <div>
@@ -137,6 +173,16 @@
                                         Actively Investing
                                     </span>
                                 </div>
+
+                                @auth
+                                    <!-- Additional Details for Authenticated Users -->
+                                    @if($buyerProfile->linkedin_profile)
+                                        <div class="mb-4">
+                                            <span class="text-gray-600 block mb-2 font-medium">LinkedIn Profile:</span>
+                                            <a href="{{ $buyerProfile->linkedin_profile }}" target="_blank" class="text-blue-600 hover:underline text-sm">View Profile</a>
+                                        </div>
+                                    @endif
+                                @endif
 
                                 <!-- Value Proposition -->
                                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -151,66 +197,178 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Contact Information (Registered users only) -->
+                    @auth
+                        @if($buyerProfile->display_contact_details)
+                            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                                <h2 class="text-xl font-semibold text-primary mb-4">Contact Information</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <div class="text-sm text-gray-600 mb-1">Contact Person</div>
+                                        <div class="text-lg font-bold text-primary">{{ $buyerProfile->name }}</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <div class="text-sm text-gray-600 mb-1">Email</div>
+                                        <div class="text-lg font-bold text-primary">{{ $buyerProfile->email }}</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <div class="text-sm text-gray-600 mb-1">Phone</div>
+                                        <div class="text-lg font-bold text-primary">{{ $buyerProfile->mobile_number }}</div>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <div class="text-sm text-gray-600 mb-1">Designation</div>
+                                        <div class="text-lg font-bold text-primary">{{ $buyerProfile->your_designation ?? 'Not specified' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @else
+                        <!-- Contact information locked for guests -->
+                        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-primary mb-4">Contact Information</h2>
+                            <div class="bg-gray-50 rounded-lg p-6 text-center">
+                                <div class="text-gray-400 mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 0h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                </div>
+                                <p class="text-gray-600">Contact information available to registered users</p>
+                            </div>
+                        </div>
+                    @endauth
                 </div>
 
                 <!-- Sidebar -->
                 <div class="w-full lg:w-1/3">
                     <!-- Contact Card -->
                     <div class="bg-white rounded-lg shadow-sm p-6 mb-6 sticky top-4">
-                        <div class="text-center text-white bg-green-500 py-2 -mt-6 -mx-6 rounded-t-lg mb-6">
-                            <h5 class="text-white font-medium">Premium Verified Investor</h5>
-                        </div>
+                        @auth
+                            <div class="text-center text-white bg-green-500 py-2 -mt-6 -mx-6 rounded-t-lg mb-6">
+                                <h5 class="text-white font-medium">Premium Verified Investor</h5>
+                            </div>
 
-                        <h3 class="text-lg font-semibold text-primary mb-4">Connect With This Investor</h3>
+                            <h3 class="text-lg font-semibold text-primary mb-4">Connect With This Investor</h3>
 
-                        <div class="space-y-4 mb-6">
-                            <p class="text-gray-600 text-sm">
-                                Professional introduction service ensures verified connections and protects all parties involved.
+                            <div class="space-y-4 mb-6">
+                                <p class="text-gray-600 text-sm">
+                                    Professional introduction service ensures verified connections and protects all parties involved.
+                                </p>
+
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                    <div class="flex items-center mb-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="text-sm font-medium text-blue-800">Introduction Includes:</span>
+                                    </div>
+                                    <ul class="text-xs text-blue-700 space-y-1 ml-6">
+                                        <li>• Direct contact with investor</li>
+                                        <li>• Investment preferences details</li>
+                                        <li>• Professional introduction email</li>
+                                        <li>• Ongoing support during discussions</li>
+                                    </ul>
+                                </div>
+
+                                <!-- Investor Summary -->
+                                <div class="bg-gray-50 p-4 rounded-lg space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Investment Range:</span>
+                                        <span class="font-medium">KES {{ number_format($buyerProfile->investment_range) }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Focus Area:</span>
+                                        <span class="font-medium">{{ $buyerProfile->buyer_interest }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Location:</span>
+                                        <span class="font-medium">{{ $buyerProfile->buyer_location_interest }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if(auth()->id() !== $buyerProfile->user_id)
+                                <!-- Contact Form for other users -->
+                                <form action="{{ route('messages.send', ['recipient' => $buyerProfile->user_id]) }}" method="POST">
+                                    @csrf
+                                    <div class="mb-4">
+                                        <h3 class="text-[#9D9D9D] mb-2">Introduce yourself and leave the investor a message</h3>
+
+                                        <!-- Notice to inform users about restrictions -->
+                                        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 rounded-md mb-4">
+                                            <p class="text-sm">
+                                                <strong>Note:</strong> Please avoid including email addresses, phone numbers, or any contact details in your message.
+                                            </p>
+                                        </div>
+
+                                        <!-- Textarea for the message -->
+                                        <textarea
+                                            name="message"
+                                            id="message"
+                                            class="w-full border border-[#D9D9D9] rounded-sm mb-3 p-2"
+                                            style="height: 140px; resize: none;"
+                                            placeholder="Type your message here..."></textarea>
+
+                                        <!-- Display error message if validation fails -->
+                                        @error('message')
+                                            <p class="text-red-500 text-sm mb-4">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
+                                        Contact Investor
+                                    </button>
+                                </form>
+                            @else
+                                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
+                                    <p class="font-bold">Note:</p>
+                                    <p>Businesses can contact you directly through this profile.</p>
+                                </div>
+                            @endif
+
+                            <p class="text-xs text-gray-500 mt-3 text-center">
+                                Get connected with this verified investor through our secure messaging platform.
                             </p>
+                        @else
+                            <h3 class="text-lg font-semibold text-primary mb-4">Connect With This Investor</h3>
 
-                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                                <div class="flex items-center mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span class="text-sm font-medium text-blue-800">Introduction Includes:</span>
-                                </div>
-                                <ul class="text-xs text-blue-700 space-y-1 ml-6">
-                                    <li>• Direct contact with investor</li>
-                                    <li>• Investment preferences details</li>
-                                    <li>• Professional introduction email</li>
-                                    <li>• Ongoing support during discussions</li>
-                                </ul>
-                            </div>
+                            <div class="space-y-4 mb-6">
+                                <p class="text-gray-600 text-sm">
+                                    Join our platform to access complete investor information and contact verified investors directly.
+                                </p>
 
-                            <!-- Investor Summary -->
-                            <div class="bg-gray-50 p-4 rounded-lg space-y-2 text-sm">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Investment Range:</span>
-                                    <span class="font-medium">KES {{ number_format($buyerProfile->investment_range) }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Focus Area:</span>
-                                    <span class="font-medium">{{ $buyerProfile->buyer_interest }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Location:</span>
-                                    <span class="font-medium">{{ $buyerProfile->buyer_location_interest }}</span>
+                                <!-- Investor Summary for Guests -->
+                                <div class="bg-gray-50 p-4 rounded-lg space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Investment Focus:</span>
+                                        <span class="font-medium">{{ str_replace('_', ' ', $buyerProfile->interested_in) }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Focus Area:</span>
+                                        <span class="font-medium">{{ $buyerProfile->buyer_interest }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Location:</span>
+                                        <span class="font-medium">{{ $buyerProfile->buyer_location_interest }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Investment Range:</span>
+                                        <span class="text-gray-400">•••</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Contact Button -->
-                        <a href="/contact" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
-                            Request Introduction - Small Fee Applies
-                        </a>
+                            <!-- Single CTA for Guests -->
+                            <a href="{{ route('register') }}" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
+                                Join Platform to Connect
+                            </a>
 
-                        <p class="text-xs text-gray-500 mt-3 text-center">
-                            Get connected with this verified investor through our professional introduction service.
-                        </p>
+                            <p class="text-xs text-gray-500 mt-3 text-center">
+                                Free registration • Direct investor contact
+                            </p>
+                        @endauth
                     </div>
-
-
                 </div>
             </div>
         </article>
