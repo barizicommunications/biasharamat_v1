@@ -359,10 +359,39 @@
                                 </div>
                             </div>
 
-                            <!-- Single CTA for Guests -->
-                            <a href="{{ route('register') }}" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
-                                Join Platform to Connect
-                            </a>
+                            <!-- Registration Options for Guests -->
+<div class="space-y-3">
+    <p class="text-sm font-medium text-gray-700 text-center">Join as:</p>
+
+    <!-- Business Seller Option -->
+    <a href="{{ route('business.create') }}" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
+        <div class="flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-6m-8 0H3m2 0h6m0 0v-4a2 2 0 012-2h2a2 2 0 012 2v4" />
+            </svg>
+            Join as Business Seller
+        </div>
+        <span class="text-xs opacity-90">Sell your business or seek investment</span>
+    </a>
+
+    <!-- Business Investor Option -->
+    <a href="{{ route('investor.create') }}" class="block w-full bg-green-600 text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200">
+        <div class="flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+            </svg>
+            Join as Investor/Buyer
+        </div>
+        <span class="text-xs opacity-90">Invest in or acquire businesses</span>
+    </a>
+
+    <!-- Alternative: Dropdown Style -->
+    <div class="pt-2 border-t border-gray-200">
+        <p class="text-xs text-gray-500 text-center">
+            Or <a href="{{ route('register') }}" class="text-primary hover:underline">create general account</a>
+        </p>
+    </div>
+</div>
 
                             <p class="text-xs text-gray-500 mt-3 text-center">
                                 Free registration • Direct investor contact
