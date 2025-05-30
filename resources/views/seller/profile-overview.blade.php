@@ -24,6 +24,8 @@
                 </a>
             </div>
 
+
+
             <!-- Business Header -->
             <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
                 <div class="flex items-start justify-between mb-6">
@@ -77,22 +79,29 @@
                         <div class="text-2xl font-bold text-primary">{{ $applicationData['number_employees'] ?? 'N/A' }}</div>
                         <div class="text-sm text-gray-600">Employees</div>
                     </div>
-                    @if($applicationData['seller_interest'] === 'Sale of shares' && isset($sellerProfile->tentative_selling_price))
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-primary">KES {{ number_format($sellerProfile->tentative_selling_price) }}</div>
-                        <div class="text-sm text-gray-600">Asking Price</div>
-                    </div>
-                    @elseif($applicationData['seller_interest'] === 'Partial sale of shares' && isset($applicationData['investment_amount']))
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-primary">KES {{ number_format($applicationData['investment_amount']) }}</div>
-                        <div class="text-sm text-gray-600">Investment Sought</div>
-                    </div>
-                    @elseif($applicationData['seller_interest'] === 'Financing' && isset($applicationData['loan_amount']))
-                    <div class="text-center">
-                        <div class="text-2xl font-bold text-primary">KES {{ number_format($applicationData['loan_amount']) }}</div>
-                        <div class="text-sm text-gray-600">Loan Amount</div>
-                    </div>
-                    @endif
+                    @auth
+                        @if($applicationData['seller_interest'] === 'Sale of shares' && isset($sellerProfile->tentative_selling_price))
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary">KES {{ number_format($sellerProfile->tentative_selling_price) }}</div>
+                            <div class="text-sm text-gray-600">Asking Price</div>
+                        </div>
+                        @elseif($applicationData['seller_interest'] === 'Partial sale of shares' && isset($applicationData['investment_amount']))
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary">KES {{ number_format($applicationData['investment_amount']) }}</div>
+                            <div class="text-sm text-gray-600">Investment Sought</div>
+                        </div>
+                        @elseif($applicationData['seller_interest'] === 'Financing' && isset($applicationData['loan_amount']))
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary">KES {{ number_format($applicationData['loan_amount']) }}</div>
+                            <div class="text-sm text-gray-600">Loan Amount</div>
+                        </div>
+                        @endif
+                    @else
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-400">•••</div>
+                            <div class="text-sm text-gray-500">Register to View</div>
+                        </div>
+                    @endauth
                     <div class="text-center">
                         <div class="text-2xl font-bold text-primary">{{ $applicationData['seller_interest'] ?? 'N/A' }}</div>
                         <div class="text-sm text-gray-600">Interest Type</div>
@@ -104,67 +113,119 @@
                 <!-- Main Content -->
                 <div class="w-full lg:w-2/3">
                     <!-- Image Gallery -->
-                    @if (isset($documents['business_photos']) && count($documents['business_photos']) > 0)
-                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-                        <h2 class="text-xl font-semibold text-primary mb-4">Business Photos</h2>
-                        <div class="swiper">
-                            <div class="swiper-wrapper">
-                                @foreach ($documents['business_photos'] as $photo)
-                                <div class="swiper-slide">
-                                    <img src="{{ Storage::url($photo) }}" alt="Business Photo" class="w-full h-64 object-cover rounded-lg">
+                    @auth
+                        @if (isset($documents['business_photos']) && count($documents['business_photos']) > 0)
+                        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-primary mb-4">Business Photos</h2>
+                            <div class="swiper">
+                                <div class="swiper-wrapper">
+                                    @foreach ($documents['business_photos'] as $photo)
+                                    <div class="swiper-slide">
+                                        <img src="{{ Storage::url($photo) }}" alt="Business Photo" class="w-full h-64 object-cover rounded-lg">
+                                    </div>
+                                    @endforeach
                                 </div>
-                                @endforeach
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
                             </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
                         </div>
-                    </div>
-                    @endif
+                        @endif
+                    @else
+                        <!-- Limited Photo Preview for Guests -->
+                        @if (isset($documents['business_photos']) && count($documents['business_photos']) > 0)
+                        <div class="bg-white rounded-lg shadow-sm p-6 mb-8 relative">
+                            <h2 class="text-xl font-semibold text-primary mb-4">Business Photos</h2>
+                            <div class="relative">
+                                <img src="{{ Storage::url($documents['business_photos'][0]) }}" alt="Business Photo" class="w-full h-64 object-cover rounded-lg blur-sm">
+                                <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+                                    <div class="text-center text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 0h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        </svg>
+                                        <p class="text-lg font-medium mb-2">{{ count($documents['business_photos']) }} Photos Available</p>
+                                        <p class="text-sm">Register to view all business photos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+                    @endauth
 
                     <!-- Business Overview -->
                     <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
                         <h2 class="text-xl font-semibold text-primary mb-4">About This Business</h2>
-                        <p class="text-gray-700 leading-relaxed mb-6">
-                            {{ $applicationData['business_description'] ?? 'No description available.' }}
-                        </p>
 
-                        @if(!empty($applicationData['business_highlights']))
-                        <div class="mb-6">
-                            <h3 class="text-lg font-medium text-gray-900 mb-3">Business Highlights</h3>
-                            <p class="text-gray-700">{{ $applicationData['business_highlights'] }}</p>
-                        </div>
-                        @endif
+                        @auth
+                            <p class="text-gray-700 leading-relaxed mb-6">
+                                {{ $applicationData['business_description'] ?? 'No description available.' }}
+                            </p>
 
-                        <!-- Products and Services -->
-                        @if(!empty($applicationData['product_services']))
-                        <div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-3">Products & Services</h3>
-                            <p class="text-gray-700">{{ $applicationData['product_services'] }}</p>
-                        </div>
-                        @endif
-                    </div>
-
-                    <!-- Financial Information (Limited for public view) -->
-                    @if(!empty($applicationData['monthly_turnover']) || !empty($applicationData['yearly_turnover']))
-                    <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-                        <h2 class="text-xl font-semibold text-primary mb-4">Financial Highlights</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            @if(!empty($applicationData['monthly_turnover']))
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="text-sm text-gray-600 mb-1">Monthly Turnover</div>
-                                <div class="text-xl font-bold text-primary">KES {{ number_format($applicationData['monthly_turnover']) }}</div>
+                            @if(!empty($applicationData['business_highlights']))
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-3">Business Highlights</h3>
+                                <p class="text-gray-700">{{ $applicationData['business_highlights'] }}</p>
                             </div>
                             @endif
-                            @if(!empty($applicationData['yearly_turnover']))
-                            <div class="bg-gray-50 p-4 rounded-lg">
-                                <div class="text-sm text-gray-600 mb-1">Annual Turnover</div>
-                                <div class="text-xl font-bold text-primary">KES {{ number_format($applicationData['yearly_turnover']) }}</div>
+
+                            @if(!empty($applicationData['product_services']))
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 mb-3">Products & Services</h3>
+                                <p class="text-gray-700">{{ $applicationData['product_services'] }}</p>
                             </div>
                             @endif
-                        </div>
+                        @else
+                            <!-- Limited description for guests -->
+                            <p class="text-gray-700 leading-relaxed mb-6">
+                                {{ Str::limit($applicationData['business_description'] ?? 'No description available.', 200) }}
+                                @if(strlen($applicationData['business_description'] ?? '') > 200)
+                                    <span class="text-gray-500">...</span>
+                                @endif
+                            </p>
+
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <p class="text-sm text-gray-600">
+                                    <span class="font-medium">Additional details available:</span> Business highlights, detailed services, and more information for registered users.
+                                </p>
+                            </div>
+                        @endauth
                     </div>
-                    @endif
+
+                    <!-- Financial Information (Registered users only) -->
+                    @auth
+                        @if(!empty($applicationData['monthly_turnover']) || !empty($applicationData['yearly_turnover']))
+                        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-primary mb-4">Financial Highlights</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                @if(!empty($applicationData['monthly_turnover']))
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="text-sm text-gray-600 mb-1">Monthly Turnover</div>
+                                    <div class="text-xl font-bold text-primary">KES {{ number_format($applicationData['monthly_turnover']) }}</div>
+                                </div>
+                                @endif
+                                @if(!empty($applicationData['yearly_turnover']))
+                                <div class="bg-gray-50 p-4 rounded-lg">
+                                    <div class="text-sm text-gray-600 mb-1">Annual Turnover</div>
+                                    <div class="text-xl font-bold text-primary">KES {{ number_format($applicationData['yearly_turnover']) }}</div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+                    @else
+                        <!-- Financial information locked for guests -->
+                        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                            <h2 class="text-xl font-semibold text-primary mb-4">Financial Information</h2>
+                            <div class="bg-gray-50 rounded-lg p-6 text-center">
+                                <div class="text-gray-400 mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 0h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                </div>
+                                <p class="text-gray-600">Financial data available to registered users</p>
+                            </div>
+                        </div>
+                    @endauth
 
                     <!-- Business Details -->
                     <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
@@ -189,13 +250,17 @@
                                 @if(!empty($applicationData['facility_description']))
                                 <div class="mb-4">
                                     <span class="text-gray-600 block mb-2 font-medium">Facility Information:</span>
-                                    <span class="text-sm text-gray-700">{{ $applicationData['facility_description'] }}</span>
+                                    @auth
+                                        <span class="text-sm text-gray-700">{{ $applicationData['facility_description'] }}</span>
+                                    @else
+                                        <span class="text-sm text-gray-500">Details available to registered users</span>
+                                    @endauth
                                 </div>
                                 @endif
 
                                 <!-- Value Proposition -->
                                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <h4 class="font-medium text-blue-900 mb-2">Why Use Our Introduction Service?</h4>
+                                    <h4 class="font-medium text-blue-900 mb-2">Professional Introduction Service</h4>
                                     <ul class="text-xs text-blue-700 space-y-1">
                                         <li>• Pre-verified business information</li>
                                         <li>• Confidential initial discussions</li>
@@ -212,53 +277,73 @@
                 <div class="w-full lg:w-1/3">
                     <!-- Contact Card -->
                     <div class="bg-white rounded-lg shadow-sm p-6 mb-6 sticky top-4">
-                        <h3 class="text-lg font-semibold text-primary mb-4">Interested in This Business?</h3>
+                        @auth
+                            <h3 class="text-lg font-semibold text-primary mb-4">Interested in This Business?</h3>
 
-                        <div class="space-y-4 mb-6">
-                            <p class="text-gray-600 text-sm">
-                                To protect both parties and ensure proper due diligence, all connections are facilitated through our platform for a small introduction fee.
+                            <div class="space-y-4 mb-6">
+                                <p class="text-gray-600 text-sm">
+                                    All connections are facilitated through our platform with professional introduction services.
+                                </p>
+
+                                <!-- Business Details Summary -->
+                                <div class="bg-gray-50 p-4 rounded-lg space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Industry:</span>
+                                        <span class="font-medium">{{ $applicationData['business_industry'] }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Location:</span>
+                                        <span class="font-medium">{{ $applicationData['city'] ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Opportunity:</span>
+                                        <span class="font-medium">{{ $applicationData['seller_interest'] ?? 'N/A' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contact Button -->
+                            <a href="{{ route('request.introduction', ['type' => 'business', 'id' => $sellerProfile->id]) }}" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
+                                Request Introduction
+                            </a>
+
+                            <p class="text-xs text-gray-500 mt-3 text-center">
+                                Professional introduction service with small fee
                             </p>
+                        @else
+                            <h3 class="text-lg font-semibold text-primary mb-4">Connect with This Business</h3>
 
-                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                                <div class="flex items-center mb-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span class="text-sm font-medium text-blue-800">What You Get:</span>
-                                </div>
-                                <ul class="text-xs text-blue-700 space-y-1 ml-6">
-                                    <li>• Verified business information</li>
-                                    <li>• Direct contact with business owner</li>
-                                    <li>• Professional introduction service</li>
-                                    <li>• Confidentiality protection</li>
-                                </ul>
-                            </div>
+                            <div class="space-y-4 mb-6">
+                                <p class="text-gray-600 text-sm">
+                                    Join our platform to access complete business information and request professional introductions.
+                                </p>
 
-                            <!-- Business Details Summary -->
-                            <div class="bg-gray-50 p-4 rounded-lg space-y-2 text-sm">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Industry:</span>
-                                    <span class="font-medium">{{ $applicationData['business_industry'] }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Location:</span>
-                                    <span class="font-medium">{{ $applicationData['city'] ?? 'N/A' }}</span>
-                                </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-600">Opportunity:</span>
-                                    <span class="font-medium">{{ $applicationData['seller_interest'] ?? 'N/A' }}</span>
+                                <!-- Business Summary -->
+                                <div class="bg-gray-50 p-4 rounded-lg space-y-2 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Industry:</span>
+                                        <span class="font-medium">{{ $applicationData['business_industry'] }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Location:</span>
+                                        <span class="font-medium">{{ $applicationData['city'] ?? 'N/A' }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-600">Opportunity:</span>
+                                        <span class="font-medium">{{ $applicationData['seller_interest'] ?? 'N/A' }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Contact Button -->
-                        <a href="/contact" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
-                            Request Introduction - Small Fee Applies
-                        </a>
+                            <!-- Single CTA -->
+                            <a href="{{ route('register') }}" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
+                                Join Platform to Connect
+                            </a>
 
-                        <p class="text-xs text-gray-500 mt-3 text-center">
-                            Professional introduction service ensures verified connections and protects all parties involved.
-                        </p>
+                            <p class="text-xs text-gray-500 mt-3 text-center">
+                                Free registration • Professional introductions
+                            </p>
+                        @endauth
                     </div>
                 </div>
             </div>
