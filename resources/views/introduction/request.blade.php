@@ -25,7 +25,7 @@
                         <div class="text-center">
                             <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.25-4.5a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
                             <h3 class="font-semibold text-gray-900 mb-1">Verified Connections</h3>
@@ -43,7 +43,7 @@
                         <div class="text-center">
                             <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z" />
                                 </svg>
                             </div>
                             <h3 class="font-semibold text-gray-900 mb-1">Professional Support</h3>
@@ -56,12 +56,60 @@
                 <div class="bg-white rounded-lg shadow-sm p-8">
                     <h2 class="text-2xl font-bold text-primary mb-6">Introduction Request Form</h2>
 
+                    <!-- Show Target Profile Info if Pre-selected -->
+                    @if(isset($profile) && isset($type))
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 mb-6">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <h3 class="text-lg font-semibold text-blue-900 mb-2">Requesting Introduction To:</h3>
+                                    <div class="bg-white rounded-lg p-4 border border-blue-200">
+                                        @if($type === 'business')
+                                            <div class="flex items-center mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-6m-8 0H3m2 0h6m0 0v-4a2 2 0 012-2h2a2 2 0 012 2v4" />
+                                                </svg>
+                                                <span class="text-lg font-medium text-gray-900">{{ $profile->application_data['company_name'] ?? 'Business' }}</span>
+                                            </div>
+                                            <p class="text-blue-800 text-sm">
+                                                <span class="font-medium">Industry:</span> {{ $profile->application_data['business_industry'] ?? 'Unknown Industry' }}
+                                            </p>
+                                            <p class="text-blue-800 text-sm">
+                                                <span class="font-medium">Location:</span> {{ $profile->application_data['city'] ?? 'Location not specified' }}
+                                            </p>
+                                        @elseif($type === 'investor')
+                                            <div class="flex items-center mb-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                                </svg>
+                                                <span class="text-lg font-medium text-gray-900">{{ $profile->company_name }}</span>
+                                            </div>
+                                            <p class="text-blue-800 text-sm">
+                                                <span class="font-medium">Investment Focus:</span> {{ $profile->buyer_interest ?? 'Unknown Interest' }}
+                                            </p>
+                                            <p class="text-blue-800 text-sm">
+                                                <span class="font-medium">Location:</span> {{ $profile->current_location ?? 'Location not specified' }}
+                                            </p>
+                                        @endif
+                                    </div>
+                                    <p class="text-xs text-blue-600 mt-2 font-medium">
+                                        ✓ Target automatically selected
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <!-- Display validation errors -->
                     @if ($errors->any())
                         <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                             <div class="flex">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-400 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.19 2.5 1.732 2.5z" />
                                 </svg>
                                 <div>
                                     <h3 class="text-sm font-medium text-red-800">Please correct the following errors:</h3>
@@ -90,51 +138,51 @@
                     <form action="{{ route('introduction.request.submit') }}" method="POST" class="space-y-6">
                         @csrf
 
-                        <!-- Hidden fields for pre-filled data -->
-                        @if(isset($profile))
-                            <input type="hidden" name="profile_type" value="{{ $type }}">
-                            <input type="hidden" name="profile_id" value="{{ $profile->id }}">
+                        @if(isset($profile) && isset($type))
+                            <!-- Pre-selected target - hidden fields only -->
+                            <input type="hidden" name="introduction_type" value="{{ $type }}">
+                            <input type="hidden" name="target_id" value="{{ $profile->id }}">
+                        @else
+                            <!-- Target Selection for general access -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Introduction Type -->
+                                <div>
+                                    <label for="introduction_type" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Type of Introduction <span class="text-red-500">*</span>
+                                    </label>
+                                    <select name="introduction_type" id="introduction_type"
+                                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
+                                            onchange="toggleTargetOptions()" required>
+                                        <option value="">Select introduction type</option>
+                                        <option value="business" {{ old('introduction_type') == 'business' ? 'selected' : '' }}>
+                                            Connect with a Business
+                                        </option>
+                                        <option value="investor" {{ old('introduction_type') == 'investor' ? 'selected' : '' }}>
+                                            Connect with an Investor
+                                        </option>
+                                    </select>
+                                    @error('introduction_type')
+                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Target Selection -->
+                                <div>
+                                    <label for="target_id" class="block text-sm font-medium text-gray-700 mb-2">
+                                        Select Target <span class="text-red-500">*</span>
+                                    </label>
+                                    <select name="target_id" id="target_id"
+                                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
+                                            required>
+                                        <option value="">Choose a target</option>
+                                        <!-- Options will be populated by JavaScript -->
+                                    </select>
+                                    @error('target_id')
+                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
                         @endif
-
-                        <!-- Target Selection -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Introduction Type -->
-                            <div>
-                                <label for="introduction_type" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Type of Introduction <span class="text-red-500">*</span>
-                                </label>
-                                <select name="introduction_type" id="introduction_type"
-                                        class="w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
-                                        onchange="toggleTargetOptions()" required>
-                                    <option value="">Select introduction type</option>
-                                    <option value="business" {{ (old('introduction_type', $type ?? '') == 'business') ? 'selected' : '' }}>
-                                        Connect with a Business
-                                    </option>
-                                    <option value="investor" {{ (old('introduction_type', $type ?? '') == 'investor') ? 'selected' : '' }}>
-                                        Connect with an Investor
-                                    </option>
-                                </select>
-                                @error('introduction_type')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <!-- Target Selection -->
-                            <div>
-                                <label for="target_id" class="block text-sm font-medium text-gray-700 mb-2">
-                                    Select Target <span class="text-red-500">*</span>
-                                </label>
-                                <select name="target_id" id="target_id"
-                                        class="w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50"
-                                        required>
-                                    <option value="">Choose a target</option>
-                                    <!-- Options will be populated by JavaScript -->
-                                </select>
-                                @error('target_id')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
 
                         <!-- Your Information -->
                         <div class="border-t border-gray-200 pt-6">
@@ -312,48 +360,51 @@
 
     <!-- JavaScript for dynamic form behavior -->
     <script>
-        // Data for populating dropdowns
-        const businessProfiles = @json($businessProfiles ?? []);
-        const investorProfiles = @json($investorProfiles ?? []);
+        // Only initialize dropdown behavior if no pre-selected target
+        const hasPreSelectedTarget = {{ isset($profile) && isset($type) ? 'true' : 'false' }};
 
-        function toggleTargetOptions() {
-            const introductionType = document.getElementById('introduction_type').value;
-            const targetSelect = document.getElementById('target_id');
+        if (!hasPreSelectedTarget) {
+            // Data for populating dropdowns
+            const businessProfiles = @json($businessProfiles ?? []);
+            const investorProfiles = @json($investorProfiles ?? []);
 
-            // Clear existing options
-            targetSelect.innerHTML = '<option value="">Choose a target</option>';
+            function toggleTargetOptions() {
+                const introductionType = document.getElementById('introduction_type').value;
+                const targetSelect = document.getElementById('target_id');
 
-            if (introductionType === 'business') {
-                // Populate with business profiles
-                businessProfiles.forEach(profile => {
-                    const option = document.createElement('option');
-                    option.value = profile.id;
-                    option.textContent = `${profile.application_data.company_name} - ${profile.application_data.business_industry}`;
-                    if ({{ $profile->id ?? 'null' }} == profile.id) {
-                        option.selected = true;
-                    }
-                    targetSelect.appendChild(option);
-                });
-            } else if (introductionType === 'investor') {
-                // Populate with investor profiles
-                investorProfiles.forEach(profile => {
-                    const option = document.createElement('option');
-                    option.value = profile.id;
-                    option.textContent = `${profile.company_name} - ${profile.buyer_interest}`;
-                    if ({{ $profile->id ?? 'null' }} == profile.id) {
-                        option.selected = true;
-                    }
-                    targetSelect.appendChild(option);
-                });
+                // Clear existing options
+                targetSelect.innerHTML = '<option value="">Choose a target</option>';
+
+                if (introductionType === 'business') {
+                    // Populate with business profiles
+                    businessProfiles.forEach(profile => {
+                        const option = document.createElement('option');
+                        option.value = profile.id;
+                        const companyName = profile.application_data?.company_name || 'Unknown Company';
+                        const industry = profile.application_data?.business_industry || 'Unknown Industry';
+                        option.textContent = `${companyName} - ${industry}`;
+                        targetSelect.appendChild(option);
+                    });
+                } else if (introductionType === 'investor') {
+                    // Populate with investor profiles
+                    investorProfiles.forEach(profile => {
+                        const option = document.createElement('option');
+                        option.value = profile.id;
+                        const companyName = profile.company_name || 'Unknown Company';
+                        const interest = profile.buyer_interest || 'Unknown Interest';
+                        option.textContent = `${companyName} - ${interest}`;
+                        targetSelect.appendChild(option);
+                    });
+                }
             }
+
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                toggleTargetOptions();
+            });
         }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            toggleTargetOptions();
-        });
-
-        // Form validation
+        // Form validation (applies to all forms)
         document.querySelector('form').addEventListener('submit', function(e) {
             const message = document.getElementById('message').value;
             if (message.length < 50) {

@@ -287,45 +287,22 @@
                                 </div>
                             </div>
 
-                            @if(auth()->id() !== $buyerProfile->user_id)
-                                <!-- Contact Form for other users -->
-                                <form action="{{ route('messages.send', ['recipient' => $buyerProfile->user_id]) }}" method="POST">
-                                    @csrf
-                                    <div class="mb-4">
-                                        <h3 class="text-[#9D9D9D] mb-2">Introduce yourself and leave the investor a message</h3>
+                           @if(auth()->id() !== $buyerProfile->user_id)
+    <!-- Request Introduction Button -->
+    <a href="{{ route('request.introduction', ['type' => 'investor', 'id' => $buyerProfile->id]) }}"
+       class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
+        Request Introduction
+    </a>
 
-                                        <!-- Notice to inform users about restrictions -->
-                                        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-3 rounded-md mb-4">
-                                            <p class="text-sm">
-                                                <strong>Note:</strong> Please avoid including email addresses, phone numbers, or any contact details in your message.
-                                            </p>
-                                        </div>
-
-                                        <!-- Textarea for the message -->
-                                        <textarea
-                                            name="message"
-                                            id="message"
-                                            class="w-full border border-[#D9D9D9] rounded-sm mb-3 p-2"
-                                            style="height: 140px; resize: none;"
-                                            placeholder="Type your message here..."></textarea>
-
-                                        <!-- Display error message if validation fails -->
-                                        @error('message')
-                                            <p class="text-red-500 text-sm mb-4">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Submit button -->
-                                    <button type="submit" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
-                                        Contact Investor
-                                    </button>
-                                </form>
-                            @else
-                                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
-                                    <p class="font-bold">Note:</p>
-                                    <p>Businesses can contact you directly through this profile.</p>
-                                </div>
-                            @endif
+    <p class="text-xs text-gray-500 mt-3 text-center">
+        Professional introduction service with small fee
+    </p>
+@else
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
+        <p class="font-bold">Note:</p>
+        <p>This is your investor profile. Businesses can request introductions to connect with you.</p>
+    </div>
+@endif
 
                             <p class="text-xs text-gray-500 mt-3 text-center">
                                 Get connected with this verified investor through our secure messaging platform.
