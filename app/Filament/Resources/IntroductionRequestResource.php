@@ -24,42 +24,63 @@ class IntroductionRequestResource extends Resource
     protected static ?string $navigationLabel = 'Introduction Requests';
 
     public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'pending' => 'Pending',
-                        'approved' => 'Approved',
-                        'rejected' => 'Rejected',
-                        'completed' => 'Completed',
-                    ])
-                    ->required()
-                    ->live(),
+{
+    return $form
+        ->schema([
+            Forms\Components\Section::make('Request Status')
+                ->schema([
+                    Forms\Components\Select::make('status')
+                        ->options([
+                            'pending' => 'Pending',
+                            'approved' => 'Approved',
+                            'rejected' => 'Rejected',
+                            'completed' => 'Completed',
+                        ])
+                        ->required()
+                        ->live()
+                        ->default('pending'),
 
-                Forms\Components\Select::make('payment_status')
-                    ->options([
-                        'unpaid' => 'Unpaid',
-                        'paid' => 'Paid',
-                        'refunded' => 'Refunded',
-                    ])
-                    ->required(),
+                    Forms\Components\Select::make('payment_status')
+                        ->options([
+                            'unpaid' => 'Unpaid',
+                            'paid' => 'Paid',
+                            'refunded' => 'Refunded',
+                        ])
+                        ->required()
+                        ->default('unpaid'),
+                ])
+                ->columns(2),
 
-                Forms\Components\Textarea::make('rejection_reason')
-                    ->label('Rejection Reason')
-                    ->visible(fn (Forms\Get $get) => $get('status') === 'rejected')
-                    ->required(fn (Forms\Get $get) => $get('status') === 'rejected')
-                    ->maxLength(1000),
+            Forms\Components\Section::make('Review Information')
+                ->schema([
+                    Forms\Components\Textarea::make('rejection_reason')
+                        ->label('Rejection Reason')
+                        ->visible(fn (Forms\Get $get) => $get('status') === 'rejected')
+                        ->required(fn (Forms\Get $get) => $get('status') === 'rejected')
+                        ->maxLength(1000)
+                        ->rows(3),
 
-                Forms\Components\DateTimePicker::make('introduction_sent_at')
-                    ->label('Introduction Sent At')
-                    ->visible(fn (Forms\Get $get) => $get('status') === 'approved'),
+                    Forms\Components\DateTimePicker::make('introduction_sent_at')
+                        ->label('Introduction Sent At')
+                        ->visible(fn (Forms\Get $get) => $get('status') === 'approved'),
 
-                Forms\Components\DateTimePicker::make('payment_received_at')
-                    ->label('Payment Received At')
-                    ->visible(fn (Forms\Get $get) => $get('payment_status') === 'paid'),
-            ]);
-    }
+                    Forms\Components\DateTimePicker::make('payment_received_at')
+                        ->label('Payment Received At')
+                        ->visible(fn (Forms\Get $get) => $get('payment_status') === 'paid'),
+                ])
+                ->columns(2),
+
+            Forms\Components\Section::make('Request Details')
+                ->schema([
+                    Forms\Components\TextInput::make('service_fee')
+                        ->label('Service Fee (KES)')
+                        ->numeric()
+                        ->default(2500.00)
+                        ->required(),
+                ])
+                ->visible(fn ($livewire) => $livewire instanceof \Filament\Resources\Pages\CreateRecord),
+        ]);
+}
 
     public static function table(Table $table): Table
     {
@@ -324,7 +345,7 @@ class IntroductionRequestResource extends Resource
         return [
             'index' => Pages\ListIntroductionRequests::route('/'),
             'create' => Pages\CreateIntroductionRequest::route('/create'),
-            // 'view' => Pages\ViewIntroductionRequest::route('/{record}'),
+            'view' => Pages\ViewIntroductionRequest::route('/{record}'),
             'edit' => Pages\EditIntroductionRequest::route('/{record}/edit'),
         ];
     }
