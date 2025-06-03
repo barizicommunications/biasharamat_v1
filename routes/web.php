@@ -7,6 +7,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\IntroductionController;
 use App\Http\Controllers\BusinessProfileController;
 use App\Http\Controllers\InvestorProfileController;
 use App\Http\Controllers\InvestorsAndBuyersController;
@@ -56,6 +57,34 @@ Route::group(['controller' => InvestorRegistrationController::class], function (
         ->name('investor.create');
     Route::post('/register-business-investor', 'store')
         ->name('investor.store');
+});
+
+// Add these routes to your web.php file
+
+// Introduction Request Routes
+Route::middleware('auth')->group(function () {
+    // Show introduction request form
+    Route::get('/request-introduction', [IntroductionController::class, 'show'])
+        ->name('introduction.request');
+
+    // Show introduction request form with pre-filled data (this matches the route used in profile pages)
+    Route::get('/request-introduction/{type}/{id}', [IntroductionController::class, 'show'])
+        ->name('request.introduction')
+        ->where(['type' => 'business|investor', 'id' => '[0-9]+']);
+
+    // Handle introduction request submission
+    Route::post('/request-introduction', [IntroductionController::class, 'store'])
+        ->name('introduction.request.submit');
+
+    // Admin routes for managing introduction requests
+    Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
+        Route::get('/introduction-requests', [IntroductionController::class, 'index'])
+            ->name('admin.introduction.requests');
+        Route::patch('/introduction-requests/{id}/approve', [IntroductionController::class, 'approve'])
+            ->name('admin.introduction.approve');
+        Route::patch('/introduction-requests/{id}/reject', [IntroductionController::class, 'reject'])
+            ->name('admin.introduction.reject');
+    });
 });
 
 Route::group(['controller' => BusinessProfileController::class], function () {
