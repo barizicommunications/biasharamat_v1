@@ -302,11 +302,21 @@
                                 </div>
                             </div>
 
-                            <!-- Contact Button -->
-                            <a href="{{ route('request.introduction', ['type' => 'business', 'id' => $sellerProfile->id]) }}" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
-                                Request Introduction
-                                
-                            </a>
+                           <!-- Contact Button -->
+@if(auth()->id() !== $sellerProfile->user_id)
+    <a href="{{ route('request.introduction', ['type' => 'business', 'id' => $sellerProfile->id]) }}" class="block w-full bg-primary text-white text-center py-3 px-4 rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200">
+        Request Introduction
+    </a>
+
+    <p class="text-xs text-gray-500 mt-3 text-center">
+        Professional introduction service with small fee
+    </p>
+@else
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
+        <p class="font-bold">Note:</p>
+        <p>This is your business profile. Investors can request introductions to connect with you.</p>
+    </div>
+@endif
 
                             <p class="text-xs text-gray-500 mt-3 text-center">
                                 Professional introduction service with small fee
