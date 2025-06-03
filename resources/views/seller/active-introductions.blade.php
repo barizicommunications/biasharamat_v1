@@ -50,7 +50,7 @@
                             </a>
                         </div>
 
-                        <div class="relative" :class="{'border-l-4 border-[#030e4f]': activeTab === 'notifications', 'border-l-4 border-transparent': activeTab !== 'notifications'}">
+                        {{-- <div class="relative" :class="{'border-l-4 border-[#030e4f]': activeTab === 'notifications', 'border-l-4 border-transparent': activeTab !== 'notifications'}">
                             <a href="#"
                                @click="activeTab = 'notifications'"
                                class="flex items-center px-4 py-3 text-sm font-medium rounded-md transition-all duration-200"
@@ -63,7 +63,7 @@
                                 </svg>
                                 Notifications
                             </a>
-                        </div>
+                        </div> --}}
 
                         <div class="relative" :class="{'border-l-4 border-[#030e4f]': activeTab === 'profile', 'border-l-4 border-transparent': activeTab !== 'profile'}">
                             <a href="#"

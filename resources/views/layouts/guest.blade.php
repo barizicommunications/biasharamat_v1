@@ -45,6 +45,9 @@
                 <!-- Centered Menu Items -->
                 <div class="hidden lg:flex lg:items-center lg:justify-center flex-grow">
                     <div class="flex space-x-6">
+                        <a href="/" class="px-3 py-2 transition-colors duration-300 transform rounded-md hover:bg-gray-100 {{ Request::routeIs('faqs') ? 'bg-gray-100 text-primary font-semibold' : 'text-gray-700' }}">
+                            Home
+                        </a>
                         <a href="{{ route('faqs') }}" class="px-3 py-2 transition-colors duration-300 transform rounded-md hover:bg-gray-100 {{ Request::routeIs('faqs') ? 'bg-gray-100 text-primary font-semibold' : 'text-gray-700' }}">
                             FAQs
                         </a>

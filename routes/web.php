@@ -93,7 +93,7 @@ Route::group(['controller' => InvestorProfileController::class], function () {
     Route::get('/investor-profile-registration', 'create')
         ->name('investor.profile.create');
     Route::get('investor-verification-call-page', function () {
-        return view('buyer.buyer-verification-call');
+        return view('buyer.buyer-verification-call')->name('buyer.buyer-verification-call');
     })->name('investorVerificationCallPage');
     Route::get('/business-buyer-profile-overview/{id}', 'show')
         ->name('buyer.buyer-profile');
