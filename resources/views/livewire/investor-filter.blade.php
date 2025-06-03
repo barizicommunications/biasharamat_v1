@@ -68,52 +68,59 @@
 
         <!-- Investor Profiles Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            @forelse ($investorProfiles as $profile)
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
-                    <div class="p-6">
-                        <!-- Header Section -->
-                        <div class="flex items-center mb-4">
-                            <div class="w-12 h-12 flex-shrink-0">
-                                <img src="{{ asset('images/investor-pic.png') }}" alt="Investor Logo" class="w-12 h-12 rounded-full object-cover">
-                            </div>
-                            <div class="ml-4">
-                                <h3 class="text-lg font-bold text-gray-800">{{ $profile->company_name }}</h3>
-                                <p class="text-sm text-gray-500">{{ $profile->current_location }}</p>
-                            </div>
-                        </div>
+   @forelse ($investorProfiles as $profile)
+       <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300 flex flex-col">
+           <div class="p-6 flex-1">
+               <!-- Header Section -->
+               <div class="mb-4">
+                   <div class="flex items-start space-x-3">
+                       <div class="w-12 h-12 flex-shrink-0">
+                           <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                   <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-6m-8 0H3m2 0h6m0 0v-4a2 2 0 012-2h2a2 2 0 012 2v4" />
+                               </svg>
+                           </div>
+                       </div>
+                       <div class="flex-1 min-w-0">
+                           <h3 class="text-base font-semibold text-gray-800 break-words leading-tight">{{ $profile->company_name }}</h3>
+                           <p class="text-sm text-gray-500 mt-1">{{ $profile->current_location }}</p>
+                       </div>
+                   </div>
+               </div>
 
-                        <!-- Industry and Interested In -->
-                        <div class="mb-2">
-                            <span class="inline-block bg-indigo-100 text-indigo-700 text-xs font-medium px-2 py-1 rounded">
-                                {{ $profile->company_industry ?? 'Unspecified Industry' }}
-                            </span>
-                        </div>
+               <!-- Industry Tag -->
+               <div class="mb-3">
+                   <span class="inline-block bg-indigo-100 text-indigo-700 text-xs font-medium px-2 py-1 rounded">
+                       {{ $profile->company_industry ?? 'Unspecified Industry' }}
+                   </span>
+               </div>
 
-                        <p class="text-sm text-gray-600 mb-2">
-                            <span class="font-semibold">Interested In:</span> {{ $profile->interested_in }}
-                        </p>
+               <!-- Profile Details -->
+               <div class="space-y-2">
+                   <p class="text-sm text-gray-600">
+                       <span class="font-medium">Interested In:</span> <span class="break-words">{{ $profile->interested_in }}</span>
+                   </p>
+                   <p class="text-sm text-gray-600">
+                       <span class="font-medium">Buyer Interest:</span> <span class="break-words">{{ $profile->buyer_interest }}</span>
+                   </p>
+                   <p class="text-sm text-gray-600">
+                       <span class="font-medium">Location Interest:</span> <span class="break-words">{{ $profile->buyer_location_interest }}</span>
+                   </p>
+               </div>
+           </div>
 
-                        <p class="text-sm text-gray-600 mb-2">
-                            <span class="font-semibold">Buyer Interest:</span> {{ $profile->buyer_interest }}
-                        </p>
-
-                        <p class="text-sm text-gray-600 mb-4">
-                            <span class="font-semibold">Location Interest:</span> {{ $profile->buyer_location_interest }}
-                        </p>
-
-                        <!-- Contact Button -->
-                        <div>
-                            <a href="{{ route('buyer.buyer-profile', ['id' => $profile->id]) }}"
-                               class="inline-block bg-[#030e4f] text-white font-medium py-2 px-4 rounded hover:bg-[#1e2d7a] transition-colors duration-300">
-                                Contact Investor
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            @empty
-                <p class="text-gray-600 col-span-full text-center">No investor profiles available.</p>
-            @endforelse
-        </div>
+           <!-- Footer with Contact Button -->
+           <div class="bg-gray-50 px-6 py-4 mt-auto">
+               <a href="{{ route('buyer.buyer-profile', ['id' => $profile->id]) }}"
+                  class="w-full flex items-center justify-center px-4 py-2 bg-[#030e4f] text-white text-sm font-medium rounded-md hover:bg-[#1e2d7a] transition-colors duration-300">
+                   Contact Investor
+               </a>
+           </div>
+       </div>
+   @empty
+       <p class="text-gray-600 col-span-full text-center">No investor profiles available.</p>
+   @endforelse
+</div>
 
         <!-- Pagination -->
         @if ($investorProfiles->hasPages())

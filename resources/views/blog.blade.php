@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <section class="bg-[#f4f4f4]">
+    <section class="bg-[#f4f4f4] mb-40" >
         <article class="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:py-8">
             <div class="flex items-center py-4 overflow-x-auto whitespace-nowrap mb-8">
 
