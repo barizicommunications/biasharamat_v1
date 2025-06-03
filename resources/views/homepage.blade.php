@@ -30,9 +30,9 @@
                     </div>
                 </div>
             </div>
-            <div class="right-vector justify-self-center md:mt-0 mt-10">
+            <div class="right-vector   md:mt-0 mt-10">
                 <div>
-                    <img src="{{ asset('images/sample.png') }}" class="md:scale-125" alt="sample">
+                    <img src="{{ asset('images/business-setup.png') }}" class="md:pl-12" alt="sample">
                 </div>
 
             </div>
@@ -98,7 +98,7 @@
     <div class="grid gap-10 grid-cols-1 md:grid-cols-2 md:p-0 p-10">
         <div class="bg-[#FBE9E6] md:px-20 rounded-r-3xl flex py-10">
             <div class=" md:ml-36 ">
-                <img src="{{ asset('images/card-section.png') }}" alt="">
+                <img src="{{ asset('images/business-for-sale.png') }}" alt="">
             </div>
         </div>
         <div class="self-center">
@@ -124,7 +124,7 @@
 
     </div>
     <div class=" bg-[#e5e6ef] rounded-l-3xl py-10">
-        <img src="{{ asset('images/card-section3.png') }}" class=" md:pl-32 " alt="">
+        <img src="{{ asset('images/investor-profile.png') }}" class=" md:pl-32 " alt="">
     </div>
 </div>
    </section>
