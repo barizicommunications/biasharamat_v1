@@ -61,18 +61,18 @@ class IntroductionRequest extends Model
     /**
      * Get the business target if target_type is 'business'
      */
-    public function businessTarget()
-    {
-        return $this->belongsTo(BusinessProfile::class, 'target_id')->where('target_type', 'business');
-    }
+  public function businessTarget()
+{
+    return $this->belongsTo(BusinessProfile::class, 'target_id');
+}
 
     /**
      * Get the investor target if target_type is 'investor'
      */
-    public function investorTarget()
-    {
-        return $this->belongsTo(InvestorProfile::class, 'target_id')->where('target_type', 'investor');
-    }
+   public function investorTarget()
+{
+    return $this->belongsTo(InvestorProfile::class, 'target_id');
+}
 
     /**
      * Get the target profile regardless of type
