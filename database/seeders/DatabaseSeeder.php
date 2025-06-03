@@ -42,8 +42,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,              // Step 1: Create roles for sellers, investors, etc.
             UserSeeder::class,              // Step 2: Seed users for sellers and investors
-            BusinessProfileSeeder::class,   // Step 3: Seed business profiles
-            InvestorProfileSeeder::class,   // Step 4: Seed investor profiles
+            // BusinessProfileSeeder::class,   // Step 3: Seed business profiles
+            // InvestorProfileSeeder::class,   // Step 4: Seed investor profiles
         ]);
     }
 }

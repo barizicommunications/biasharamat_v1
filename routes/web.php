@@ -59,15 +59,13 @@ Route::group(['controller' => InvestorRegistrationController::class], function (
         ->name('investor.store');
 });
 
-// Add these routes to your web.php file
-
-// Introduction Request Routes
+// Introduction Request Routes (Frontend only - Admin routes handled by Filament)
 Route::middleware('auth')->group(function () {
     // Show introduction request form
     Route::get('/request-introduction', [IntroductionController::class, 'show'])
         ->name('introduction.request');
 
-    // Show introduction request form with pre-filled data (this matches the route used in profile pages)
+    // Show introduction request form with pre-filled data
     Route::get('/request-introduction/{type}/{id}', [IntroductionController::class, 'show'])
         ->name('request.introduction')
         ->where(['type' => 'business|investor', 'id' => '[0-9]+']);
@@ -75,16 +73,6 @@ Route::middleware('auth')->group(function () {
     // Handle introduction request submission
     Route::post('/request-introduction', [IntroductionController::class, 'store'])
         ->name('introduction.request.submit');
-
-    // Admin routes for managing introduction requests
-    Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
-        Route::get('/introduction-requests', [IntroductionController::class, 'index'])
-            ->name('admin.introduction.requests');
-        Route::patch('/introduction-requests/{id}/approve', [IntroductionController::class, 'approve'])
-            ->name('admin.introduction.approve');
-        Route::patch('/introduction-requests/{id}/reject', [IntroductionController::class, 'reject'])
-            ->name('admin.introduction.reject');
-    });
 });
 
 Route::group(['controller' => BusinessProfileController::class], function () {
