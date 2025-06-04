@@ -22,6 +22,12 @@
 
 
 
+<!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-HX003Y4C3L"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-HX003Y4C3L'); </script>
+
+
+
+
+
     <style>
         [x-cloak] {
             display: none !important;
