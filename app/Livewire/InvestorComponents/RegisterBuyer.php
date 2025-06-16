@@ -121,7 +121,7 @@ class RegisterBuyer extends Component implements HasForms
 
 
 
-    return redirect()->route('buyer.buyer-verification-call')->with('success', 'Investor profile created successfully. Please proceed to payment.');
+    return redirect()->route('investorVerificationCallPage')->with('success', 'Investor profile created successfully. Please proceed to payment.');
 }
 
 
