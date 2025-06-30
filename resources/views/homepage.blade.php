@@ -294,6 +294,7 @@
 <p class="text-center mb-20">Join more than 15,000+ connections around the country</p>
 
 <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+    <!-- James Otieno Testimonial -->
     <div class="bg-white py-6 px-10">
         <div>
            <p class="flex mb-6">
@@ -307,16 +308,13 @@
                 The seamless communication tools and approval process gave me confidence throughout the journey.
             </p>
         </div>
-        <div class="flex items-center">
-            <div>
-                <img src="{{ asset('images/user-icon.png') }}" alt="User Icon" class="w-10 h-10">
-            </div>
-            <div class="ml-4">
-                <h5 class="font-bold">James Otieno</h5>
-            </div>
+        <div>
+            <h5 class="font-bold text-[#030E4F]">James Otieno</h5>
+            <p class="text-sm text-gray-600">Entrepreneur</p>
         </div>
     </div>
 
+    <!-- Sarah Njoroge Testimonial -->
     <div class="bg-white py-6 px-10">
         <div>
            <p class="flex mb-6">
@@ -329,16 +327,13 @@
                 This platform has simplified everything—I can easily browse vetted business opportunities and communicate directly with entrepreneurs.
             </p>
         </div>
-        <div class="flex items-center">
-            <div>
-                <img src="{{ asset('images/user-icon.png') }}" alt="User Icon" class="w-10 h-10">
-            </div>
-            <div class="ml-4">
-                <h5 class="font-bold">Sarah Njoroge</h5>
-            </div>
+        <div>
+            <h5 class="font-bold text-[#030E4F]">Sarah Njoroge</h5>
+            <p class="text-sm text-gray-600">Investor</p>
         </div>
     </div>
 
+    <!-- Michael Wanjiru Testimonial -->
     <div class="bg-white py-6 px-10">
         <div>
            <p class="flex mb-6">
@@ -348,16 +343,12 @@
         <div>
             <p class="mb-4 max-w-[20rem]">
                 The approval system ensures that only credible businesses are listed, which gave me peace of mind when looking for investment opportunities.
-                I’ve successfully invested in two startups through this platform and look forward to many more!
+                I've successfully invested in two startups through this platform and look forward to many more!
             </p>
         </div>
-        <div class="flex items-center">
-            <div>
-                <img src="{{ asset('images/user-icon.png') }}" alt="User Icon" class="w-10 h-10">
-            </div>
-            <div class="ml-4">
-                <h5 class="font-bold">Michael Wanjiru</h5>
-            </div>
+        <div>
+            <h5 class="font-bold text-[#030E4F]">Michael Wanjiru</h5>
+            <p class="text-sm text-gray-600">Investor</p>
         </div>
     </div>
 </div>

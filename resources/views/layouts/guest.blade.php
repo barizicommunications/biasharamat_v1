@@ -221,11 +221,11 @@
 </footer> --}}
 <footer class="bg-[#262626] text-white">
     <div class="mx-auto max-w-screen-xl px-8 py-6">
-        <div class="flex flex-row items-center justify-between">
+        <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <div class="flex items-center">
-                <img src="{{ asset('images/logos/white-logo.png') }}" class=" h-4 " alt="BiasharaMart Logo">
+                <img src="{{ asset('images/logos/white-logo.png') }}" class="h-4" alt="BiasharaMart Logo">
             </div>
-            <div class="flex items-center space-x-6">
+            <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-center md:text-left">
                 <p class="text-sm">Phone: +254 714704440</p>
                 <p class="text-sm">Email: info@biasharamart.com</p>
                 <p class="text-sm">&copy; <?php echo date("Y"); ?> BiasharaMart. All rights reserved</p>
